@@ -1,0 +1,151 @@
+<!-- 管理员用户组新增和编辑页面 -->
+{include file="public/header"}
+<style>
+
+/* 授权编辑页 */
+.checkmod {
+    margin-bottom: 20px;
+    border: 1px solid #ebebeb;
+}
+.checkmod dt {
+    padding-left: 10px;
+    height: 30px;
+    font-weight: bold;
+    border-bottom: 1px solid #ebebeb;
+    background-color: #ECECEC;
+}
+.checkmod dd {
+    padding-left: 10px;
+    line-height: 30px;
+}
+.checkmod dd .checkbox {
+    margin: 0 10px 0 0;
+}
+.checkmod dd .divsion {
+    margin-right: 20px;
+}
+
+.checkbox-inline{
+        line-height: 7px;
+}
+
+</style>
+
+<div class="x-body">
+		
+       
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                      <legend>访问授权</legend>
+                    </fieldset>
+                    <!-- action="{:url('Role/writeGroup')}" enctype="application/x-www-form-urlencoded" method="POST"  -->
+                    <form class="layui-form">
+                          {volist name="node_list" id="node" }
+                        <dl class="checkmod">
+                            <dt class="hd">
+                             <label class="checkbox-inline" for="rules">
+                                    <input type="checkbox" lay-filter="filter"  class="auth_rules rules_all" value="<?php echo $main_rules[$node['url']] ?>" name="rules[]">{$node.title}管理</label>
+                            </dt>
+                            <dd class="bd">
+                                {notempty name="node['child']" }
+                                <present name="node['child']">
+                                {volist name="node['child']" id="child" }
+                                    <div class="rule_check">
+                                        <div>
+                                            <label class="checkbox-inline" {notempty name="child['tip']"}title='{$child.tip}' {/notempty} for="rules">
+                                                <input class="auth_rules rules_row" type="checkbox" name="rules[]" value="<?php echo $auth_rules[$child['url']] ?>">{$child.title}
+                                               </label>
+
+                                        </div>
+                                        {notempty name="child['operator']"}
+                                           <span class="divsion">&nbsp;</span>
+                                           <span class="child_row">
+                                               {volist name="child['operator']" id="op"}
+                                                   <label class="checkbox-inline" {notempty name="op['tip']"} title='{$op.tip}'{/notempty} for="rules">
+                                                       <input class="auth_rules" type="checkbox" name="rules[]"
+                                                       value="<?php echo $auth_rules[$op['url']] ?>"/>{$op.title}
+                                                   </label>
+                                               {/volist}
+                                           </span>
+                                        {/notempty}
+                                    </div>
+                                {/volist}
+                                </present>
+                                {/notempty}
+                            </dd>
+                        </dl>
+                    {/volist}
+                            <input type="hidden" name="id" value="{$this_group.id}" />
+                            
+                             <div class="layui-form-item">
+                                  <label for="L_repass" class="layui-form-label">
+                                  </label>
+                                  <button  class="layui-btn" lay-filter="add" lay-submit="">
+                                      保存
+                                  </button>
+                              </div>
+                        </form>
+
+	</div>
+
+</body>
+<block name="script">
+
+<script type="text/javascript" charset="utf-8">
+
+layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+           var form = layui.form
+          ,layer = layui.layer;
+
+            var rules = [{$this_group.rules}];
+            $('.auth_rules').each(function(){
+                if( $.inArray( parseInt(this.value,10),rules )>-1 ){
+                    $(this).prop('checked',true);
+                }
+                if(this.value==''){
+                    $(this).closest('span').remove();
+                }
+            });
+
+            
+
+          //监听提交
+          form.on('submit(add)', function(data){
+
+            //发异步，把数据提交给php
+            $.post('/Admin/Role/writeGroup', data.field, function(res){
+
+                if(res.code == 1){
+                    layer.alert(res.msg, {icon: 1},function () {
+                      // 获得frame索引
+                      var index = parent.layer.getFrameIndex(window.name);
+
+                      //关闭当前frame
+                      parent.layer.close(index);
+                     
+                     window.parent.location.reload();
+
+                  });
+                }else{
+                  layer.alert(res.msg, {icon: 1});
+                }
+            })
+
+                return false;
+          });
+          
+            form.on('checkbox(filter)', function(data){
+
+                $(this).closest('dl').find('dd').find('input').prop('checked',this.checked);
+               
+                form.render('checkbox');//渲染
+            });  
+
+
+            form.render('checkbox'); //进入页面渲染
+        });
+
+        
+     
+</script>
+</block>

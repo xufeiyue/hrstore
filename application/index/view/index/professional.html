@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>控烟知识竞答</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- light7_base -->
+    <link rel="stylesheet" href="__CSS__/light7.css">
+    <link rel="stylesheet" href="__CSS__/style.css">
+</head>
+
+<body onload="timer()">
+    <div class="page">
+        <div class="content ti-page">
+           <!--  <div class="rel">
+                <img src="__IMAGES__/ti_01.png" class="fu-img" alt="">
+                <div class="jindu abs">1/10</div>
+            </div>
+            <p class="sel-titt">1.世界无烟日是每年的哪一天？</p>
+            <div class="btn-size sel-btn">
+                A.4月1日
+            </div>
+            <div class="btn-size sel-btn">
+                B.5月1日
+            </div>
+            <div class="btn-size sel-btn dui">
+                C.5月31日
+            </div>
+            <div class="btn-size sel-btn cuo">
+                D.6月1日
+            </div>
+            <br> -->
+            
+
+
+        </div>
+        <!-- content -->
+
+    </div>
+    <!-- page -->
+
+
+    <script type='text/javascript' src='__JS__/jquery-1.8.3.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='__JS__/light7.js' charset='utf-8'></script>
+        <script src="https://cdn.bootcss.com/layer/3.0.1/layer.js"></script>
+    <script src="__JS__/my.js"></script>
+    <script>
+        // function timer() {
+        //     var ts = (new Date(2017, 5, 25, 9, 0, 0)) - (new Date()); //计算剩余的毫秒数  
+        //     var dd = parseInt(ts / 1000 / 60 / 60 / 24, 10); //计算剩余的天数  
+        //     var hh = parseInt(ts / 1000 / 60 / 60 % 24, 10); //计算剩余的小时数  
+        //     var mm = parseInt(ts / 1000 / 60 % 60, 10); //计算剩余的分钟数  
+        //     var ss = parseInt(ts / 1000 % 60, 10); //计算剩余的秒数  
+        //     dd = checkTime(dd);
+        //     hh = checkTime(hh);
+        //     mm = checkTime(mm);
+        //     ss = checkTime(ss);
+        //     document.getElementById("timer").innerHTML = mm + "分" + ss + "秒";
+        //    // setInterval("timer()", 1000);
+        // }
+
+        // function checkTime(i) {
+        //     if (i < 10) {
+        //         i = "0" + i;
+        //     }
+        //     return i;
+        // }
+
+        num = 0;
+        anserws = '';
+         $(document).ready(function(){
+             $.ajax({
+                    type: "GET",
+                    url: "{:url('professional_ajax')}",
+                    data: {},
+                    dataType: "json",
+                    success: function(data){
+                       
+                       anserws = data;
+                       set_problem(anserws[num],num,anserws['zongnum']);
+                    }   
+             });
+
+             function set_problem(data,num,zongnum){
+
+                var html = '<div class="rel">'+
+                '<img src="__IMAGES__/ti_01.png" class="fu-img" alt="">'+
+                '<div class="jindu abs">' + (num + 1) + '/' + zongnum + '</div>'+
+                '</div>'+
+                '<p class="sel-titt">' + (num + 1) + '.'+ data.problem + '</p>'+
+                '<div class="btn-size A sel-btn " data-id = "A" >A.'+
+                   data.A +
+                '</div>'+
+                '<div class="btn-size B sel-btn " data-id = "B" >B.'+
+                    data.B +
+                '</div>'+
+                '<div class="btn-size C sel-btn " data-id = "C" >C.'+
+                    data.C +
+                '</div>'+
+                '<div class="btn-size D sel-btn " data-id = "D" >D.'+
+                    data.D+
+                '</div>' + '<button class="btn-size XYT" style="border: none;background-color: #13b5b1">下一道</button>';
+
+                $('.content').html(html);
+
+                    $('.sel-btn').click(function(){ 
+
+                        var tiid  =  data.id;
+                        
+                        var answer = $(this).data('id');
+
+                          $.ajax({
+                            type: "GET",
+                            url: "{:url('a_ajax')}",
+                            data: {tiid:tiid,answer:answer},
+                            dataType: "json",
+                            success: function(data){
+                                if(data.code == 1){
+                                    $("."+answer).addClass('cuo');
+                                }
+                                $("."+data.data).addClass('dui');
+                                
+                                if(num == zongnum-1){
+                                    layer.open({
+                                      content: '答题完毕',
+                                      end: function(index, layero){
+                                        //do something
+                                        window.location.href="/index/index/questions?openid={$openid}";
+                                      }
+                                    });
+                                }
+                                
+                            }   
+                        });
+                    
+                 });
+
+
+             }
+         
+                 $(document).on('click','.XYT',function(){
+
+                    num++; 
+                  //  alert(num);
+                    set_problem(anserws[num],num,anserws['zongnum']);
+                 })
+
+        });
+    </script>
+</body>
+
+</html>

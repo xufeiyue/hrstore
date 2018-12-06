@@ -1,0 +1,90 @@
+{include file="public/header"}
+<body>
+<div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>编辑优惠券<small></small></h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form method="post" class="form-horizontal m-t" id="commentForm" enctype="multipart/form-data">
+                            
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">类型：</label>
+                                <div class="col-sm-3">
+                                    <select id="type" name="type" minlength="1" class="form-control" required="" aria-required="true">
+                                        <option value="">请选择</option>
+                                        <option value="1" {if condition="$list['type'] eq 1"}selected="selected"{/if}>通用</option>
+                                        <option value="2" {if condition="$list['type'] eq 2"}selected="selected"{/if}>保洁</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="type">
+                                <label class="col-sm-3 control-label">优惠券logo：</label>
+                                <div class="col-sm-3">
+                                    <img src="{$list['coupon_url']}" style="width: 50%;height: 50%">
+                                    <input id="coupon_url" name="coupon_url" minlength="1" type="file" class="form-control"accept="image/gif,image/jpeg,image/png,image/jpg" >
+                                </div>
+
+                            </div>
+
+                            <div class="form-group" id="type">
+                                <label class="col-sm-3 control-label">优惠券名称：</label>
+                                <div class="col-sm-3">
+                                    <input id="coupon_name" name="coupon_name" minlength="2" placeholder="请输入优惠券名称" type="text" class="form-control" value="{$list['coupon_name']}" required="" aria-required="true">
+                                </div>
+
+                            </div>
+
+                            <div class="form-group" id="type">
+                                <label class="col-sm-3 control-label">满减金额：</label>
+                                <div class="col-sm-3">
+                                    <input id="amount_available" name="amount_available" minlength="2" placeholder="请输入满减金额" type="number" value="{$list['amount_available']}" class="form-control" required="" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="type">
+                                <label class="col-sm-3 control-label">金额：</label>
+                                <div class="col-sm-3">
+                                    <input id="money" name="money" minlength="2" placeholder="请输入金额" type="number" class="form-control" required="" value="{$list['money']}" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="type">
+                                <label class="col-sm-3 control-label">开始时间：</label>
+                                <div class="col-sm-3">
+                                    <input id="start_time" name="start_time" minlength="1" placeholder="请选择开始时间" type="text" class="form-control layer-date" value="{$list['start_time']}" readonly required="" aria-required="true">
+                                   <!--  <input readonly class="form-control layer-date" id="hello1"> -->
+                                    <label class="laydate-icon inline demoicon" onclick="laydate({elem: '#start_time', format: 'YYYY-MM-DD hh:mm:ss'});"></label>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="type">
+                                <label class="col-sm-3 control-label">结束时间：</label>
+                                <div class="col-sm-3">
+                                    <input id="end_time" name="end_time" minlength="1" placeholder="请选择结束时间" type="text" readonly class="form-control layer-date" value="{$list['end_time']}" required="" aria-required="true">
+                                     <label class="laydate-icon inline demoicon" onclick="laydate({elem: '#end_time', format: 'YYYY-MM-DD hh:mm:ss'});"></label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                    <button class="btn btn-white" onclick="javascript:history.go(-1)">取消</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+{include file="public/footer"}
+<script>
+    laydate({elem:"#hello",event:"focus"});var start={elem:"#start",format:"YYYY/MM/DD hh:mm:ss",min:laydate.now(),max:"2099-06-16 23:59:59",istime:true,istoday:false,choose:function(datas){end.min=datas;end.start=datas}};var end={elem:"#end",format:"YYYY/MM/DD hh:mm:ss",min:laydate.now(),max:"2099-06-16 23:59:59",istime:true,istoday:false,choose:function(datas){start.max=datas}};laydate(start);laydate(end);
+</script>
+</html>

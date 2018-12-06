@@ -1,0 +1,86 @@
+{include file="public/header"}
+<body>
+<div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>编辑产品<small></small></h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form method="post" class="form-horizontal m-t" id="commentForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">类型：</label>
+                                <div class="col-sm-3">
+                                    <select name="type_id" id="type_id" minlength="1" class="form-control" required="" aria-required="true">
+                                        <option value="">请选择类型</option>
+                                        {volist name="type" id="vo"}
+                                        <option value="{$vo['id']}" {if condition="$vo['id'] eq $list['type_id']"}selected="selected"{/if}>{$vo['type_name']}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">产品图片：</label>
+                                <div class="col-sm-3">
+                                    <img src="{$list['product_image']}" style="width: 50%;height: 50%">
+                                    <input accept="image/gif,image/jpeg,image/png,image/jpg" name="product_image" minlength="2" type="file" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">产品名称：</label>
+                                <div class="col-sm-3">
+                                    <input id="product_name" name="product_name" minlength="2" placeholder="请输入名称" type="text" class="form-control" value="{$list['product_name']}" required="" aria-required="true">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">产品金额：</label>
+                                <div class="col-sm-3">
+                                    <input id="product_money" name="product_money" minlength="2" placeholder="请输入金额" type="number" class="form-control" value="{$list['product_money']}" required="" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">服务建议：</label>
+                                <div class="col-sm-3">
+                                    <textarea id="service_type" rows="5" name="service_type" minlength="2" placeholder="请输入服务类型" type="text" class="form-control" required="" aria-required="true">{$list['service_type']}</textarea>
+                                </div>
+                                <div class="col-sm-3">
+                                    <textarea id="server_explain" rows="5" name="server_explain" minlength="2" placeholder="请输入说明" type="text" class="form-control"  required="" aria-required="true">{$list['server_explain']}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">服务范围：</label>
+                                <div class="col-sm-3">
+                                    <textarea id="service_scope" rows="5" name="service_scope" minlength="2" placeholder="请输入服务类型" type="text" class="form-control" required="" aria-required="true">{$list['service_scope']}</textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">排序：</label>
+                                <div class="col-sm-3">
+                                    <input id="sort" name="sort" minlength="1" placeholder="排序" type="number" class="form-control" required="" value="{$list['sort']}" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                    <button class="btn btn-white" onclick="javascript:history.go(-1)">取消</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+{include file="public/footer"}
+
+</html>

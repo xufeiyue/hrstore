@@ -1,0 +1,212 @@
+{include file="public/header"}
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">演示</a>
+        <a>
+          <cite>导航元素</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      <div class="layui-row">
+       <!--  <form class="layui-form layui-col-md12 x-so">
+          <input class="layui-input" placeholder="开始日" name="start" id="start">
+          <input class="layui-input" placeholder="截止日" name="end" id="end">
+          <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form> -->
+          <div class="demoTable layui-form layui-col-md12 x-so">
+          搜索用户名：
+          <div class="layui-inline">
+            <input class="layui-input" name="username" id="demoReload" autocomplete="off">
+          </div>
+          <button class="layui-btn" data-type="reload">搜索</button>
+        </div>
+      </div>
+
+      <div class="layui-btn-group demoTable">
+        <button class="layui-btn" data-type="getCheckData">批量删除</button>
+        <button class="layui-btn" onclick="x_admin_show('添加用户','./role_add.html',600,400)"><i class="layui-icon"></i>添加</button>
+        <!-- <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+        <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
+      </div>
+      <table class="layui-table"  id="demo" lay-filter="useruv">
+      </table>
+    </div>
+      <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">授权</a>
+        <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+      </script>
+      <script type="text/html" id="switchTpl">
+        <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.sex == 0 ? 'checked' : '' }}>
+
+      </script>
+    <script>
+    layui.use(['table','laydate'], function(){
+      var laydate = layui.laydate;
+      var table = layui.table;
+      var form = layui.form;
+
+        //执行一个laydate实例
+        // laydate.render({
+        //   elem: '#start' //指定元素
+        // });
+
+        // //执行一个laydate实例
+        // laydate.render({
+        //   elem: '#end' //指定元素
+        // });
+
+      //第一个实例
+      var tableIns = table.render({
+        elem: '#demo'
+        ,method: 'post'
+        ,height: 600
+        ,url: '/Admin/Role/role_ajax' //数据接口
+        ,page: true //开启分页
+        ,limit: 10
+        ,id: 'idTest'
+        ,cols: [[ //表头
+           {checkbox: true, fixed: true}
+          ,{field: 'id',  title: 'ID', sort: true, fixed: 'left' ,align: 'center'}
+          ,{field: 'title', title: '名称',align: 'center'}
+          ,{field: 'module', title: '模块', align: 'center'}
+          ,{field: 'type', title: '类型',align: 'center'} 
+          ,{field: 'description', title: '描述',align: 'center',event: 'setSign'}
+          ,{field:'right', title: '操作',toolbar:"#barDemo",align: 'center'}
+        ]]
+      });
+
+
+        table.on('checkbox(useruv)', function(obj){
+
+        });
+
+         //监听性别操作
+        form.on('switch(sexDemo)', function(obj){
+          layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+        });
+
+        //监听工具条
+        table.on('tool(useruv)', function(obj){
+          var data = obj.data;
+          console.log(data);
+          if(obj.event === 'detail'){
+            x_admin_show('授权','access?group_id='+data.id,600,500);
+          } else if(obj.event === 'del'){
+            layer.confirm('确认要删除吗？', function(index){
+              //发异步删除数据
+              $.post('/Admin/Role/role_del', {id:data.id}, function(res){
+
+                  if (res.code == 1) {
+                  
+                    layer.msg(res.msg,{icon:1,time:1000});
+                    obj.del();
+                  
+                  }else{
+
+                    layer.msg(res.msg,{icon:1,time:1000});
+                  }
+
+              })
+
+            });
+          } else if(obj.event === 'edit'){
+             x_admin_show('编辑','role_edit.html?id='+data.id,600,400);
+          }else if(obj.event === 'setSign'){
+              layer.prompt({
+                formType: 2
+                ,title: '修改 ID 为 ['+ data.id +'] 的用户签名'
+                ,value: data.sign
+              }, function(value, index){
+                layer.close(index);
+                
+                //这里一般是发送修改的Ajax请求
+                
+                //同步更新表格和缓存对应的值
+                var a = obj.update({sign: value});
+                console.log(a);
+              });
+            }
+        });
+
+        //监听单元格编辑
+        table.on('edit(useruv)', function(obj){
+          var value = obj.value //得到修改后的值
+          ,data = obj.data //得到所在行所有键值
+          ,field = obj.field; //得到字段
+          layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+        })
+
+        var $ = layui.$, active = {
+          getCheckData: function(){ //获取选中数据
+            var checkStatus = table.checkStatus('idTest')
+            ,data = checkStatus.data;
+
+            if(data == ''){
+              layer.msg('未选中', {icon: 1});
+              return false;
+            }
+            var id = [];
+            for (var i = 0; i < data.length; i++) {
+              id.push(data[i].id)
+            }
+             layer.confirm('确认要删除吗？', function(index){
+              //发异步删除数据
+              $.post('/Admin/Member/member_delAll', {id:id}, function(res){
+
+                  if (res.code == 1) {
+                  
+                    layer.msg(res.msg,{icon:1,time:1000});
+                    table.reload('idTest');
+                  }else{
+
+                    layer.msg(res.msg,{icon:1,time:1000});
+                  }
+
+              })
+            })
+          }
+          ,getCheckLength: function(){ //获取选中数目
+            var checkStatus = table.checkStatus('idTest')
+            ,data = checkStatus.data;
+            layer.msg('选中了：'+ data.length + ' 个');
+          }
+          ,isAll: function(){ //验证是否全选
+            var checkStatus = table.checkStatus('idTest');
+            layer.msg(checkStatus.isAll ? '全选': '未全选')
+          }
+          ,reload: function(){
+            var demoReload = $('#demoReload');
+            //执行重载
+            tableIns.reload({
+              page: {
+                curr: 1 //重新从第 1 页开始
+              }
+              ,where: {
+                  username: demoReload.val()
+              }
+            })
+          }
+        };
+        
+        $('.demoTable .layui-btn').on('click', function(){
+          var type = $(this).data('type');
+          active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>
