@@ -24,9 +24,9 @@ class MemberController extends Controller
 
 		$where['status'] = 1;
 
-		$offset = (input('page') - 1) * input('limit') ? : 0;
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
-		$limit = input('limit') ? : 10;
+		$limit = input('post.limit/d') ? : 10;
 
 		$data = (new Member)->Common_Select($offset,$limit,$where);
 
@@ -76,7 +76,7 @@ class MemberController extends Controller
 
 			if($password){
 
-				$data['password'] = crypt($password,'r2');// 'r2'为盐值，默认是随机生成的两位字串
+				$data['password'] = MD5($password);// 'r2'为盐值，默认是随机生成的两位字串
 			}
 
 			$data['username'] = input('post.username/s');
@@ -127,30 +127,10 @@ class MemberController extends Controller
 			return json(['code' => 2 , 'msg' => '删除失败']);
 	}
 
-	//上传图片
-	public function upload(Request $request){
-
-		// 获取表单上传文件
-        $file = $request->file('file');
-
-        if (empty($file)) {
-            return json(['code' => 0 , 'msg' => '请选择文件']);
-        }
-        // 移动到框架应用根目录/public/uploads/ 目录下
-        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads' .DS .'member');
-
-        if ($info) {
-            // $this->success('文件上传成功：' . $info->getRealPath());
-            return json(['code'=> 1 ,'data'=> '/uploads/member/' . $info->getSaveName()]);
-        } else {
-            // 上传失败获取错误信息
-            // $this->error($file->getError());
-            return json(['code'=> 0, 'data'=> '','msg'=> '上传失败']);
-        }
-	}
-
+	
 	public function member_password(){
 
 		return view();
 	}
+
 }

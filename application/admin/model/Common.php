@@ -56,4 +56,5 @@ class Common
 
 		return Db::name($this->table)->where($where)->delete();
 	}
+
 }

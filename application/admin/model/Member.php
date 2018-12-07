@@ -10,4 +10,5 @@ class Member extends Common
 
 		parent::__construct($this->table);
 	}
+
 }

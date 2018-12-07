@@ -224,7 +224,7 @@ class AdminController extends Controller
         if(config('ADMIN_MENU_LIST')){
             $menus  =   session('ADMIN_MENU_LIST'.$controller);//取菜单session
         }else{
-            $menus = '';
+            $menus = [];
         }
         if(empty($menus)){
             // 获取主菜单

@@ -280,27 +280,4 @@ function tree_to_list($tree, $child = '_child', $order='id', &$list = array()){
     }
     return $list;
 }
-/**
- * [get_anfang_menu 获取安防菜单]
- * @param  string $id [id]
- * @return [type]     [description]
- */
-function get_anfang_menu($id='')
-{
-    $data = Db::name('anfang_menu')->field('name')->find($id);
-    if($data){
-        return $data['name'];
-    }else{
-        return '';
-    }
-}
-function nav(){
-       
-        return [
-        $data1 = Db::name('nav')->field('nav')->order('id asc')->select(),
-        // $data2 = Db::name('nav')->field('nav')->order('id asc')->select(),
-        ] ;
-        // $this->assign('data1',$data1);
-        // $this->assign('data2',$data2);
-        
-    }
+
