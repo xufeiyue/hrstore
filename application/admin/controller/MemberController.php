@@ -1,11 +1,10 @@
 <?php
 namespace app\admin\controller;
 use think\Controller;
-use think\Db;
 use think\Request;
+use app\admin\model\Member;
 class MemberController extends Controller
 {	
-	public $table = 'member';
 	//渲染页面
 	public function member_list(){
 	
@@ -16,31 +15,22 @@ class MemberController extends Controller
 
 		$username = input('post.username/s');
 
-		$where = '';
+		$where = [];
 
 		if($username){
 
-			$where = "username like '%{$username}%'" ;
+			$where['username']  = ['like','%{$username}%'];
 		}
+
+		$where['status'] = 1;
 
 		$offset = (input('page') - 1) * input('limit') ? : 0;
 
 		$limit = input('limit') ? : 10;
 
-		$list = Db::name($this->table)
-				->where(['status' => 1])
-				->where($where)
-				->limit($offset,$limit)
-				->field("*,FROM_UNIXTIME(create_time)create_time,case when `status` = 1 then '正常' when `status` = 2 then '删除' end status ")
-				->order('id desc')
-				->select();
+		$data = (new Member)->Common_Select($offset,$limit,$where);
 
-		$count = Db::name($this->table)
-				->where(['status' => 1])
-				->where($where)
-				->count();
-
-		return json(["code" =>  0, "msg" => "请求成功", 'data' => $list , 'count' => $count]);
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
 	//添加
 	public function member_add(){
@@ -51,7 +41,7 @@ class MemberController extends Controller
 
 			$password = input('post.pass/s');
 
-			$data['password'] = crypt($password,'r2');// 'r2'为盐值，默认是随机生成的两位字串
+			$data['password'] = MD5($password);// 'r2'为盐值，默认是随机生成的两位字串
 
 			$data['username'] = input('post.username/s');
 
@@ -61,7 +51,7 @@ class MemberController extends Controller
 
 			$data['update_time'] = time();
 
-			$add = Db::name('Member')->insert($data);
+			$add = (new Member)->Common_Insert($data);
 
 			if($add)
 				return json(['code' => 1 , 'msg' => '添加成功']);
@@ -97,7 +87,7 @@ class MemberController extends Controller
 
 			$data['head_portrait'] = input('post.head_portrait/s');
 
-			$edit = Db::name('Member')->where(['id' => $id])->update($data);
+			$edit = (new Member)->Common_Update($data,['id' => $id]);
 
 			if($edit)
 				return json(['code' => 1 , 'msg' => '编辑成功']);
@@ -105,7 +95,7 @@ class MemberController extends Controller
 
 		}else{
 
-			$list = Db::name($this->table)->where(['id' => $id])->find();
+			$list = (new Member)->Common_Find(['id' => $id]);
 
 			$this->assign('list',$list);
 
@@ -119,7 +109,7 @@ class MemberController extends Controller
 
 		$id = input('post.id/d');
 
-		$del = Db::name($this->table)->where(['id' => $id])->update(['status' => 2]);
+		$del = (new Member)->Common_Update(['status' => 2],['id' => $id]);
 
 		if($del)
 			return json(['code' => 1 , 'msg' => '删除成功']);
@@ -130,7 +120,7 @@ class MemberController extends Controller
 
 		$id = array_unique(input('post.id/a'));
 
-		$del = Db::name($this->table)->where(['id' => ['in', $id]])->update(['status' => 2]);
+		$del = (new Member)->Common_Update(['status' => 2],['id' => ['in', $id]]);
 
 		if($del)
 			return json(['code' => 1 , 'msg' => '删除成功']);
