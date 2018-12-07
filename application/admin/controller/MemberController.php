@@ -24,9 +24,9 @@ class MemberController extends Controller
 
 		$where['status'] = 1;
 
-		$offset = (input('page') - 1) * input('limit') ? : 0;
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
-		$limit = input('limit') ? : 10;
+		$limit = input('post.limit/d') ? : 10;
 
 		$data = (new Member)->Common_Select($offset,$limit,$where);
 
