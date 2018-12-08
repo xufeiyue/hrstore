@@ -19,7 +19,7 @@ class MemberController extends Controller
 
 		if($username){
 
-			$where['username']  = ['like','%{$username}%'];
+			$where['username']  = ['like',"%{$username}%"];
 		}
 
 		$where['status'] = 1;
@@ -28,7 +28,9 @@ class MemberController extends Controller
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$data = (new Member)->Common_Select($offset,$limit,$where);
+		$order = ['id' => 'desc'];
+
+		$data = (new Member)->Common_Select($offset,$limit,$where,$order);
 
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}

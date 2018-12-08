@@ -10,6 +10,12 @@
 // +----------------------------------------------------------------------
 use think\Db;
 use admin\model\AuthGroup;
+function is_jurisdiction(){
+    $store = session('store');
+    if($store)
+        return $store;
+        return 0;
+}
 // 应用公共文件
 function get_role_list($value='')
 {

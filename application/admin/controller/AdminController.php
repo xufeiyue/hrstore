@@ -10,6 +10,8 @@ use admin\model\AuthGroup;
 use think\Session;
 class AdminController extends Controller
 {
+    public $is_jurisdiction;
+
 	public function _initialize()
 	{
 		if(!session('user_id')){
@@ -35,12 +37,23 @@ class AdminController extends Controller
             }
         }
         $menu = $this->getMenus();
-       // $this->assign('menu', $menu);
-
 
 		$controller = request()->controller();
 		$menu = $this->getMenus($controller);
-		//echo '<pre>';print_r($menu);exit;
+
+        $is_jurisdiction = is_jurisdiction(); //判断是否是店铺
+
+        $store = [
+            ['id' => 1 , 'name' => '名称1'],
+            ['id' => 2 , 'name' => '名称2'],
+            ['id' => 3 , 'name' => '名称3']
+        ];
+            
+        $this->is_jurisdiction = $is_jurisdiction;
+
+        $this->assign('store',$store);
+
+        $this->assign('is_jurisdiction',$is_jurisdiction);
         
 		$this->assign('menu',$menu);
 	}

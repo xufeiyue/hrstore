@@ -14,12 +14,12 @@ class Common
 	}
 
 	//公共列表
-	public function Common_Select($offset=0,$limit=10,$where=[]){
+	public function Common_Select($offset=0,$limit=10,$where=[],$order=[]){
 
 		$data = Db::name($this->table)
 			->where($where)
 			->limit($offset,$limit)
-			->order('id desc')
+			->order($order)
 			->field('*,FROM_UNIXTIME(create_time)create_time')
 			->select();
 
