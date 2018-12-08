@@ -18,28 +18,28 @@
           <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form> -->
           <div class="demoTable layui-form layui-col-md12 x-so">
-          搜索用户名：
+          搜索账号：
           <div class="layui-inline">
-            <input class="layui-input" name="username" id="demoReload" autocomplete="off">
+            <input class="layui-input" name="user_name" id="demoReload" autocomplete="off">
           </div>
           <button class="layui-btn" data-type="reload">搜索</button>
         </div>
       </div>
 
       <div class="layui-btn-group demoTable">
-        <button class="layui-btn" data-type="getCheckData">批量删除</button>
+        <!-- <button class="layui-btn" data-type="getCheckData">批量删除</button> -->
         <button class="layui-btn" onclick="x_admin_show('添加管理员','./admin_add.html',600,400)"><i class="layui-icon"></i>添加</button>
       </div>
       <table class="layui-table"  id="demo" lay-filter="useruv">
       </table>
     </div>
       <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a>
+        <!-- <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a> -->
         <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
         <!-- <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a> -->
       </script>
       <script type="text/html" id="switchTpl">
-        <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.sex == 0 ? 'checked' : '' }}>
+        <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="正常|冻结" lay-filter="statusDemo" {{ d.status == 1 ? 'checked' : '' }}>
 
       </script>
     <script>
@@ -65,13 +65,14 @@
         ,height: 600
         ,url: '/Admin/Admin/admin_ajax' //数据接口
         ,page: true //开启分页
-        ,limit: 10
+        ,limit: 20
         ,id: 'idTest'
         ,cols: [[ //表头
            {checkbox: true, fixed: true}
           ,{field: 'id',  title: 'ID', sort: true, fixed: 'left' ,align: 'center'}
-          ,{field: 'user_name',title: '名称',align: 'center'}
+          ,{field: 'user_name',title: '账号',align: 'center'}
           ,{field: 'title', title: '角色', align: 'center'}
+          ,{field: 'status', title: '账号状态', align: 'center',templet: '#switchTpl'}
           ,{field:'right', title: '操作',toolbar:"#barDemo",align: 'center'}
         ]]
       });
@@ -81,9 +82,29 @@
 
         });
 
-         //监听性别操作
-        form.on('switch(sexDemo)', function(obj){
-          layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+         //监听账号操作
+        form.on('switch(statusDemo)', function(obj){
+          // layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+          var status;
+          if (obj.elem.checked) {
+            status = 1;
+          }else{
+            status = 0;
+          }
+           //冻结账号
+          $.post('/Admin/admin/admin_del', {id:this.value,status:status}, function(res){
+
+              if (res.code == 200) {
+              
+                layer.msg(res.msg,{icon:1,time:1000});
+                obj.del();
+              
+              }else{
+
+                layer.msg(res.msg,{icon:1,time:1000});
+              }
+
+          })
         });
 
         //监听工具条
@@ -97,7 +118,7 @@
               //发异步删除数据
               $.post('/Admin/admin/admin_del', {id:data.id}, function(res){
 
-                  if (res.code == 1) {
+                  if (res.code == 200) {
                   
                     layer.msg(res.msg,{icon:1,time:1000});
                     obj.del();
@@ -152,7 +173,7 @@
             }
              layer.confirm('确认要删除吗？', function(index){
               //发异步删除数据
-              $.post('/Admin/Member/member_delAll', {id:id}, function(res){
+              $.post('/Admin/Admin/Admin_delAll', {id:id}, function(res){
 
                   if (res.code == 1) {
                   
@@ -183,7 +204,7 @@
                 curr: 1 //重新从第 1 页开始
               }
               ,where: {
-                  username: demoReload.val()
+                  user_name: demoReload.val()
               }
             })
           }

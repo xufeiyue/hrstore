@@ -46,11 +46,23 @@ class User extends Model
 		    ->insert($data);
 	}
 
-	public function lists($p=1)
+	public function lists($offset=0,$limit=10,$where=[],$order=[])
 	{
 
-		$data = $this->alias('a')->field('a.*,r.title')->join('__AUTH_GROUP__ r',' r.id = a.role_id ','left')->page($p,20)->select();
-		$count = $this->count();
+		$data = $this
+			->alias('a')
+			->where($where)
+			->field('a.*,r.title')
+			->join('__AUTH_GROUP__ r',' r.id = a.role_id ','left')
+			->limit($offset,$limit)
+			->order($order)
+			->select();
+
+		$count = $this
+			->alias('a')
+			->where($where)
+			->count();
+			
 		return ['total'=>$count,'rows'=>$data];
 	}
 }

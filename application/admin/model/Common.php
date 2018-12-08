@@ -13,7 +13,7 @@ class Common
 		$this->table = $table;
 	}
 
-	//公共列表
+	//公共列表+分页+搜索条件+排序
 	public function Common_Select($offset=0,$limit=10,$where=[],$order=[]){
 
 		$data = Db::name($this->table)
@@ -28,6 +28,18 @@ class Common
 			->count();
 
 		return ['data' => $data , 'count' => $count];
+	}
+
+	//全部数据
+	public function Common_All_Select($where=[],$order=[]){
+
+		$data = Db::name($this->table)
+			->where($where)
+			->order($order)
+			->field('*,FROM_UNIXTIME(create_time)create_time')
+			->select();
+
+		return $data;
 	}
 
 	//公共详情

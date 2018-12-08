@@ -44,6 +44,34 @@ class ActivityController extends AdminController
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
 
+	//导出
+	public function activity_export(){
+
+		$where = [];
+
+		$activity_name = input('post.activity_name/s');
+
+		if($activity_name){
+
+			$where['activity_name']  = ['like',"%{$activity_name}%"];
+		}
+
+		if ($this->is_jurisdiction) { //判断是管理员还是商家
+			
+			$where['store_id'] = $this->is_jurisdiction;
+		}
+
+		$order = ['id' => 'desc'];
+
+		$where['status'] = 0;
+
+		$data = (new Activity)->Common_All_Select($where,$order);
+
+		if($data)
+			return json(['code' => 200 , 'msg' => '请求成功', 'data' => $data]);
+			return json(['code' => 400 , 'msg' => '没有可导出数据']);
+	}
+
 	//新增活动
 	public function activity_add(){
 
@@ -190,9 +218,4 @@ class ActivityController extends AdminController
 			return json(['code' => 2 , 'msg' => '删除失败']);
 	}
 
-	//活动导出
-	public function export(){
-
-
-	}
 }

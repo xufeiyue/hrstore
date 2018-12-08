@@ -104,6 +104,18 @@ class RoleController extends AdminController{
             return view();
         }
     }
+    
+    public function role_del(){
+
+        $id = input('post.id/d');
+
+        $del = Db::name('auth_group')->where(['id' => $id])->delete();
+
+        if($del)
+            return json(['code' => 200 , 'msg' => '刪除成功']);
+            return json(['code' => 400 , 'msg' => '刪除失敗']);
+
+    }
     /**
      * 后台节点配置的url作为规则存入auth_rule
      * 执行新节点的插入,已有节点的更新,无效规则的删除三项任务

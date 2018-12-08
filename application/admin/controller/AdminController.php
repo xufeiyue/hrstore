@@ -70,10 +70,25 @@ class AdminController extends Controller
 	 * @return [type] [description]
 	 */
 	public function admin_ajax()
-	{
+	{  
+        $where = [];
+
+        $user_name = input('post.user_name/s');
+
+        if ($user_name) {
+            
+            $where['a.user_name'] = ['like',"%{$user_name}%"];
+        }
+
+        $offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+        $limit = input('post.limit/d') ? : 10;
+
 		$User = Model('User');
 
-		$data = $User->lists();
+        $order = ['a.id' => 'desc'];
+
+		$data = $User->lists($offset,$limit,$where,$order);
 
         return json(['code' => 0 , 'msg' => '','count' => $data['total'] , 'data' => $data['rows']]);
 	}
@@ -94,6 +109,10 @@ class AdminController extends Controller
             $data['password'] = MD5(input('password'));
 
             $data['createTime'] = time();
+
+            $data['update_time'] = time();
+
+            $data['store_id'] = input('post.store_id/d');
 
 			$User = Model('User');
 
@@ -133,7 +152,9 @@ class AdminController extends Controller
 				unset($data['password']);
 			}
 	        
-            $data['update'] = time();
+            $data['store_id'] = input('post.store_id/d');
+
+            $data['update_time'] = time();
 
 			$User = Model('User');
 			$AuthGroup = Model('AuthGroup');
@@ -159,6 +180,23 @@ class AdminController extends Controller
 			return view();
 		}
 	}
+    /**
+     * [admin_del 编辑管理员]
+     * @param  string $value [description]
+     * @return [type]        [description]
+     */
+    public function admin_del(){
+
+        $id = input('post.id/d');
+
+        $status = input('post.status/d');
+
+        $del = Db::name('user')->where(['id' => $id])->update(['status' => $status]);
+
+        if($del)
+            return json(['code' => 200 , 'msg' => '操作成功']);
+            return json(['code' => 400 , 'msg' => '操作失败']);
+    }
 	/**
      * 返回后台节点数据
      * @param boolean $tree    是否返回多维数组结构(生成菜单时用到),为false返回一维数组(生成权限节点时用到)

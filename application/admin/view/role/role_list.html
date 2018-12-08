@@ -10,24 +10,19 @@
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-      <div class="layui-row">
-       <!--  <form class="layui-form layui-col-md12 x-so">
-          <input class="layui-input" placeholder="开始日" name="start" id="start">
-          <input class="layui-input" placeholder="截止日" name="end" id="end">
-          <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-        </form> -->
+      <!-- <div class="layui-row">
+       
           <div class="demoTable layui-form layui-col-md12 x-so">
-          搜索用户名：
-          <div class="layui-inline">
-            <input class="layui-input" name="username" id="demoReload" autocomplete="off">
+            搜索用户名：
+            <div class="layui-inline">
+              <input class="layui-input" name="username" id="demoReload" autocomplete="off">
+            </div>
+            <button class="layui-btn" data-type="reload">搜索</button>
           </div>
-          <button class="layui-btn" data-type="reload">搜索</button>
-        </div>
-      </div>
+      </div> -->
 
       <div class="layui-btn-group demoTable">
-        <button class="layui-btn" data-type="getCheckData">批量删除</button>
+        <!-- <button class="layui-btn" data-type="getCheckData">批量删除</button> -->
         <button class="layui-btn" onclick="x_admin_show('添加用户','./role_add.html',600,400)"><i class="layui-icon"></i>添加</button>
         <!-- <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
         <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
@@ -74,8 +69,7 @@
           ,{field: 'id',  title: 'ID', sort: true, fixed: 'left' ,align: 'center'}
           ,{field: 'title', title: '名称',align: 'center'}
           ,{field: 'module', title: '模块', align: 'center'}
-          ,{field: 'type', title: '类型',align: 'center'} 
-          ,{field: 'description', title: '描述',align: 'center',event: 'setSign'}
+          ,{field: 'description', title: '描述',align: 'center'}
           ,{field:'right', title: '操作',toolbar:"#barDemo",align: 'center'}
         ]]
       });
@@ -101,7 +95,7 @@
               //发异步删除数据
               $.post('/Admin/Role/role_del', {id:data.id}, function(res){
 
-                  if (res.code == 1) {
+                  if (res.code == 200) {
                   
                     layer.msg(res.msg,{icon:1,time:1000});
                     obj.del();
