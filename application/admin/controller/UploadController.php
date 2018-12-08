@@ -45,7 +45,7 @@ class UploadController extends Controller
 
         if ($info) {
             // $this->success('文件上传成功：' . $info->getRealPath());
-            return json(['code'=> 0 ,'data'=> ['src' => 'http://www.shop.com/uploads/member/' . $info->getSaveName() , 'title' => '']]);
+            return json(['code'=> 0 ,'data'=> ['src' => $request->domain().'/uploads/member/' . $info->getSaveName() , 'title' => '']]);
         } else {
             // 上传失败获取错误信息
             // $this->error($file->getError());
