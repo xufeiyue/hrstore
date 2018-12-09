@@ -17,6 +17,7 @@ class Advertisement extends Common
 		$data = Db::name($this->table)
 			->alias('a')
 			->join('advertisement_type a_t','a_t.id = a.type_id and a_t.status = 0','left')
+			// ->join('store s','s.id = a.store_id','left')
 			->where($where)
 			->limit($offset,$limit)
 			->order($order)
