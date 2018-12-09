@@ -1,0 +1,176 @@
+{include file="public/header"}
+    <div class="x-body">
+        <form class="layui-form">
+          <input type="hidden" id="id"  name="id" value="{$list['id']}" required="" lay-verify="id"
+                  autocomplete="off" class="layui-input">
+          <div class="layui-form-item">
+              <label for="search_box_content" class="layui-form-label">
+                  <span class="x-red">*</span>搜索框默认内容
+              </label>
+              <div class="layui-input-inline"> <!-- layui-input-block 长输入框 -->
+                  <input type="text" id="search_box_content" value="{$list['search_box_content']}" name="search_box_content"   lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="site_name" class="layui-form-label">
+                  <span class="x-red">*</span>网站名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="site_name" name="site_name" value="{$list['site_name']}" lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="site_title" class="layui-form-label">
+                  <span class="x-red">*</span>标题
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="site_title" name="site_title" value="{$list['site_title']}"   lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="phone" class="layui-form-label">
+                  <span class="x-red">*</span>联系电话
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="phone" name="phone" required="" value="{$list['phone']}" lay-verify="phone"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_email" class="layui-form-label">
+                  <span class="x-red">*</span>电子信箱
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="L_email" name="email" required="" value="{$list['email']}" lay-verify="email"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="address" class="layui-form-label">
+                  <span class="x-red">*</span>联系地址
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="address" name="address" required="" value="{$list['address']}"  lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="copyright_information" class="layui-form-label">
+                  <span class="x-red">*</span>版权信息
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="copyright_information" value="{$list['copyright_information']}" name="copyright_information"  lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="record_information" class="layui-form-label">
+                  <span class="x-red">*</span>备案信息
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="record_information" value="{$list['record_information']}" name="record_information"  lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="key_word" class="layui-form-label">
+                  <span class="x-red">*</span>关键词
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="key_word" name="key_word" value="{$list['key_word']}"  lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="site_description" class="layui-form-label">
+                  <span class="x-red">*</span>网站描述
+              </label>
+              <div class="layui-input-inline">
+              <textarea placeholder="请输入内容" class="layui-textarea"  id="site_description" name="site_description"  lay-verify="required"
+                  autocomplete="off">{$list['site_description']}</textarea>
+                 <!--  <input type="text" id="site_description" value="{$list['site_description']}" name="site_description"  lay-verify="required"
+                  autocomplete="off" class="layui-input"> -->
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="friendship_link" class="layui-form-label">
+                  <span class="x-red">*</span>友情链接
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="friendship_link" value="{$list['friendship_link']}" name="friendship_link"  lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label" class="layui-form-label">
+              <span class="x-red">*</span>站点开关状态
+            </label>
+            <div class="layui-input-block">
+              <input type="checkbox" {if condition="$list['site_switch_state'] eq 1"}checked=""{/if} name="site_switch_state" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="edit" lay-submit="">
+                  保存
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+      layui.use(['form','layer'], function(){
+          $ = layui.jquery;
+        var form = layui.form
+        ,layer = layui.layer;
+     
+        //自定义验证规则
+        form.verify({
+          nikename: function(value){
+            if(value.length < 5){
+              return '昵称至少得5个字符啊';
+            }
+          }
+          // ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+          // ,repass: function(value){
+          //     if($('#L_pass').val()!=$('#L_repass').val()){
+          //         return '两次密码不一致';
+          //     }
+          // }
+        });
+
+        //监听提交
+        form.on('submit(edit)', function(data){
+
+            //发异步，把数据提交给php
+            $.post('/Admin/System/system_setup', data.field, function(res){
+                if(res.code == 200){
+                    layer.alert(res.msg, {icon: 1},function () {
+                      window.location.reload();
+                  });
+                }else{
+                  layer.alert(res.msg, {icon: 1});
+                }
+            })
+
+            return false;
+        });
+        
+        
+      });
+  </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        console.log(s);
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>
