@@ -1,4 +1,5 @@
 {include file="public/header"}
+
     <div class="x-nav">
       <span class="layui-breadcrumb">
         <a href="">首页</a>
@@ -11,84 +12,77 @@
     </div>
     <div class="x-body">
       <div class="layui-row">
-       <!--  <form class="layui-form layui-col-md12 x-so">
-          <input class="layui-input" placeholder="开始日" name="start" id="start">
-          <input class="layui-input" placeholder="截止日" name="end" id="end">
-          <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-        </form> -->
           <div class="demoTable layui-form layui-col-md12 x-so">
-          搜索用户名：
           <div class="layui-inline">
-            <input class="layui-input" name="username" id="demoReload" autocomplete="off">
+            <input class="layui-input" name="name" placeholder="请输入名称" id="demoReload" autocomplete="off">
           </div>
           <button class="layui-btn" data-type="reload">搜索</button>
         </div>
       </div>
-<!-- onclick="x_admin_show('添加菜单','./menu_add.html',600,500)" -->
+
       <div class="layui-btn-group demoTable">
         <button class="layui-btn" data-type="getCheckData">批量删除</button>
-        <button class="layui-btn insert" id="button" ><i class="layui-icon"></i>添加</button>
+        <button class="layui-btn" onclick="x_admin_show('新增广告','./advertisement_add.html',600,400)"><i class="layui-icon"></i>新增</button>
         <!-- <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
         <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
       </div>
-      <table class="layui-table"  id="demo" lay-filter="useruv">
+      <table class="layui-table" id="demo" lay-filter="useruv">
       </table>
     </div>
       <script type="text/html" id="barDemo">
-        <!-- <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a> -->
         <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
       </script>
-      <script type="text/html" id="usernameTpl">
-        <a class="layui-table-link" lay-event="title">{{ d.title }}</a>
+      <script type="text/html" id="switchTpl">
+        <input type="checkbox" name="state" value="{{d.id}}" lay-skin="switch" lay-text="ON|OFF" lay-filter="stateDemo" {{ d.state == 0 ? 'checked' : '' }}>
+
+      </script>
+      <script type="text/html" id="portrait" >
+
+          <a href="{{d.image}}"><img src="{{d.image}}"  style="width: 100%;height: 100%"></a>
+        
       </script>
     <script>
+
     layui.use(['table','laydate'], function(){
       var laydate = layui.laydate;
       var table = layui.table;
       var form = layui.form;
 
         //执行一个laydate实例
-        // laydate.render({
-        //   elem: '#start' //指定元素
-        // });
+        laydate.render({
+          elem: '#start' //指定元素
+        });
 
-        // //执行一个laydate实例
-        // laydate.render({
-        //   elem: '#end' //指定元素
-        // });
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+
+
 
       //第一个实例
       var tableIns = table.render({
         elem: '#demo'
         ,method: 'post'
-        ,height : "600"
-        ,url: '/Admin/Menu/ajax_menu_list' //数据接口
+        ,defaultToolbar: ['filter', 'print', 'exports']
+        // ,toolbar: 'default'
+        ,url: '/Admin/Advertisement/ajax_advertisement_list' //数据接口
         ,page: true //开启分页
+        ,cellMinWidth : 95
+        ,height : "600"
         ,limit: 20
         ,id: 'idTest'
         ,cols: [[ //表头
-           {checkbox: true, fixed: true}
-          ,{field: 'id',  title: 'ID', sort: true, fixed: 'left' ,align: 'center'}
-          ,{field: 'title', title: '名称',align: 'center',templet: '#usernameTpl'}
-          ,{field: 'up_title', title: '上级菜单', align: 'center'}
-          ,{field: 'group', title: '分组',align: 'center'} 
-          ,{field: 'url', title: 'URL',align: 'center'}
-          ,{field: 'sort', title: '排序',align: 'center'}
-          ,{field:'right', title: '操作',toolbar:"#barDemo",align: 'center'}
+           {checkbox: true, fixed: true,style:'height:100px;'}
+          ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
+          ,{field: 'type_name', title: '广告类型',align: 'center'}
+          ,{field: 'name', title: '广告名称',align: 'center'}
+          ,{field: 'image', title: '广告图片',align: 'center',templet: '#portrait'}
+          ,{field: 'create_time', title: '创建时间',align: 'center'}
+          ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
         ]]
       });
-
-
-        table.on('checkbox(useruv)', function(obj){
-
-        });
-
-         //监听性别操作
-        form.on('switch(sexDemo)', function(obj){
-          layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
-        });
 
         //监听工具条
         table.on('tool(useruv)', function(obj){
@@ -99,10 +93,10 @@
           } else if(obj.event === 'del'){
             layer.confirm('确认要删除吗？', function(index){
               //发异步删除数据
-              $.post('/Admin/Menu/Menu_del', {id:data.id}, function(res){
+              $.post('/Admin/Advertisement/advertisement_del', {id:data.id}, function(res){
 
-                  if (res.code == 1) {
-                  
+                  if (res.code == 200) {
+                
                     layer.msg(res.msg,{icon:1,time:1000});
                     obj.del();
                   
@@ -115,36 +109,8 @@
 
             });
           } else if(obj.event === 'edit'){
-             x_admin_show('编辑菜单','Menu_edit.html?id='+data.id,600,400);
-          }else if(obj.event === 'setSign'){
-              layer.prompt({
-                formType: 2
-                ,title: '修改 ID 为 ['+ data.id +'] 的用户签名'
-                ,value: data.sign
-              }, function(value, index){
-                layer.close(index);
-                
-                //这里一般是发送修改的Ajax请求
-                
-                //同步更新表格和缓存对应的值
-                var a = obj.update({sign: value});
-                console.log(a);
-              });
-            
-            }else if(obj.event === 'title'){
-              $('.insert').removeAttr('onclick');//清除onclick事件
-              $('.insert').attr('value',data.id);//赋值pid
-              $('.insert').attr('id','button');//改变事件名称
-                //执行重载
-              tableIns.reload({
-                page: {
-                  curr: 1 //重新从第 1 页开始
-                }
-                ,where: {
-                    pid: data.id
-                }
-              })
-            }
+             x_admin_show('编辑','advertisement_edit.html?id='+data.id,600,400);
+          }
         });
 
         //监听单元格编辑
@@ -170,12 +136,12 @@
             }
              layer.confirm('确认要删除吗？', function(index){
               //发异步删除数据
-              $.post('/Admin/Member/member_delAll', {id:id}, function(res){
+              $.post('/Admin/Advertisement/advertisement_delAll', {id:id}, function(res){
 
-                  if (res.code == 1) {
+                  if (res.code == 200) {
                   
                     layer.msg(res.msg,{icon:1,time:1000});
-                    
+                    table.reload('idTest');
                   }else{
 
                     layer.msg(res.msg,{icon:1,time:1000});
@@ -184,24 +150,15 @@
               })
             })
           }
-          ,getCheckLength: function(){ //获取选中数目
-            var checkStatus = table.checkStatus('idTest')
-            ,data = checkStatus.data;
-            layer.msg('选中了：'+ data.length + ' 个');
-          }
-          ,isAll: function(){ //验证是否全选
-            var checkStatus = table.checkStatus('idTest');
-            layer.msg(checkStatus.isAll ? '全选': '未全选')
-          }
           ,reload: function(){
             var demoReload = $('#demoReload');
             //执行重载
             tableIns.reload({
               page: {
-                curr: 2 //重新从第 1 页开始
+                curr: 1 //重新从第 1 页开始
               }
               ,where: {
-                  username: demoReload.val()
+                  name: demoReload.val(),
               }
             })
           }
@@ -212,12 +169,6 @@
           active[type] ? active[type].call(this) : '';
         });
 
-    });
-      
-    $(document).on('click', '#button', function(event) {
-
-        var id = $(this).attr('value');
-        x_admin_show('添加菜单','menu_add.html?pid='+id,600,500)
     });
 
     </script>
