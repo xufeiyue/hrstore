@@ -1,0 +1,182 @@
+{include file="public/header"}
+    <div class="x-body">
+        <form class="layui-form">
+        {if condition="$is_jurisdiction == 0"}
+          <div class="layui-form-item">
+            <label  for="store_id" class="layui-form-label">
+              <span class="x-red">*</span>选择店铺
+            </label>
+            <div class="layui-input-block">
+              <select name="store_id" lay-filter="store_id">
+                <option value="0">请选择</option>
+                {volist name="store" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                {/volist}
+              </select>
+            </div>
+          </div>
+        {/if}
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>标题
+              </label>
+              <div class="layui-input-block">
+                  <input type="text" id="title" name="title" lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>开始时间
+              </label>
+              <div class="layui-input-block">
+                  <input type="text"  name="start_time" id="start_time"lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>结束时间
+              </label>
+              <div class="layui-input-block">
+                  <input type="text" name="end_time" id="end_time"lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>问卷正文
+              </label>
+              <div class="layui-input-block">
+                  <textarea type="text" id="questionnaire_text" name="questionnaire_text" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>意见填写
+              </label>
+              <div class="layui-input-block">
+                  <textarea type="text" id="opinion_completion" name="opinion_completion" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label class="layui-form-label">
+                  <span class="x-red">*</span>选择问题(标题)
+              </label>
+              <table  class="layui-input-block">
+                  <tbody id="problem_id">
+                     
+                  </tbody>
+              </table>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  增加
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+        layui.use(['form','layer','laydate'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer
+          ,laydate = layui.laydate;
+
+          //执行一个laydate实例
+        laydate.render({
+          elem: '#start_time' //指定元素
+          ,type: 'datetime'
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end_time' //指定元素
+          ,type: 'datetime'
+        });
+         
+         //监听选择店铺
+         form.on('select(store_id)',function(data){
+          $.post('/Admin/Statistical/problem_list',{store_id: data.value},function(res){
+            var html = '';
+            if (res.code == 200) {
+              for (var i = 0; i < res.data.length; i++) {
+                html += '<tr>';
+                html +=   '<td>';
+                html +=      '<div class="layui-btn layui-btn-sm layui-btn-normal" style="background-color: #5FB878;margin-right: 10px;">'+res.data[i].type+'</div>';
+                html +=      '<input type="checkbox" title="全选" lay-filter="filter">';
+                html +=   '</td>';
+                html +=       '<td>';
+                html +=          '<div class="layui-input-block">';
+                          for (var j = 0; j < res.data[i].list.length; j++) {
+                html +=            '<input type="checkbox" name="problem_id[]" value="'+res.data[i].list[j].id+'" title="'+res.data[i].list[j].problem+'">';
+                // html +=             '<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>'
+                          }
+                html +=           '</div>';
+                html +=       '</td>';
+                html +=  '</tr>';
+                html +=  '<hr/>';
+              }
+              
+            }
+            $("#problem_id").html('');
+            $("#problem_id").append(html);
+            form.render('checkbox');
+          })
+         })
+
+         //监听工具条
+          form.on('tool(useruv)', function(obj){
+            var data = obj.data;
+            x_admin_show('编辑','subject_edit.html?id='+data.id,600,400);
+          });
+
+          form.on('checkbox(filter)', function(data){
+
+            $(this).closest('tr').find('td').find('input').prop('checked',this.checked);
+           
+            form.render('checkbox');//渲染
+          });
+
+          //监听提交
+          form.on('submit(add)', function(data){
+            
+            //发异步，把数据提交给php
+            $.post('/Admin/Statistical/questionnaire_add', data.field, function(res){
+
+                if(res.code == 200){
+                    layer.alert(res.msg, {icon: 1},function () {
+                      // 获得frame索引
+                      var index = parent.layer.getFrameIndex(window.name);
+
+                      //关闭当前frame
+                      parent.layer.close(index);
+                     
+                      window.parent.location.reload();
+
+                  });
+                }else{
+                  layer.msg(res.msg,{time: 1000});
+                }
+            })
+            
+            return false;
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

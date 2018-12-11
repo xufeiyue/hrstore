@@ -11,23 +11,18 @@
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-      <div class="layui-row">
+      <!-- <div class="layui-row">
           <div class="demoTable layui-form layui-col-md12 x-so">
           <div class="layui-inline">
-            <select name="type_id" lay-filter="type_id" id="type_id">
-                <option value="0">单选题</option>
-                <option value="1">多选题</option>
-              </select>
-            <!-- <input class="layui-input" name="type_name" placeholder="请输入类型名称" id="demoReload" autocomplete="off"> -->
+            <input class="layui-input" name="type_name" placeholder="请输入类型名称" id="demoReload" autocomplete="off">
           </div>
           <button class="layui-btn" data-type="reload">搜索</button>
         </div>
-      </div>
+      </div> -->
 
       <div class="layui-btn-group demoTable">
         <button class="layui-btn" data-type="getCheckData">批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('新增单选题','./subject_add.html?type=0',800,800)"><i class="layui-icon"></i>新增单选题</button>
-        <button class="layui-btn" onclick="x_admin_show('新增多选题','./subject_add.html?type=1',800,800)"><i class="layui-icon"></i>新增多选题</button>
+        <button class="layui-btn" onclick="x_admin_show('发布问卷','./questionnaire_add.html?type=0',1000,800)"><i class="layui-icon"></i>发布问卷</button>
         <!-- <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
         <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
       </div>
@@ -72,7 +67,7 @@
         ,method: 'post'
         ,defaultToolbar: ['filter', 'print', 'exports']
         // ,toolbar: 'default'
-        ,url: '/Admin/Statistical/ajax_subject_list' //数据接口
+        ,url: '/Admin/Statistical/ajax_questionnaire_list' //数据接口
         ,page: true //开启分页
         ,cellMinWidth : 95
         ,height : "600"
@@ -81,8 +76,10 @@
         ,cols: [[ //表头
            {checkbox: true, fixed: true,style:'height:100px;'}
           ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
-          ,{field: 'type_name', title: '类型',align: 'center'}
-          ,{field: 'problem', title: '问题',align: 'center'}
+          ,{field: 'title', title: '标题',align: 'center'}
+          ,{field: 'start_time', title: '开始时间',align: 'center'}
+          ,{field: 'end_time', title: '结束时间',align: 'center'}
+          ,{field: 'questionnaire_text', title: '问卷正文',align: 'center'}
           ,{field: 'create_time', title: '创建时间',align: 'center'}
           ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
         ]]
@@ -97,7 +94,7 @@
           } else if(obj.event === 'del'){
             layer.confirm('确认要删除吗？', function(index){
               //发异步删除数据
-              $.post('/Admin/Statistical/subject_del', {id:data.id}, function(res){
+              $.post('/Admin/Statistical/questionnaire_del', {id:data.id}, function(res){
 
                   if (res.code == 200) {
                 
@@ -113,7 +110,7 @@
 
             });
           } else if(obj.event === 'edit'){
-             x_admin_show('编辑','subject_edit.html?id='+data.id,600,400);
+             x_admin_show('编辑','questionnaire_edit.html?id='+data.id,1000,800);
           }
         });
 
@@ -140,7 +137,7 @@
             }
              layer.confirm('确认要删除吗？', function(index){
               //发异步删除数据
-              $.post('/Admin/Statistical/subject_delAll', {id:id}, function(res){
+              $.post('/Admin/Statistical/questionnaire_delAll', {id:id}, function(res){
 
                   if (res.code == 200) {
                   
@@ -155,14 +152,14 @@
             })
           }
           ,reload: function(){
-            var demoReload = $('#type_id');
+            var demoReload = $('#demoReload');
             //执行重载
             tableIns.reload({
               page: {
                 curr: 1 //重新从第 1 页开始
               }
               ,where: {
-                  type_id: demoReload.val(),
+                  type_name: demoReload.val(),
               }
             })
           }
