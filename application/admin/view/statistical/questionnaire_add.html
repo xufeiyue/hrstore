@@ -67,7 +67,7 @@
               </label>
               <table  class="layui-input-block">
                   <tbody id="problem_id">
-                     
+                      <div class="layui-btn layui-btn-sm layui-btn-normal" style="background-color: #5FB878" id="type_id">单选题</div>
                   </tbody>
               </table>
           </div>
@@ -88,6 +88,7 @@
           ,layer = layui.layer
           ,laydate = layui.laydate;
 
+        var store_id;
           //执行一个laydate实例
         laydate.render({
           elem: '#start_time' //指定元素
@@ -102,6 +103,7 @@
          
          //监听选择店铺
          form.on('select(store_id)',function(data){
+          store_id = data.value
           $.post('/Admin/Statistical/problem_list',{store_id: data.value},function(res){
             var html = '';
             if (res.code == 200) {
@@ -130,11 +132,14 @@
           })
          })
 
-         //监听工具条
-          form.on('tool(useruv)', function(obj){
-            var data = obj.data;
-            x_admin_show('编辑','subject_edit.html?id='+data.id,600,400);
-          });
+
+          $("#type_id").click(function(){
+            if (store_id == undefined) {
+              layer.msg('请选择店铺',{time: 1000});
+              return false
+            }
+             x_admin_show('题库','store_subject.html?store_id='+store_id,800,400);
+          })
 
           form.on('checkbox(filter)', function(data){
 

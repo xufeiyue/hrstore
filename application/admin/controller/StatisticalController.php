@@ -404,4 +404,36 @@ class StatisticalController extends AdminController
 			return json(['code' => 400 , 'msg' => '请求成功,没有数据']);
 
 	}
+
+	//店铺下查询所有题目
+	public function problem_list1($storeId=0){
+
+		$store_id = input('store_id/d');
+
+		$order = ['id' => 'desc'];
+
+		$list = (new Problem)->Problem_Select(['store_id' => $store_id , 'status' => 0],$order);
+
+		foreach ($list as $key => $value) {
+			if ($value['type']) {
+				$list[$key]['type_name'] = '多选题';
+			}else{
+				$list[$key]['type_name'] = '单选题';
+			}
+		}
+
+		if($list)
+			return json(['code' => 0 , 'msg' => '请求成功' , 'data' => $list]);
+			return json(['code' => 1 , 'msg' => '请求成功,没有数据']);
+
+	}
+	//店铺下题目
+	public function store_subject(){
+
+		$store_id = input('store_id/d');
+
+		$this->assign('store_id',$store_id);
+
+		return view();
+	}
 }

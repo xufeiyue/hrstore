@@ -43,7 +43,8 @@
                         <dl class="checkmod">
                             <dt class="hd">
                              <label class="checkbox-inline" for="rules">
-                                    <input type="checkbox" lay-filter="filter"  class="auth_rules rules_all" value="<?php echo $main_rules[$node['url']] ?>" name="rules[]">{$node.title}管理</label>
+                                    <input type="checkbox" lay-filter="filter"  class="auth_rules rules_all" value="<?php echo $main_rules[$node['url']] ?>" name="rules[]" title="{$node.title}"></label>
+
                             </dt>
                             <dd class="bd">
                                 {notempty name="node['child']" }
@@ -52,7 +53,7 @@
                                     <div class="rule_check">
                                         <div>
                                             <label class="checkbox-inline" {notempty name="child['tip']"}title='{$child.tip}' {/notempty} for="rules">
-                                                <input class="auth_rules rules_row" type="checkbox" lay-filter="filter" name="rules[]" value="<?php echo $auth_rules[$child['url']] ?>">{$child.title}
+                                                <input class="auth_rules rules_row" type="checkbox" lay-filter="filter" name="rules[]" value="<?php echo $auth_rules[$child['url']] ?>" title="{$child.title}">
                                                </label>
 
                                         </div>
@@ -62,7 +63,7 @@
                                                {volist name="child['operator']" id="op"}
                                                    <label class="checkbox-inline" {notempty name="op['tip']"} title='{$op.tip}'{/notempty} for="rules">
                                                        <input class="auth_rules" type="checkbox" name="rules[]"
-                                                       value="<?php echo $auth_rules[$op['url']] ?>"/>{$op.title}
+                                                       value="<?php echo $auth_rules[$op['url']] ?>" title="{$op.title}"/>
                                                    </label>
                                                {/volist}
                                            </span>
