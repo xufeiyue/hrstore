@@ -240,6 +240,10 @@ class StatisticalController extends AdminController
 
 			$problem_id = input('post.problem_id/a');
 
+			if (empty($problem_id)) {
+				return json(['code' => 400 , 'msg' => '请选择问题']);
+			}
+
 			$data['problem_id'] = implode(',', $problem_id);
 
 			$data['create_time'] = time();
@@ -295,8 +299,12 @@ class StatisticalController extends AdminController
 			$data['opinion_completion'] = input('post.opinion_completion/s');
 
 			$problem_id = input('post.problem_id/a');
-
+			if (empty($problem_id)) {
+				return json(['code' => 400 , 'msg' => '请选择问题']);
+			}
 			$data['problem_id'] = implode(',', $problem_id);
+
+
 
 			$data['update_time'] = time();
 
