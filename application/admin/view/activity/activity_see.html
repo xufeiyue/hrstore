@@ -1,0 +1,178 @@
+{include file="public/header"}
+    <div class="x-body">
+        <form class="layui-form">
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>活动名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="activity_name" disabled="" name="activity_name" value="{$list['activity_name']}" lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+              <!-- <div class="layui-form-mid layui-word-aux">
+                  <span class="x-red">*</span>将会成为您唯一的登入名
+              </div> -->
+          </div>
+          <div class="layui-form-item">
+              <label for="touxiang" class="layui-form-label">
+                  <span class="x-red">*</span>活动图片
+              </label>
+              <!-- <img src="{$list['activity_url']}" style="width: 200px;height: 200px"> -->
+              <input type="hidden" lay-verify="required" name="activity_url" id="activity_url" value="{$list['activity_url']}">
+              <div class="layui-upload-drag" style="width: 40%;height: 40%">
+                <img src="{$list['activity_url']}" style="width: 30%;height: 30%" class="layui-upload-img">
+                <!-- <i class="layui-icon"></i>
+                <p>点击上传，或将文件拖拽到此处</p> -->
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="touxiang" class="layui-form-label">
+                  <span class="x-red">*</span>活动详情
+              </label>
+               <div class="layui-input-inline"  style="width: 550px">
+                  <textarea id="activity_detail" lay-verify="activity_detail" contenteditable="false" name="activity_detail" style="display: none;">{$list['activity_detail']}</textarea>
+                </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="activity_start_time" class="layui-form-label">
+                  <span class="x-red">*</span>开始时间
+              </label>
+                <div class="layui-input-inline">
+                  <input type="text" lay-verify="required" disabled="" value="{$list['activity_start_time']}" autocomplete="off" class="layui-input" name="activity_start_time" id="start" placeholder="请输入开始时间">
+                </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="activity_end_time" class="layui-form-label">
+                  <span class="x-red">*</span>结束时间
+              </label>
+                <div class="layui-input-inline">
+                  <input type="text" lay-verify="required" disabled="" value="{$list['activity_end_time']}" autocomplete="off" class="layui-input" name="activity_end_time" id="end" placeholder="请输入结束时间">
+                </div>
+          </div>
+          <!-- <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="edit" lay-submit="">
+                  更新
+              </button>
+          </div> -->
+      </form>
+    </div>
+    <script>
+        layui.use(['form','layer','upload','laydate','layedit'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,laydate = layui.laydate
+          ,layedit = layui.layedit
+          ,layer = layui.layer
+          ,upload = layui.upload;
+          layedit.set({
+            uploadImage: {
+              url: '/Admin/Upload/editor_upload', 
+              type: 'post'
+            }
+          });
+          //注意：layedit.set 一定要放在 build 前面，否则配置全局接口将无效。
+          var index = layedit.build('activity_detail',{
+            height: 180,
+            contenteditable: false
+          }); //建立编辑器
+
+          layedit.sync(index)
+
+          //日期时间选择器
+          laydate.render({
+            elem: '#start'
+            ,type: 'datetime'
+          });
+
+          laydate.render({
+            elem: '#end'
+            ,type: 'datetime'
+          });
+
+          //拖拽上传
+          upload.render({
+            elem: '#test10'
+            ,url: '/Admin/Upload/upload'
+            ,accept: 'images'
+            ,exts: 'jpg|png' //允许上传类型
+            ,before: function(obj){
+              //预读本地文件示例，不支持ie8
+              obj.preview(function(index, file, result){
+                $('#test10').html('');
+                $('#test10').append('<img src="'+ result +'" alt="'+ file.name +'" style="width: 30%;height: 30%" class="layui-upload-img">')
+              });
+            }
+            ,done: function(res){ //上传成功 赋值
+              $('#activity_url').val(res.data);
+              layer.msg('上传成功', {icon: 1});
+            }
+          });
+
+          //自定义验证规则
+          form.verify({
+            nikename: function(value){
+              if(value.length < 5){
+                return '昵称至少得5个字符啊';
+              }
+            }
+            ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+            ,repass: function(value){
+                if($('#L_pass').val()!=$('#L_repass').val()){
+                    return '两次密码不一致';
+                }
+            },
+            activity_detail: function(value) { 
+             return layedit.sync(index);
+            }
+          });
+
+          //监听指定开关
+          form.on('switch(switchTest)', function(data){
+            console.log(data.othis)
+            // layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+            //   offset: '6px'
+            // });
+            // layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+          });
+
+          //监听提交
+          form.on('submit(edit)', function(data){
+            console.log(data);
+            
+            //发异步，把数据提交给php
+            $.post('/Admin/Activity/activity_edit', data.field, function(res){
+
+                if(res.code == 200){
+                    layer.alert(res.msg, {icon: 1},function () {
+                      // 获得frame索引
+                      var index = parent.layer.getFrameIndex(window.name);
+
+                      //关闭当前frame
+                      parent.layer.close(index);
+                     
+                      window.parent.location.reload();
+
+                  });
+                }else{
+                  layer.msg(res.msg,{time: 1000});
+                  // layer.alert(res.msg, {icon: 1});
+                }
+            })
+
+            
+            return false;
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

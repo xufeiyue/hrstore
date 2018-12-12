@@ -21,10 +21,9 @@
       </div>
 
       <div class="layui-btn-group demoTable">
-        <button class="layui-btn" data-type="export">导出</button>
+        <!-- <button class="layui-btn" data-type="export">导出</button> -->
         <button class="layui-btn" data-type="getCheckData">批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('发布活动','./activity_add.html',800,500)"><i class="layui-icon"></i>发布</button>
-        <button class="layui-btn" onclick="x_admin_show('拉取活动','./pull_up_activity.html',1000,600)"><i class="layui-icon"></i>拉取活动</button>
+        <button class="layui-btn" onclick="x_admin_show('发布活动','./activity_library_add.html',800,500)"><i class="layui-icon"></i>发布</button>
         <!-- <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
         <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
       </div>
@@ -69,7 +68,7 @@
         ,method: 'post'
         ,defaultToolbar: ['filter', 'print', 'exports']
         // ,toolbar: 'default'
-        ,url: '/Admin/Activity/ajax_activity_list' //数据接口
+        ,url: '/Admin/Activity/ajax_activity_library_list' //数据接口
         ,page: true //开启分页
         ,cellMinWidth : 95
         ,height : "600"
@@ -80,8 +79,7 @@
           ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
           ,{field: 'activity_name', title: '活动名称',align: 'center'}
           ,{field: 'activity_url', title: '活动图片',align: 'center',templet: '#portrait'}
-          ,{field: 'state', title: '开关状态', align: 'center',templet: '#switchTpl', unresize: true}
-          ,{field: 'pid_name', title: '来自', align: 'center',unresize: true}
+          // ,{field: 'state', title: '开关状态', align: 'center',templet: '#switchTpl', unresize: true}
           ,{field: 'create_time', title: '创建时间',align: 'center'}
           ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
         ]]
@@ -102,7 +100,7 @@
           }
           // layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
           //发异步更新数据
-          $.post('/Admin/Activity/activity_stateupdate', {id:this.value,state: state}, function(res){
+          $.post('/Admin/Activity/activity_library_stateupdate', {id:this.value,state: state}, function(res){
             if (res.code == 1) {
               layer.msg(res.msg,{icon:1,time:1000});
               // table.reload('idTest');
@@ -123,7 +121,7 @@
           } else if(obj.event === 'del'){
             layer.confirm('确认要删除吗？', function(index){
               //发异步删除数据
-              $.post('/Admin/activity/activity_del', {id:data.id}, function(res){
+              $.post('/Admin/activity/activity_library_del', {id:data.id}, function(res){
 
                   if (res.code == 1) {
                   
@@ -139,7 +137,7 @@
 
             });
           } else if(obj.event === 'edit'){
-             x_admin_show('编辑','activity_edit.html?id='+data.id,800,500);
+             x_admin_show('编辑','activity_library_edit.html?id='+data.id,800,500);
           }else if(obj.event === 'setSign'){
               layer.prompt({
                 formType: 2
@@ -180,7 +178,7 @@
             }
              layer.confirm('确认要删除吗？', function(index){
               //发异步删除数据
-              $.post('/Admin/Activity/activity_delAll', {id:id}, function(res){
+              $.post('/Admin/Activity/activity_library_delAll', {id:id}, function(res){
 
                   if (res.code == 1) {
                   
@@ -192,17 +190,6 @@
                   }
 
               })
-            })
-          },
-          export: function () {
-            $.post('/Admin/Activity/activity_export',{
-                  activity_name: $('#demoReload').val(),
-              }, function(res){
-                if (res.code == 200) {
-                  table.exportFile(tableIns.config.id, res.data, 'xls'); //导出
-                }else{
-                  layer.msg(res.msg,{icon:1,time:1000});
-                }
             })
           }
           ,getCheckLength: function(){ //获取选中数目

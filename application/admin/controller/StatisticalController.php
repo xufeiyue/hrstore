@@ -168,7 +168,7 @@ class StatisticalController extends AdminController
 
 		$id = input('id/d');
 
-		$list = (new Problem)->Common_Find(['id' => $id]);
+		$list = (new ItemBank)->Common_Find(['id' => $id]);
 
 		$list['content'] = json_decode($list['content'],true);
 

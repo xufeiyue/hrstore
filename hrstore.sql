@@ -11,11 +11,62 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 12/12/2018 14:33:57
+ Date: 12/12/2018 16:54:28
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for th_activity
+-- ----------------------------
+DROP TABLE IF EXISTS `th_activity`;
+CREATE TABLE `th_activity` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '活动自增id',
+  `activity_name` varchar(255) DEFAULT '' COMMENT '活动名称',
+  `activity_url` varchar(255) DEFAULT '' COMMENT '活动图片',
+  `activity_start_time` int(10) unsigned DEFAULT '0' COMMENT '活动开始时间',
+  `activity_end_time` int(10) unsigned DEFAULT '0' COMMENT '活动结束时间',
+  `activity_detail` text COMMENT '活动详情',
+  `status` tinyint(3) unsigned DEFAULT '0' COMMENT '0正常1删除',
+  `state` tinyint(3) unsigned DEFAULT '0' COMMENT '0开启1关闭',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `store_id` int(11) unsigned DEFAULT '0' COMMENT '店铺id',
+  `store_name` varchar(255) DEFAULT '' COMMENT '店铺名称',
+  `link_state` tinyint(1) unsigned DEFAULT '0' COMMENT '0内连接1外连接',
+  `number` int(10) unsigned DEFAULT '0' COMMENT '活动可参与总人数',
+  `participants_number` int(10) unsigned DEFAULT '0' COMMENT '活动已参与人数',
+  `pid` int(11) unsigned DEFAULT '0' COMMENT '活动库id',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`),
+  KEY `store_id` (`store_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='活动表';
+
+-- ----------------------------
+-- Table structure for th_activity_library
+-- ----------------------------
+DROP TABLE IF EXISTS `th_activity_library`;
+CREATE TABLE `th_activity_library` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '活动自增id',
+  `activity_name` varchar(255) DEFAULT '' COMMENT '活动名称',
+  `activity_url` varchar(255) DEFAULT '' COMMENT '活动图片',
+  `activity_start_time` int(10) unsigned DEFAULT '0' COMMENT '活动开始时间',
+  `activity_end_time` int(10) unsigned DEFAULT '0' COMMENT '活动结束时间',
+  `activity_detail` text COMMENT '活动详情',
+  `status` tinyint(3) unsigned DEFAULT '0' COMMENT '0正常1删除',
+  `state` tinyint(3) unsigned DEFAULT '0' COMMENT '0开启1关闭',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `store_id` int(11) unsigned DEFAULT '0' COMMENT '店铺id',
+  `store_name` varchar(255) DEFAULT '' COMMENT '店铺名称',
+  `link_state` tinyint(1) unsigned DEFAULT '0' COMMENT '0内连接1外连接',
+  `number` int(10) unsigned DEFAULT '0' COMMENT '活动可参与总人数',
+  `participants_number` int(10) unsigned DEFAULT '0' COMMENT '活动已参与人数',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`),
+  KEY `store_id` (`store_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='活动库表';
 
 -- ----------------------------
 -- Table structure for th_advertisement
@@ -104,7 +155,7 @@ CREATE TABLE `th_problem` (
   `pid` int(11) unsigned DEFAULT '0' COMMENT '题库自增id',
   PRIMARY KEY (`id`),
   KEY `status` (`status`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='店铺下题库';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='店铺下题库';
 
 -- ----------------------------
 -- Table structure for th_questionnaire
