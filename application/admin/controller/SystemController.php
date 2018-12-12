@@ -3,6 +3,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Request;
 use app\admin\model\System;
+use app\admin\model\AdminLog;
 class SystemController extends AdminController
 {
 	/*
@@ -69,5 +70,34 @@ class SystemController extends AdminController
 
 			return view();
 		}
+	}
+
+	//渲染系统日志模板
+	public function log_list(){
+
+		return view();
+	}
+
+	//ajax获取日志数据
+	public function ajax_log_list(){
+
+		$where = [];
+
+		$user_name = input('post.user_name/s');
+
+		if ($user_name) {
+			
+			$where['user_name'] = ['like',"%{$user_name}%"];
+		}
+
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+		$limit = input('post.limit/d') ? : 10;
+
+		$order = ['id' => 'desc'];
+
+		$data = (new AdminLog)->Common_Select($offset,$limit,$where,$order);
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
 }

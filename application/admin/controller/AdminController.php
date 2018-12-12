@@ -88,6 +88,8 @@ class AdminController extends Controller
 
         $order = ['a.id' => 'desc'];
 
+        $where['state'] = 0;
+
 		$data = $User->lists($offset,$limit,$where,$order);
 
         return json(['code' => 0 , 'msg' => '','count' => $data['total'] , 'data' => $data['rows']]);
@@ -180,8 +182,27 @@ class AdminController extends Controller
 			return view();
 		}
 	}
+
     /**
-     * [admin_del 编辑管理员]
+     * [update_status 冻结管理员]
+     * @param  string $value [description]
+     * @return [type]        [description]
+     */
+    public function update_status(){
+
+        $id = input('post.id/d');
+
+        $status = input('post.status/d');
+
+        $del = Db::name('user')->where(['id' => $id])->update(['status' => $status]);
+
+        if($del)
+            return json(['code' => 200 , 'msg' => '操作成功']);
+            return json(['code' => 400 , 'msg' => '操作失败']);
+    }
+
+    /**
+     * [admin_del 删除管理员]
      * @param  string $value [description]
      * @return [type]        [description]
      */
@@ -189,9 +210,7 @@ class AdminController extends Controller
 
         $id = input('post.id/d');
 
-        $status = input('post.status/d');
-
-        $del = Db::name('user')->where(['id' => $id])->update(['status' => $status]);
+        $del = Db::name('user')->where(['id' => $id])->update(['state' => 1]);
 
         if($del)
             return json(['code' => 200 , 'msg' => '操作成功']);

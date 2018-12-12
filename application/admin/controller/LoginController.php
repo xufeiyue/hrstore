@@ -15,15 +15,15 @@ class LoginController extends Controller
     		$User = Model('User');
 
     		$rs = $User->check($data,$request->IP());
-            //dump($rs);die;
-    		if($rs){
+    		if($rs && $rs['status'] == 1){
     			//设置session
-    			session('user_name',$rs['user_name']);
-    			session('user_id',$rs['id']);
-    			//$this->success('登录成功',url('admin/index/index'),'data',0);
+    			session('user_name',$rs['user_name']);//账号
+    			session('user_id',$rs['id']); //管理员id
+                session('store_id',$rs['store_id']); //店铺id
                 return json(['code' => 1 , 'msg' => '登录成功,正在跳转中....']);
-    		}else{
-    			//$this->error('用户名密码不对');
+    		}elseif ($rs && ($rs['status'] == 0)) {
+                return json(['code' => 2 , 'msg' => '该账号已被冻结，请联系管理员']);
+            } else{
                 return json(['code' => 2 , 'msg' => '用户名或密码错误']);
     		}
     	}else{

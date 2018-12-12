@@ -1,24 +1,22 @@
 /*
- Navicat Premium Data Transfer
+Navicat MySQL Data Transfer
 
- Source Server         : homestead
- Source Server Type    : MySQL
- Source Server Version : 50724
- Source Host           : 192.168.10.10:3306
- Source Schema         : ceshi
+Source Server         : localhost_3306
+Source Server Version : 50711
+Source Host           : localhost:3306
+Source Database       : ceshi
 
- Target Server Type    : MySQL
- Target Server Version : 50724
- File Encoding         : 65001
+Target Server Type    : MYSQL
+Target Server Version : 50711
+File Encoding         : 65001
 
- Date: 12/12/2018 16:54:28
+Date: 2018-12-12 22:01:36
 */
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for th_activity
+-- Table structure for `th_activity`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_activity`;
 CREATE TABLE `th_activity` (
@@ -44,7 +42,11 @@ CREATE TABLE `th_activity` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='活动表';
 
 -- ----------------------------
--- Table structure for th_activity_library
+-- Records of th_activity
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_activity_library`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_activity_library`;
 CREATE TABLE `th_activity_library` (
@@ -69,7 +71,30 @@ CREATE TABLE `th_activity_library` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='活动库表';
 
 -- ----------------------------
--- Table structure for th_advertisement
+-- Records of th_activity_library
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_admin_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `th_admin_log`;
+CREATE TABLE `th_admin_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `create_time` int(10) NOT NULL DEFAULT '0',
+  `user_id` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `log_info` varchar(255) NOT NULL DEFAULT '',
+  `ip_address` varchar(15) NOT NULL DEFAULT '',
+  `user_name` varchar(50) DEFAULT '' COMMENT '账号',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统日志表';
+
+-- ----------------------------
+-- Records of th_admin_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_advertisement`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_advertisement`;
 CREATE TABLE `th_advertisement` (
@@ -86,7 +111,11 @@ CREATE TABLE `th_advertisement` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='广告表';
 
 -- ----------------------------
--- Table structure for th_advertisement_type
+-- Records of th_advertisement
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_advertisement_type`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_advertisement_type`;
 CREATE TABLE `th_advertisement_type` (
@@ -97,10 +126,14 @@ CREATE TABLE `th_advertisement_type` (
   `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
   `store_id` int(10) unsigned DEFAULT '0' COMMENT '店铺id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='广告类型表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='广告类型表';
 
 -- ----------------------------
--- Table structure for th_information
+-- Records of th_advertisement_type
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_information`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_information`;
 CREATE TABLE `th_information` (
@@ -121,7 +154,11 @@ CREATE TABLE `th_information` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统基本信息';
 
 -- ----------------------------
--- Table structure for th_item_bank
+-- Records of th_information
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_item_bank`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_item_bank`;
 CREATE TABLE `th_item_bank` (
@@ -139,7 +176,11 @@ CREATE TABLE `th_item_bank` (
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='总题库';
 
 -- ----------------------------
--- Table structure for th_problem
+-- Records of th_item_bank
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_problem`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_problem`;
 CREATE TABLE `th_problem` (
@@ -158,7 +199,11 @@ CREATE TABLE `th_problem` (
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='店铺下题库';
 
 -- ----------------------------
--- Table structure for th_questionnaire
+-- Records of th_problem
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_questionnaire`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_questionnaire`;
 CREATE TABLE `th_questionnaire` (
@@ -177,4 +222,6 @@ CREATE TABLE `th_questionnaire` (
   KEY `status` (`status`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='调研问卷表';
 
-SET FOREIGN_KEY_CHECKS = 1;
+-- ----------------------------
+-- Records of th_questionnaire
+-- ----------------------------

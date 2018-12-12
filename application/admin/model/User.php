@@ -13,14 +13,16 @@ class User extends Model
 	 */
 	public function check($where,$ip)
 	{
-		$where['status'] = 1;
+		// $where['status'] = 1; //有效
+		$where['state'] = 0; //正常
 		$rs = $this->where($where)->find();
 		if($rs){
 			//登录成功 加入登录日志
 			$data['user_id'] = $rs['id'];
-			$data['log_time'] = date('Y-m-d H:i:s');
+			$data['create_time'] = time();
 			$data['log_info'] = '登录系统';
-			$data['ip_address'] = ip2long($ip);
+			$data['ip_address'] = $ip;
+			$data['user_name'] = $rs['user_name'];
 			$this->loginlog($data);
 
 			return $rs;
