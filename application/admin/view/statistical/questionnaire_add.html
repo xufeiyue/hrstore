@@ -63,13 +63,10 @@
 
           <div class="layui-form-item">
               <label class="layui-form-label">
-                  <span class="x-red">*</span>选择问题(标题)
+                  <span class="x-red">*</span>选择问题
               </label>
-              <table  class="layui-input-block">
-                  <tbody id="problem_id">
-                      <div class="layui-btn layui-btn-sm layui-btn-normal" style="background-color: #5FB878" id="type_id">单选题</div>
-                  </tbody>
-              </table>
+              <table class="layui-table" id="demo" lay-filter="useruv">
+                </table>
           </div>
 
           <div class="layui-form-item">
@@ -81,11 +78,15 @@
           </div>
       </form>
     </div>
+     <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-mini" lay-event="edit">查看</a>
+      </script>
     <script>
-        layui.use(['form','layer','laydate'], function(){
+        layui.use(['form','layer','laydate', 'table'], function(){
             $ = layui.jquery;
           var form = layui.form
           ,layer = layui.layer
+          ,table = layui.table
           ,laydate = layui.laydate;
 
         var store_id;
@@ -100,46 +101,64 @@
           elem: '#end_time' //指定元素
           ,type: 'datetime'
         });
+
+        //第一个实例
+      var tableIns = table.render({
+        elem: '#demo'
+        ,method: 'post'
+        ,defaultToolbar: ['filter', 'print', 'exports']
+        // ,toolbar: 'default'
+        // ,url: '/Admin/Statistical/ajax_item_bank_list' //数据接口
+        // ,page: true //开启分页
+        ,cellMinWidth : 95
+        ,height : 300
+        ,limit: 20
+        ,id: 'idTest'
+        ,cols: [[ //表头
+           {checkbox: true, fixed: true,style:'height:100px;'}
+          ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
+          ,{field: 'type_name', title: '类型',align: 'center'}
+          ,{field: 'problem', title: '问题',align: 'center'}
+          ,{field: 'pid_name', title: '来自',align: 'center'}
+          ,{field: 'create_time', title: '创建时间',align: 'center'}
+          ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
+        ]]
+        ,data: {$list}
+      });
+
+      //监听工具条
+        table.on('tool(useruv)', function(obj){
+          var data = obj.data;
+          if(obj.event === 'edit'){
+             x_admin_show('查看','subject_see.html?id='+data.id,600,300);
+          }
+        });
          
          //监听选择店铺
          form.on('select(store_id)',function(data){
           store_id = data.value
-          $.post('/Admin/Statistical/problem_list',{store_id: data.value},function(res){
-            var html = '';
-            if (res.code == 200) {
-              for (var i = 0; i < res.data.length; i++) {
-                html += '<tr>';
-                html +=   '<td>';
-                html +=      '<div class="layui-btn layui-btn-sm layui-btn-normal" style="background-color: #5FB878;margin-right: 10px;">'+res.data[i].type+'</div>';
-                html +=      '<input type="checkbox" title="全选" lay-filter="filter">';
-                html +=   '</td>';
-                html +=       '<td>';
-                html +=          '<div class="layui-input-block">';
-                          for (var j = 0; j < res.data[i].list.length; j++) {
-                html +=            '<input type="checkbox" name="problem_id[]" value="'+res.data[i].list[j].id+'" title="'+res.data[i].list[j].problem+'">';
-                // html +=             '<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>'
-                          }
-                html +=           '</div>';
-                html +=       '</td>';
-                html +=  '</tr>';
-                html +=  '<hr/>';
-              }
-              
-            }
-            $("#problem_id").html('');
-            $("#problem_id").append(html);
-            form.render('checkbox');
-          })
+          var tableIns = table.render({
+            elem: '#demo'
+            ,method: 'post'
+            ,defaultToolbar: ['filter', 'print', 'exports']
+            // ,toolbar: 'default'
+            ,url: '/Admin/Statistical/problem_list?store_id='+data.value //数据接口
+            // ,page: true //开启分页
+            ,cellMinWidth : 95
+            ,height : 300
+            ,limit: 20
+            ,id: 'idTest'
+            ,cols: [[ //表头
+               {checkbox: true, fixed: true,style:'height:100px;'}
+              ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
+              ,{field: 'type_name', title: '类型',align: 'center'}
+              ,{field: 'problem', title: '问题',align: 'center'}
+              ,{field: 'pid_name', title: '来自',align: 'center'}
+              ,{field: 'create_time', title: '创建时间',align: 'center'}
+              ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
+            ]]
+          });
          })
-
-
-          $("#type_id").click(function(){
-            if (store_id == undefined) {
-              layer.msg('请选择店铺',{time: 1000});
-              return false
-            }
-             x_admin_show('题库','store_subject.html?store_id='+store_id,800,400);
-          })
 
           form.on('checkbox(filter)', function(data){
 
@@ -150,8 +169,17 @@
 
           //监听提交
           form.on('submit(add)', function(data){
-            console.log(data.field)
-            
+            var checkStatus = table.checkStatus('idTest')
+            ,data1 = checkStatus.data;
+            if(data1 == ''){
+              layer.msg('请添加问题', {icon: 1});
+              return false;
+            }
+            var problem_id = [];
+            for (var i = 0; i < data1.length; i++) {
+              problem_id.push(data1[i].id)
+            }
+            data.field.problem_id = problem_id
             //发异步，把数据提交给php
             $.post('/Admin/Statistical/questionnaire_add', data.field, function(res){
 
@@ -173,7 +201,6 @@
             
             return false;
           });
-          
           
         });
     </script>

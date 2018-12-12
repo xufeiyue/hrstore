@@ -1,0 +1,42 @@
+{include file="public/header"}
+    <div class="x-body">
+        <form class="layui-form">
+        <input type="hidden" id="id" value="{$list['id']}" name="id" lay-verify="id">
+        <input type="hidden" id="id" value="{$list['type']}" name="type" lay-verify="type">
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>问题
+              </label>
+              <div class="layui-input-block">
+                  <input type="text" id="problem" disabled="" name="problem" value="{$list['problem']}" lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          {foreach name="list['content']" item="vo" key="k" }
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>{$k}
+              </label>
+              <div class="layui-input-block">
+                  <textarea type="text" name="content[{$k}]" lay-verify="required" autocomplete="off" class="layui-textarea" disabled="">{$vo}</textarea>
+                  {if condition="$list['type'] == 0"}
+                    <input type="radio" name="answer" value="{$k}" disabled="" title="{$k}" {if condition="$list['answer'][0] eq $k"} checked="checked"{/if}>
+                  {/if}
+                  {if condition="$list['type'] == 1"}
+                    <input type="checkbox" disabled="" name="answer[]" value="{$k}" lay-skin="primary" title="{$k}"  {foreach name="list['answer']" item="vo1" key="k1" } {$vo}{if condition="$vo1 eq $k"} checked="checked"{/if}{/foreach}>
+                  {/if}
+              </div>
+          </div>
+          {/foreach}
+         
+      </form>
+    </div>
+
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

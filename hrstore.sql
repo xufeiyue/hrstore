@@ -1,22 +1,24 @@
 /*
-Navicat MySQL Data Transfer
+ Navicat Premium Data Transfer
 
-Source Server         : localhost_3306
-Source Server Version : 50711
-Source Host           : localhost:3306
-Source Database       : ceshi
+ Source Server         : homestead
+ Source Server Type    : MySQL
+ Source Server Version : 50724
+ Source Host           : 192.168.10.10:3306
+ Source Schema         : ceshi
 
-Target Server Type    : MYSQL
-Target Server Version : 50711
-File Encoding         : 65001
+ Target Server Type    : MySQL
+ Target Server Version : 50724
+ File Encoding         : 65001
 
-Date: 2018-12-09 21:47:48
+ Date: 12/12/2018 14:33:57
 */
 
-SET FOREIGN_KEY_CHECKS=0;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for `th_advertisement`
+-- Table structure for th_advertisement
 -- ----------------------------
 DROP TABLE IF EXISTS `th_advertisement`;
 CREATE TABLE `th_advertisement` (
@@ -30,14 +32,10 @@ CREATE TABLE `th_advertisement` (
   `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
   `store_id` int(10) unsigned DEFAULT '0' COMMENT '店铺id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='广告表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='广告表';
 
 -- ----------------------------
--- Records of th_advertisement
--- ----------------------------
-
--- ----------------------------
--- Table structure for `th_advertisement_type`
+-- Table structure for th_advertisement_type
 -- ----------------------------
 DROP TABLE IF EXISTS `th_advertisement_type`;
 CREATE TABLE `th_advertisement_type` (
@@ -48,14 +46,10 @@ CREATE TABLE `th_advertisement_type` (
   `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
   `store_id` int(10) unsigned DEFAULT '0' COMMENT '店铺id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='广告类型表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='广告类型表';
 
 -- ----------------------------
--- Records of th_advertisement_type
--- ----------------------------
-
--- ----------------------------
--- Table structure for `th_information`
+-- Table structure for th_information
 -- ----------------------------
 DROP TABLE IF EXISTS `th_information`;
 CREATE TABLE `th_information` (
@@ -73,8 +67,63 @@ CREATE TABLE `th_information` (
   `friendship_link` varchar(255) DEFAULT '' COMMENT '友情链接',
   `site_switch_state` tinyint(1) unsigned DEFAULT '0' COMMENT '0关1开',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='系统基本信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统基本信息';
 
 -- ----------------------------
--- Records of th_information
+-- Table structure for th_item_bank
 -- ----------------------------
+DROP TABLE IF EXISTS `th_item_bank`;
+CREATE TABLE `th_item_bank` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `type` tinyint(1) unsigned DEFAULT '0' COMMENT '0单选题1多选题',
+  `problem` varchar(255) DEFAULT '' COMMENT '问题',
+  `answer` varchar(50) DEFAULT '' COMMENT '正确答案',
+  `status` tinyint(1) unsigned DEFAULT '0' COMMENT '0正常1删除',
+  `content` varchar(2000) DEFAULT '' COMMENT '所以选项已json形式存储',
+  `create_time` int(10) unsigned DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) unsigned DEFAULT NULL COMMENT '更新时间',
+  `store_id` int(11) unsigned DEFAULT '0' COMMENT '店铺id',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='总题库';
+
+-- ----------------------------
+-- Table structure for th_problem
+-- ----------------------------
+DROP TABLE IF EXISTS `th_problem`;
+CREATE TABLE `th_problem` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `type` tinyint(1) unsigned DEFAULT '0' COMMENT '0单选题1多选题',
+  `problem` varchar(255) DEFAULT '' COMMENT '问题',
+  `answer` varchar(50) DEFAULT '' COMMENT '正确答案',
+  `status` tinyint(1) unsigned DEFAULT '0' COMMENT '0正常1删除',
+  `content` varchar(2000) DEFAULT '' COMMENT '所以选项已json形式存储',
+  `create_time` int(10) unsigned DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) unsigned DEFAULT NULL COMMENT '更新时间',
+  `store_id` int(11) unsigned DEFAULT '0' COMMENT '店铺id',
+  `pid` int(11) unsigned DEFAULT '0' COMMENT '题库自增id',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='店铺下题库';
+
+-- ----------------------------
+-- Table structure for th_questionnaire
+-- ----------------------------
+DROP TABLE IF EXISTS `th_questionnaire`;
+CREATE TABLE `th_questionnaire` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '问卷自增id',
+  `title` varchar(255) DEFAULT '' COMMENT '标题',
+  `start_time` int(10) unsigned DEFAULT '0' COMMENT '开始时间',
+  `end_time` int(10) unsigned DEFAULT '0' COMMENT '结束时间',
+  `questionnaire_text` varchar(2000) DEFAULT '' COMMENT '问卷正文',
+  `opinion_completion` varchar(2000) DEFAULT '' COMMENT '意见填写',
+  `problem_id` varchar(255) DEFAULT '' COMMENT '问题',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `status` tinyint(1) unsigned DEFAULT '0' COMMENT '0正常1删除',
+  `store_id` int(11) unsigned DEFAULT '0' COMMENT '店铺id',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='调研问卷表';
+
+SET FOREIGN_KEY_CHECKS = 1;

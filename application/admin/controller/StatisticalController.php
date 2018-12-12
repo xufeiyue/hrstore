@@ -4,6 +4,7 @@ use think\Controller;
 use think\Request;
 use app\admin\model\Problem;
 use app\admin\model\Questionnaire;
+use app\admin\model\ItemBank;
 class StatisticalController extends AdminController
 {
 	/*
@@ -51,6 +52,15 @@ class StatisticalController extends AdminController
 			}else{
 
 				$data['data'][$key]['type_name'] = '单选题';
+			}
+
+			if ($value['pid']) {
+				
+				$data['data'][$key]['pid_name'] = '题库';
+
+			}else{
+
+				$data['data'][$key]['pid_name'] = '自创';
 			}
 		}
 
@@ -151,6 +161,22 @@ class StatisticalController extends AdminController
 
 			return view();
 		}
+	}
+
+	//查看详情
+	public function subject_see(){
+
+		$id = input('id/d');
+
+		$list = (new Problem)->Common_Find(['id' => $id]);
+
+		$list['content'] = json_decode($list['content'],true);
+
+		$list['answer'] = json_decode($list['answer'],true);
+
+		$this->assign('list',$list);
+
+		return view();
 	}
 
 	//删除题目
@@ -265,9 +291,31 @@ class StatisticalController extends AdminController
 				$order = ['id' => 'desc'];
 
 				$list = (new Problem)->Problem_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
+
+				foreach ($list as $key => $value) {
+					
+					if ($value['type']) {
+				
+						$list[$key]['type_name'] = '多选题';
+
+					}else{
+						
+						$list[$key]['type_name'] = '单选题';
+
+					}
+
+					if ($value['pid']) {
+				
+						$list[$key]['pid_name'] = '题库';
+
+					}else{
+
+						$list[$key]['pid_name'] = '自创';
+					}
+				}
 			}
 
-			$this->assign('list',$list);
+			$this->assign('list',json_encode($list));
 
 			return view();
 		}
@@ -326,9 +374,20 @@ class StatisticalController extends AdminController
 
 			$problem = $this->problem_list($list['store_id']);
 
+			foreach ($problem as $key => $value) {
+				
+				foreach ($list['problem_id'] as $value1) {
+					
+					if ($value['id'] == $value1) {
+						
+						$problem[$key]['LAY_CHECKED'] = true;
+					}
+				}
+			}
+
 			$this->assign('list',$list);
 
-			$this->assign('problem',$problem);
+			$this->assign('problem',json_encode($problem));
 
 			return view();
 		}
@@ -363,77 +422,266 @@ class StatisticalController extends AdminController
 	//店铺下查询所有题目
 	public function problem_list($storeId=0){
 
-		$store_id = input('post.store_id/d') ? : $storeId;
-
-		$order = ['type' => 'asc','id' => 'desc'];
-
-		$list = (new Problem)->Problem_Select(['store_id' => $store_id , 'status' => 0],$order);
-
-		$data = [];
-
-		$arr = [];
-		//分组
-		foreach ($list as $key => $value) {
-			
-			$data[$value['type']][] = $value;
-
-		}
-		//重组
-		foreach ($data as $key => $value) {
-			
-			foreach ($value as $key1 => $value1) {
-				
-				if ($value1['type'] == 1) {
-					
-					$arr[$key]['type'] = '多选题'; 
-				}else{
-
-					$arr[$key]['type'] = '单选题'; 
-				}
-
-				$arr[$key]['list'][] = $value1;
-			}
-		}
-
-		if ($storeId) {
-			return $arr;
-		}
-
-		if($list)
-			return json(['code' => 200 , 'msg' => '请求成功' , 'data' => $arr]);
-			return json(['code' => 400 , 'msg' => '请求成功,没有数据']);
-
-	}
-
-	//店铺下查询所有题目
-	public function problem_list1($storeId=0){
-
-		$store_id = input('store_id/d');
+		$store_id = input('store_id/d') ? : $storeId;
 
 		$order = ['id' => 'desc'];
 
 		$list = (new Problem)->Problem_Select(['store_id' => $store_id , 'status' => 0],$order);
 
 		foreach ($list as $key => $value) {
+			
 			if ($value['type']) {
+				
 				$list[$key]['type_name'] = '多选题';
+
 			}else{
+				
 				$list[$key]['type_name'] = '单选题';
 			}
+
+			if ($value['pid']) {
+				
+				$list[$key]['pid_name'] = '题库';
+
+			}else{
+
+				$list[$key]['pid_name'] = '自创';
+			}
+		}
+
+		if ($storeId) {
+			return $list;
 		}
 
 		if($list)
 			return json(['code' => 0 , 'msg' => '请求成功' , 'data' => $list]);
-			return json(['code' => 1 , 'msg' => '请求成功,没有数据']);
+			return json(['code' => 1 , 'msg' => '请求成功,没有数据','data' => []]);
 
 	}
-	//店铺下题目
-	public function store_subject(){
 
-		$store_id = input('store_id/d');
 
-		$this->assign('store_id',$store_id);
+	//店铺拉取题库模板
+	public function subject_item_bank(){
 
 		return view();
+	}
+
+	//ajax获取所有问题信息
+	public function ajax_subject_item_bank(){
+
+		$where = [];
+
+		$where['status'] = 0;
+
+		$order = ['id' => 'desc'];
+
+		$problem = (new Problem)->Problem_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => $this->is_jurisdiction],$order);
+
+		if (!empty($problem)) {
+			
+			$where['id'] = ['not in', $problem];
+		}
+
+		$data = (new ItemBank)->ItemBank_Select($where,$order);
+
+		foreach ($data as $key => $value) {
+			
+			if ($value['type']) {
+				
+				$data[$key]['type_name'] = '多选题';
+
+			}else{
+
+				$data[$key]['type_name'] = '单选题';
+			}
+
+		}
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data ]);
+	}
+
+	//拉取信息到店铺下题库列表
+	public function store_problem(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$order = ['id' => 'desc'];
+
+		$data = (new ItemBank)->ItemBank_Select(['id' => ['in',$id] , 'status' => 0],$order);
+
+		$arr = [];
+
+		foreach ($data as $key => $value) {
+			
+			$arr[$key]['type'] = $value['type'];
+
+			$arr[$key]['problem'] = $value['problem'];
+
+			$arr[$key]['answer'] = $value['answer'];
+
+			$arr[$key]['content'] = $value['content'];
+
+			$arr[$key]['pid'] = $value['id'];
+
+			$arr[$key]['store_id'] = $this->is_jurisdiction;
+
+			$arr[$key]['create_time'] = time();
+
+			$arr[$key]['update_time'] = time();
+
+		}
+
+		$add = (new Problem)->Common_InsertAll($arr);
+
+		if($add)
+			return json(['code' => 200 , 'msg' => '拉取成功']);
+			return json(['code' => 400 , 'msg' => '拉取失败']);
+
+	}
+
+	//渲染建立题库模板
+	public function item_bank_list(){
+
+		return view();
+	}
+
+	//ajax获取题库数据
+	public function ajax_item_bank_list(){
+
+		$where = [];
+
+		$type_id = input('post.type_id');
+
+		if (isset($type_id)) {
+
+			$where['type'] = $type_id;
+		}
+
+		$where['status'] = 0;
+
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+		$limit = input('post.limit/d') ? : 10;
+
+		$order = ['id' => 'desc'];
+
+		$data = (new ItemBank)->Common_Select($offset,$limit,$where,$order);
+
+		foreach ($data['data'] as $key => $value) {
+			
+			if ($value['type']) {
+				
+				$data['data'][$key]['type_name'] = '多选题';
+
+			}else{
+
+				$data['data'][$key]['type_name'] = '单选题';
+			}
+		}
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
+	} 
+
+	//新增题库
+	public function item_bank_add(){
+
+		$type = input('get.type/d');
+
+		if ($_POST) {
+		
+			$data['problem'] = input('post.problem/s');
+
+			$answer = input('post.answer/a');
+
+			$data['answer'] = json_encode($answer);
+
+			$data['type'] = input('post.type/d');
+
+			$content = input('content/a');
+
+			$data['content'] = json_encode($content);
+
+			$data['create_time'] = time();
+
+			$data['update_time'] = time();
+
+			$add = (new ItemBank)->Common_Insert($data);
+
+			if ($add)
+				return json(['code' => 200 , 'msg' => '新增成功']);
+				return json(['code' => 400 , 'msg' => '新增失败']);
+
+		}else{
+
+			$this->assign('type',$type);
+
+			return view();
+		}
+	}
+
+	//更新题库
+	public function item_bank_edit(){
+
+		$id = input('id/d');
+
+		if ($_POST) {
+
+			$data['problem'] = input('post.problem/s');
+
+			$answer = input('post.answer/a');
+
+			$data['answer'] = json_encode($answer);
+
+			$data['type'] = input('post.type/d');
+
+			$content = input('content/a');
+
+			$data['content'] = json_encode($content);
+
+			$data['update_time'] = time();
+
+			$edit = (new ItemBank)->Common_Update($data,['id' => $id]);
+
+			if ($edit)
+				return json(['code' => 200 , 'msg' => '更新成功']);
+				return json(['code' => 400 , 'msg' => '更新失败']);
+
+		}else{
+
+			$list = (new ItemBank)->Common_Find(['id' => $id]);
+
+			$list['content'] = json_decode($list['content'],true);
+
+			$list['answer'] = json_decode($list['answer'],true);
+
+			$this->assign('list',$list);
+
+			return view();
+		}
+	}
+
+	//删除题库
+	public function item_bank_del(){
+
+		$id = input('post.id/d');
+
+		$del = (new ItemBank)->Common_Update(['status' => 1],['id' => $id]);
+
+		if($del)
+			return json(['code' => 200 , 'msg' => '删除成功']);
+			return json(['code' => 400 , 'msg' => '删除失败']);
+
+	}
+
+	//批量删除题库
+	public function item_bank_delAll(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$del = (new ItemBank)->Common_Update(['status' => 1],['id' => ['in', $id]]);
+
+		if($del)
+			return json(['code' => 200 , 'msg' => '删除成功']);
+			return json(['code' => 400 , 'msg' => '删除失败']);
 	}
 }

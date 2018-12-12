@@ -57,6 +57,12 @@ class Common
 
 	}
 
+	//公共多条新增
+	public function Common_InsertAll($data){
+
+		return Db::name($this->table)->insertAll($data);
+	}
+
 	//公共更新 + 逻辑删除
 	public function Common_Update($data=[],$where=[]){
 

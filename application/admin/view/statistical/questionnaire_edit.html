@@ -64,27 +64,10 @@
 
           <div class="layui-form-item">
               <label class="layui-form-label">
-                  <span class="x-red">*</span>选择问题(标题)
+                  <span class="x-red">*</span>选择问题
               </label>
-              <table  class="layui-input-block">
-                  <tbody id="problem_id">
-                      {foreach name="problem" item="vo" key="k" }
-                      <tr>
-                        <td>
-                          <div class="layui-btn layui-btn-sm layui-btn-normal" style="background-color: #5FB878">{$vo['type']}</div>
-                             <input type="checkbox" title="全选" lay-filter="filter">
-                        </td>
-                        <td>
-                            <div class="layui-input-block">
-                              {foreach name="$vo['list']" item="vo1"}
-                                <input type="checkbox" name="problem_id[]" value="{$vo1.id}" title="{$vo1.problem}" {foreach name="$list['problem_id']" item="vo2" key="k1"} {if condition="$vo2 eq $vo1.id"}checked="checked"{/if}{/foreach}>
-                              {/foreach}
-                            </div>
-                        </td>
-                      </tr>
-                      {/foreach}
-                  </tbody>
-              </table>
+              <table class="layui-table" id="demo" lay-filter="useruv">
+                </table>
           </div>
 
           <div class="layui-form-item">
@@ -96,11 +79,15 @@
           </div>
       </form>
     </div>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-mini" lay-event="edit">查看</a>
+      </script>
     <script>
-        layui.use(['form','layer','laydate'], function(){
+        layui.use(['form','layer','laydate','table'], function(){
             $ = layui.jquery;
           var form = layui.form
           ,layer = layui.layer
+          ,table = layui.table
           ,laydate = layui.laydate;
 
           //执行一个laydate实例
@@ -114,35 +101,59 @@
           elem: '#end_time' //指定元素
           ,type: 'datetime'
         });
+
+        //第一个实例
+      var tableIns = table.render({
+        elem: '#demo'
+        ,method: 'post'
+        ,defaultToolbar: ['filter', 'print', 'exports']
+        ,cellMinWidth : 95
+        ,height : 300
+        ,limit: 20
+        ,id: 'idTest'
+        ,cols: [[ //表头
+           {checkbox: true, fixed: true,style:'height:100px;'}
+          ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
+          ,{field: 'type_name', title: '类型',align: 'center'}
+          ,{field: 'problem', title: '问题',align: 'center'}
+          ,{field: 'pid_name', title: '来自',align: 'center'}
+          ,{field: 'create_time', title: '创建时间',align: 'center'}
+          ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
+        ]]
+        ,data: {$problem}
+      });
          
+         //监听工具条
+        table.on('tool(useruv)', function(obj){
+          var data = obj.data;
+          if(obj.event === 'edit'){
+             x_admin_show('查看','subject_see.html?id='+data.id,600,300);
+          }
+        });
          //监听选择店铺
          form.on('select(store_id)',function(data){
-          $.post('/Admin/Statistical/problem_list',{store_id: data.value},function(res){
-            var html = '';
-            if (res.code == 200) {
-              for (var i = 0; i < res.data.length; i++) {
-                html += '<tr>';
-                html +=   '<td>';
-                html +=      '<div class="layui-btn layui-btn-sm layui-btn-normal" style="background-color: #5FB878;margin-right: 10px;">'+res.data[i].type+'</div>';
-                html +=      '<input type="checkbox" title="全选" lay-filter="filter">';
-                html +=   '</td>';
-                html +=       '<td>';
-                html +=          '<div class="layui-input-block">';
-                          for (var j = 0; j < res.data[i].list.length; j++) {
-                html +=            '<input type="checkbox" name="problem_id[]" value="'+res.data[i].list[j].id+'" title="'+res.data[i].list[j].problem+'">';
-                // html +=             '<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>'
-                          }
-                html +=           '</div>';
-                html +=       '</td>';
-                html +=  '</tr>';
-                html +=  '<hr/>';
-              }
-              
-            }
-            $("#problem_id").html('');
-            $("#problem_id").append(html);
-            form.render('checkbox');
-          })
+          store_id = data.value
+          var tableIns = table.render({
+            elem: '#demo'
+            ,method: 'post'
+            ,defaultToolbar: ['filter', 'print', 'exports']
+            // ,toolbar: 'default'
+            ,url: '/Admin/Statistical/problem_list?store_id='+data.value //数据接口
+            // ,page: true //开启分页
+            ,cellMinWidth : 95
+            ,height : 300
+            ,limit: 20
+            ,id: 'idTest'
+            ,cols: [[ //表头
+               {checkbox: true, fixed: true,style:'height:100px;'}
+              ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
+              ,{field: 'type_name', title: '类型',align: 'center'}
+              ,{field: 'problem', title: '问题',align: 'center'}
+              ,{field: 'pid_name', title: '来自',align: 'center'}
+              ,{field: 'create_time', title: '创建时间',align: 'center'}
+              ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
+            ]]
+          });
          })
 
          //监听工具条
@@ -160,6 +171,17 @@
 
           //监听提交
           form.on('submit(edit)', function(data){
+            var checkStatus = table.checkStatus('idTest')
+            ,data1 = checkStatus.data;
+            if(data1 == ''){
+              layer.msg('请添加问题', {icon: 1});
+              return false;
+            }
+            var problem_id = [];
+            for (var i = 0; i < data1.length; i++) {
+              problem_id.push(data1[i].id)
+            }
+            data.field.problem_id = problem_id
             
             //发异步，把数据提交给php
             $.post('/Admin/Statistical/questionnaire_edit', data.field, function(res){

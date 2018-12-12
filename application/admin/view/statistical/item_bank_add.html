@@ -1,0 +1,126 @@
+{include file="public/header"}
+    <div class="x-body">
+        <form class="layui-form">
+        <input type="hidden" name="type" value="{$type}">
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>问题
+              </label>
+              <div class="layui-input-block">
+                  <input type="text" id="problem" name="problem" lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>A
+              </label>
+              <div class="layui-input-block">
+                  <textarea type="text" name="content[A]" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>
+                  {if condition="$type == 0"}
+                    <input type="radio" name="answer" value="A" title="A">
+                  {/if}
+                  {if condition="$type == 1"}
+                    <input type="checkbox" name="answer[]" value="A" lay-skin="primary" title="A">
+                  {/if}
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>B
+              </label>
+              <div class="layui-input-block">
+                   <textarea type="text" name="content[B]" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>
+                   {if condition="$type == 0"}
+                    <input type="radio" name="answer" value="B" title="B">
+                  {/if}
+                  {if condition="$type == 1"}
+                    <input type="checkbox" name="answer[]" value="B" lay-skin="primary" title="B">
+                  {/if}
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>C
+              </label>
+              <div class="layui-input-block">
+                   <textarea type="text" name="content[C]" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>
+                  {if condition="$type == 0"}
+                    <input type="radio" name="answer" value="C" title="C">
+                  {/if}
+                  {if condition="$type == 1"}
+                    <input type="checkbox" name="answer[]" value="C" lay-skin="primary" title="C">
+                  {/if}
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>D
+              </label>
+              <div class="layui-input-block">
+                   <textarea type="text" name="content[D]" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>
+                  {if condition="$type == 0"}
+                    <input type="radio" name="answer" value="D" title="D">
+                  {/if}
+                  {if condition="$type == 1"}
+                    <input type="checkbox" name="answer[]" value="D" lay-skin="primary" title="D">
+                  {/if}
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  增加
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer;
+         
+          //监听提交
+          form.on('submit(add)', function(data){
+            console.log(data);
+            
+            //发异步，把数据提交给php
+            $.post('/Admin/Statistical/item_bank_add', data.field, function(res){
+
+                if(res.code == 200){
+                    layer.alert(res.msg, {icon: 1},function () {
+                      // 获得frame索引
+                      var index = parent.layer.getFrameIndex(window.name);
+
+                      //关闭当前frame
+                      parent.layer.close(index);
+                     
+                      window.parent.location.reload();
+
+                  });
+                }else{
+                  layer.msg(res.msg,{time: 1000});
+                }
+            })
+            
+            return false;
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

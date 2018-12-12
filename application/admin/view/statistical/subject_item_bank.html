@@ -2,7 +2,7 @@
 
     <div class="x-body">
       <div class="layui-btn-group demoTable">
-        <button class="layui-btn" data-type="getCheckData">保存</button>
+        <button class="layui-btn" data-type="getCheckData">拉取</button>
       </div>
       <table class="layui-table" id="demo" lay-filter="useruv">
       </table>
@@ -34,7 +34,7 @@
         ,method: 'post'
         ,defaultToolbar: ['filter', 'print', 'exports']
         // ,toolbar: 'default'
-        ,url: '/Admin/Statistical/problem_list1?store_id={$store_id}' //数据接口
+        ,url: '/Admin/Statistical/ajax_subject_item_bank' //数据接口
         // ,page: true //开启分页
         ,cellMinWidth : 95
         ,height : "600"
@@ -42,11 +42,11 @@
         ,limit: 20
         ,id: 'idTest'
         ,cols: [[ //表头
-           {checkbox: true, fixed: true,style:'height:100px;'}
+           {checkbox: 'checkbox', fixed: true,style:'height:100px;'}
           ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
           ,{field: 'type_name', title: '类型',align: 'center'}
           ,{field: 'problem', title: '问题',align: 'center'}
-          ,{field: 'content', title: '答案',align: 'center'}
+          // ,{field: 'content', title: '答案',align: 'center'}
           ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
         ]]
       });
@@ -76,7 +76,7 @@
 
             });
           } else if(obj.event === 'edit'){
-             x_admin_show('编辑','subject_edit.html?id='+data.id,600,400);
+             x_admin_show('查看','subject_see.html?id='+data.id,600,400);
           }
         });
 
@@ -101,6 +101,26 @@
             for (var i = 0; i < data.length; i++) {
               id.push(data[i].id)
             }
+            $.post('/admin/Statistical/store_problem', {id:id}, function(res){
+
+              if (res.code == 200) {
+                
+               layer.alert(res.msg, {icon: 1},function () {
+                    // 获得frame索引
+                    var index = parent.layer.getFrameIndex(window.name);
+
+                    //关闭当前frame
+                    parent.layer.close(index);
+                   
+                    window.parent.location.reload();
+
+                });
+              
+              }else{
+
+                layer.msg(res.msg,{icon:1,time:1000});
+              }
+            })
           }
         };
         

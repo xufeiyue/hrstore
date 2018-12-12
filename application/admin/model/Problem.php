@@ -17,7 +17,19 @@ class Problem extends Common
 		$data = Db::name($this->table)
 			->where($where)
 			->order($order)
+			->field('*,FROM_UNIXTIME(create_time)create_time')
 			->select();
+
+		return $data;
+	}
+
+	//查看店铺下拉取的题库id
+	public function Problem_Pid($where=[],$order=[]){
+
+		$data = Db::name($this->table)
+			->where($where)
+			->order($order)
+			->column('pid');
 
 		return $data;
 	}

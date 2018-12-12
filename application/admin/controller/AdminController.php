@@ -36,7 +36,7 @@ class AdminController extends Controller
                 $this->error('未授权访问!',url('/admin/login/login'));
             }
         }
-        $menu = $this->getMenus();
+        // $menu = $this->getMenus();
 
 		$controller = request()->controller();
 		$menu = $this->getMenus($controller);
@@ -270,112 +270,111 @@ class AdminController extends Controller
      * 获取控制器菜单数组,二级菜单元素位于一级菜单的'_child'元素中
      * @author 朱亚杰  <xcoolcc@gmail.com>
      */
-    final public function getMenus($controller=''){
-		//define('IS_ROOT',   is_administrator());
-        if(config('ADMIN_MENU_LIST')){
-            $menus  =   session('ADMIN_MENU_LIST'.$controller);//取菜单session
-        }else{
+     final public function getMenus($controller = '')
+    {
+        //define('IS_ROOT',   is_administrator());
+        if (config('ADMIN_MENU_LIST')) {
+            $menus = session('ADMIN_MENU_LIST'.$controller); //取菜单session
+        } else {
             $menus = [];
         }
-        if(empty($menus)){
+        if (empty($menus)) {
             // 获取主菜单
-            $where['pid']   =   0;
-            $where['hide']  =   0;
-            if(!config('DEVELOP_MODE')){ // 是否开发者模式
-                $where['is_dev']    =   0;
+            $where['pid'] = 0;
+            $where['hide'] = 0;
+            if (!config('DEVELOP_MODE')) { // 是否开发者模式
+                $where['is_dev'] = 0;
             }
-            $menus['main']  =   Db::name('Menu')->where($where)->order('sort asc')->select();
-            foreach ($menus['main'] as $k => $v) {
-            	$where['pid'] = $v['id'];
-            	$menus['main'][$k]['child'] = Db::name('Menu')->where($where)->order('sort asc')->select();
-            }
+            $menus['main'] = Db::name('Menu')->where($where)->order('sort asc')->select();
+            // foreach ($menus['main'] as $k => $v) {
+            //  $where['pid'] = $v['id'];
+            //  $menus['main'][$k]['child'] = Db::name('Menu')->where($where)->order('sort asc')->select();
+            // }
             // return $menus;
             $menus['child'] = array(); //设置子节点
             $AuthRule = Model('AuthRule');
             //高亮主菜单
-            $current = Db::name('Menu')->where("url like '%{$controller}/".request()->action()."%'")->field('id')->find();
-            if($current){
-                $nav = Model('Menu')->getPath($current['id']);
-                $nav_first_title = $nav[0]['title'];
-                foreach ($menus['main'] as $key => $item) {
+            // $current = Db::name('Menu')->where("url like '%{$controller}/".request()->action()."%'")->field('id')->find();
+            // if($current){
+            //     $nav = Model('Menu')->getPath($current['id']);
+            //     $nav_first_title = $nav[0]['title'];
 
-                    if (!is_array($item) || empty($item['title']) || empty($item['url']) ) {
-                        $this->error('控制器基类$menus属性元素配置有误');
+            // }
+            $menus_new = [];
+            foreach ($menus['main'] as $key => $item) {
+                $menus['main'][$key]['child'] = [];
+                if (!is_array($item) || empty($item['title']) || empty($item['url'])) {
+                    $this->error('控制器基类$menus属性元素配置有误');
+                }
+                // 判断主菜单权限
+                if (!IS_ROOT && !$this->checkRule($item['url'], $AuthRule::RULE_MAIN, null)) {
+                    unset($menus['main'][$key]);
+                    continue; //继续循环
+                } else {
+                    $groups = Db::name('Menu')->where("pid = {$item['id']}")->distinct(true)->field('`group`')->select();
+                    if ($groups) {
+                        $groups = array_column($groups, 'group');
+                    } else {
+                        $groups = array();
                     }
-                    // if( stripos($item['url'],request()->module())!==0 ){
-                    //     $item['url'] = request()->module().'/'.$item['url'];
-                        
-                    // }
 
-                    // 判断主菜单权限
-                    if ( !IS_ROOT && !$this->checkRule($item['url'],$AuthRule::RULE_MAIN,null) ) {
-
-                        unset($menus['main'][$key]);
-                        continue;//继续循环
+                    //获取二级分类的合法url
+                    $where = array();
+                    $where['pid'] = $item['id'];
+                    $where['hide'] = 0;
+                    if (!config('DEVELOP_MODE')) { // 是否开发者模式
+                        $where['is_dev'] = 0;
                     }
-                    // p($nav_first_title);
-                    // 获取当前主菜单的子菜单项
-                    if($item['title'] == $nav_first_title){
-                        $menus['main'][$key]['class']='current';
-                        //生成child树
-                        $groups = Db::name('Menu')->where("pid = {$item['id']}")->distinct(true)->field("`group`")->select();
-                        if($groups){
-                            $groups = array_column($groups, 'group');
-                        }else{
-                            $groups =   array();
-                        }
+                    $second_urls = Db::name('Menu')->where($where)->column('id,url');
 
-                        //获取二级分类的合法url
-                        $where          =   array();
-                        $where['pid']   =   $item['id'];
-                        $where['hide']  =   0;
-                        if(!config('DEVELOP_MODE')){ // 是否开发者模式
-                            $where['is_dev']    =   0;
-                        }
-                        $second_urls = Db::name('Menu')->where($where)->column('id,url');
-                        if(!IS_ROOT){
-                            // 检测菜单权限
-                            $to_check_urls = array();
-                            foreach ($second_urls as $key=>$to_check_url) {
-                                if( stripos($to_check_url,request()->module())!==0 ){
-                                    $rule = request()->module().'/'.$to_check_url;
-                                }else{
-                                    $rule = $to_check_url;
-                                }
-                                if($this->checkRule($rule, $AuthRule::RULE_URL,null))
-                                    $to_check_urls[] = $to_check_url;
+                    if (!IS_ROOT) {
+                        // 检测菜单权限
+                        $to_check_urls = array();
+                        foreach ($second_urls as $key => $to_check_url) {
+                            if (stripos($to_check_url, request()->module()) !== 0) {
+                                $rule = $to_check_url;
+                            } else {
+                                $rule = $to_check_url;
+                            }
+
+                            if ($this->checkRule($rule, $AuthRule::RULE_URL, null)) {
+                                $to_check_urls[] = $to_check_url;
                             }
                         }
-                        // 按照分组生成子菜单树
-                        foreach ($groups as $g) {
-                            $map = array('group'=>$g);
-                            if(isset($to_check_urls)){
-                                if(empty($to_check_urls)){
-                                    // 没有任何权限
-                                    continue;
-                                }else{
-                                    $map['url'] = array('in', $to_check_urls);
-                                }
-                            }
-                            $map['pid'] =   $item['id'];
-                            $map['hide']    =   0;
-                            if(!config('DEVELOP_MODE')){ // 是否开发者模式
-                                $map['is_dev']  =   0;
-                            }
-                            $menuList = Db::name('Menu')->where($map)->field('id,pid,title,url,tip')->order('sort asc')->select();
-                           
-                            $menus['child'][$g] = list_to_tree($menuList, 'id', 'pid', 'operater', $item['id']);
-                        }
-                        if($menus['child'] === array()){
-                            //$this->error('主菜单下缺少子菜单，请去系统=》后台菜单管理里添加');
-                        }
                     }
+
+                    // 按照分组生成子菜单树
+                    foreach ($groups as $g) {
+                        $map = array('group' => $g);
+                        if (isset($to_check_urls)) {
+                            if (empty($to_check_urls)) {
+                                // 没有任何权限
+                                continue;
+                            } else {
+                                $map['url'] = array('in', $to_check_urls);
+                            }
+                        }
+                        $map['pid'] = $item['id'];
+                        $map['hide'] = 0;
+                        if (!config('DEVELOP_MODE')) { // 是否开发者模式
+                            $map['is_dev'] = 0;
+                        }
+                        $menuList = Db::name('Menu')->where($map)->field('id,pid,title,url,tip')->order('sort asc')->select();
+
+                        $item['child'] = list_to_tree($menuList, 'id', 'pid', 'operater', $item['id']);
+
+                        $menus_new['main'][] = $item;
+                    }
+                    // if($menus['child'] === array()){
+                        //     //$this->error('主菜单下缺少子菜单，请去系统=》后台菜单管理里添加');
+                        // }
                 }
             }
-            session('ADMIN_MENU_LIST'.$controller,$menus);//设计菜单session
+
+            session('ADMIN_MENU_LIST'.$controller, $menus_new); //设计菜单session
         }
-       
-        return $menus;
+
+        return $menus_new;
     }
 	/**
      * action访问控制,在 **登陆成功** 后执行的第一项权限检测任务

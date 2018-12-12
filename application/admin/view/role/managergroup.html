@@ -53,7 +53,7 @@
                                     <div class="rule_check">
                                         <div>
                                             <label class="checkbox-inline" {notempty name="child['tip']"}title='{$child.tip}' {/notempty} for="rules">
-                                                <input class="auth_rules rules_row" type="checkbox" lay-filter="filter" name="rules[]" value="<?php echo $auth_rules[$child['url']] ?>" title="{$child.title}">
+                                                <input class="auth_rules rules_row" type="checkbox" lay-filter="filter1" name="rules[]" value="<?php echo $auth_rules[$child['url']] ?>" title="{$child.title}">
                                                </label>
 
                                         </div>
@@ -135,9 +135,16 @@ layui.use(['form','layer'], function(){
                 return false;
           });
           
-            form.on('checkbox(filter)', function(data){
+            form.on('checkbox(filter)', function(data){ //全选
 
                 $(this).closest('dl').find('dd').find('input').prop('checked',this.checked);
+               
+                form.render('checkbox');//渲染
+            });  
+
+            form.on('checkbox(filter1)', function(data){ //独立
+
+                $(this).closest('.rule_check').find('.child_row').find('input').prop('checked',this.checked);
                
                 form.render('checkbox');//渲染
             });  
