@@ -123,18 +123,19 @@ CREATE TABLE `th_goods` (
   `store_id` int(11) unsigned DEFAULT '0' COMMENT '店铺id',
   `goods_name` varchar(255) DEFAULT '' COMMENT '商品名称',
   `goods_images` varchar(2000) DEFAULT '' COMMENT '商品图片已json形式存储',
-  `goods_original_price` decimal(20,2) unsigned DEFAULT NULL COMMENT '商品原价',
-  `present_price` decimal(20,2) unsigned DEFAULT NULL COMMENT '商品现价',
+  `goods_original_price` decimal(20,2) unsigned DEFAULT '0.00' COMMENT '商品原价',
+  `goods_present_price` decimal(20,2) unsigned DEFAULT '0.00' COMMENT '商品现价',
   `goods_detail` text COMMENT '商品详情',
   `goods_specifications` varchar(255) DEFAULT '' COMMENT '商品规则已json形式存储',
   `goods_attribute` varchar(255) DEFAULT '' COMMENT '商品属性已json形式存储',
   `goods_stock` int(11) unsigned DEFAULT '0' COMMENT '库存',
   `state` tinyint(1) unsigned DEFAULT '0' COMMENT '0上架1下架',
   `status` tinyint(1) unsigned DEFAULT '0' COMMENT '0正常1删除2清除',
-  `create_time` tinyint(10) unsigned DEFAULT '0' COMMENT '创建时间',
-  `update_time` tinyint(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `type_id` int(11) unsigned DEFAULT '0' COMMENT '商品类型id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='商品表';
 
 -- ----------------------------
 -- Table structure for th_goods_type
@@ -146,8 +147,9 @@ CREATE TABLE `th_goods_type` (
   `store_id` int(11) unsigned DEFAULT '0' COMMENT '店铺id',
   `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
   `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `status` tinyint(1) unsigned DEFAULT '0' COMMENT '0正常1删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品类型表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='商品类型表';
 
 -- ----------------------------
 -- Table structure for th_information

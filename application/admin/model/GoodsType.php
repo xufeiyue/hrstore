@@ -1,6 +1,6 @@
 <?php
 namespace app\admin\model;
-
+use think\Db;
 class GoodsType extends Common
 {
 
@@ -11,4 +11,13 @@ class GoodsType extends Common
 		parent::__construct($this->table);
 	}
 
+	public function type($where=[],$order=[]){
+
+		$data = Db::name($this->table)
+			->where($where)
+			->order($order)
+			->select();
+
+		return $data;
+	}
 }

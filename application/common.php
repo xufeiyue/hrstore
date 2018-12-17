@@ -11,7 +11,7 @@
 use think\Db;
 use admin\model\AuthGroup;
 function is_jurisdiction(){
-    $store = session('store');
+    $store = session('store_id');
     if($store)
         return $store;
         return 0;
