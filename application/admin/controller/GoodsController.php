@@ -190,7 +190,18 @@ class GoodsController extends AdminController
 
 			$images = input('post.file/a');
 
-			$data['goods_images'] = json_encode($images,true);	
+			$data['goods_images'] = json_encode($images);
+
+			$images_detail = input('post.file_detail/a');
+
+			$images_detail1 = [];
+
+			foreach ($images_detail as $key => $value) {
+				
+				$images_detail1[] = urldecode($value);
+			}
+
+			$data['images_detail'] = json_encode($images_detail1);
 
 			$data['goods_original_price'] = input('post.goods_original_price/f');		
 
@@ -239,6 +250,7 @@ class GoodsController extends AdminController
 
 		if ($_POST) {
 
+
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
 			if (!$data['store_id'])
@@ -261,7 +273,11 @@ class GoodsController extends AdminController
 
 			$images = input('post.file/a');
 
-			$data['goods_images'] = json_encode($images,true);	
+			$data['goods_images'] = json_encode($images);	
+
+			$images_detail = input('post.file_detail/a');
+
+			$data['images_detail'] = json_encode($images_detail);	
 
 			$data['goods_original_price'] = input('post.goods_original_price/f');		
 
@@ -281,9 +297,9 @@ class GoodsController extends AdminController
 
 			$data['update_time'] = time();
 
-			$add = (new Goods)->Common_Update($data,['id' => $id]);
+			$edit = (new Goods)->Common_Update($data,['id' => $id]);
 
-			if($add)
+			if($edit)
 				return json(['code' => 200 , 'msg' => '更新成功']);
 				return json(['code' => 400 , 'msg' => '更新失败']);
 
@@ -296,6 +312,29 @@ class GoodsController extends AdminController
 			$list = (new Goods)->Common_Find(['id' => $id]);
 
 			$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
+
+			$list['goods_images'] = json_decode($list['goods_images'],true);
+
+			$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
+
+			$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
+
+			$list['goods_specifications_num'] = count($list['goods_specifications']);
+
+			$list['goods_attribute_num'] = count($list['goods_attribute']);
+
+			$images_detail = json_decode($list['images_detail'],true);
+
+			$list['images_detail1'] = [];
+
+			$list['images_detail2'] = [];
+
+			foreach ($images_detail as $key => $value) {
+				
+				$list['images_detail1'][] = json_decode($value,true);
+
+				$list['images_detail2'][] = urlencode($value) ;
+			}
 
 			$this->assign('list',$list);
 
@@ -331,7 +370,15 @@ class GoodsController extends AdminController
 	//批量上下架商品
 	public function goods_state_update(){
 
-		
+		$id = array_unique(input('post.id/a'));
+
+		$state = input('post.state/d');
+
+		$edit = (new Goods)->Common_Update(['state' => $state],['id' => ['in', $id]]);
+
+		if($edit)
+			return json(['code' => 200 , 'msg' => '操作成功']);
+			return json(['code' => 400 , 'msg' => '操作失败']);
 	}
 
 	//店铺下的商品类型
@@ -346,5 +393,55 @@ class GoodsController extends AdminController
 		if($data)
 			return json(['code' => 200 , 'msg' => '请求成功' , 'data' => $data]);
 			return json(['code' => 400 , 'msg' => '请求成功,没有数据']);
+	}
+
+	//渲染回收站模板
+	public function recycle_bin_list(){
+
+		return view();
+	}
+
+	//ajax获取回收站数据
+	public function ajax_recycle_bin_list(){
+
+		$where = [];
+
+		$goods_name = input('post.goods_name/s');
+
+		if($goods_name){
+
+			$where['goods_name']  = ['like',"%{$goods_name}%"];
+		}
+
+		if ($this->is_jurisdiction) { //判断是管理员还是商家
+			
+			$where['store_id'] = $this->is_jurisdiction;
+		}
+
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+		$limit = input('post.limit/d') ? : 10;
+
+		$order = ['id' => 'desc'];
+
+		$where['status'] = 1;
+
+		$data = (new Goods)->Common_Select($offset,$limit,$where,$order);
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
+	}
+
+	//回收站还原/清除
+	public function recycle_bin_update_status(){
+
+		$id = input('post.id/d');
+
+		$status = input('post.status/d');
+
+		$update = (new Goods)->Common_Update(['status' => $status],['id' => $id]);
+
+		if($update)
+			return json(['code' => 200 , 'msg' => '操作成功']);
+			return json(['code' => 400 , 'msg' => '操作失败']);
 	}
 }

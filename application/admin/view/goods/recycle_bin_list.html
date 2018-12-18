@@ -20,18 +20,18 @@
         </div>
       </div>
 
-      <div class="layui-btn-group demoTable">
+      <!-- <div class="layui-btn-group demoTable">
         <button class="layui-btn" data-type="getCheckData">批量删除</button>
         <button class="layui-btn" data-type="Upper_Shelf">批量上架</button>
         <button class="layui-btn" data-type="Lower_Shelf">批量下架</button>
-        <button class="layui-btn" onclick="x_admin_show('新增商品','./goods_add.html',1000,800)"><i class="layui-icon"></i>新增</button>
-      </div>
+        <button class="layui-btn" onclick="x_admin_show('新增商品','./goods_add.html',600,400)"><i class="layui-icon"></i>新增</button>
+      </div> -->
       <table class="layui-table" id="demo" lay-filter="useruv">
       </table>
     </div>
       <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-xs" lay-event="reduction">还原</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">清除</a>
       </script>
       <script type="text/html" id="switchTpl">
         <input type="checkbox" name="state" value="{{d.id}}" lay-skin="switch" lay-text="上架|下架" lay-filter="stateDemo" {{ d.state == 0 ? 'checked' : '' }}>
@@ -67,7 +67,7 @@
         ,method: 'post'
         ,defaultToolbar: ['filter', 'print', 'exports']
         // ,toolbar: 'default'
-        ,url: '/Admin/Goods/ajax_goods_list' //数据接口
+        ,url: '/Admin/Goods/ajax_recycle_bin_list' //数据接口
         ,page: true //开启分页
         ,cellMinWidth : 95
         ,height : "600"
@@ -77,9 +77,6 @@
            {checkbox: true, fixed: true,style:'height:100px;'}
           ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
           ,{field: 'goods_name', title: '商品名称',align: 'center'}
-          ,{field: 'goods_original_price', title: '商品原价',align: 'center'}
-          ,{field: 'goods_present_price', title: '商品现价',align: 'center'}
-          ,{field: 'goods_stock', title: '商品库存',align: 'center'}
           ,{field: 'state', title: '状态', align: 'center',templet: '#switchTpl', unresize: true}
           ,{field: 'create_time', title: '创建时间',align: 'center'}
           ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
@@ -118,7 +115,7 @@
           } else if(obj.event === 'del'){
             layer.confirm('确认要删除吗？', function(index){
               //发异步删除数据
-              $.post('/Admin/Goods/goods_del', {id:data.id}, function(res){
+              $.post('/Admin/Goods/recycle_bin_update_status', {id:data.id,status: 2}, function(res){
 
                   if (res.code == 200) {
                 
@@ -133,18 +130,25 @@
               })
 
             });
-          } else if(obj.event === 'edit'){
-             x_admin_show('编辑','goods_edit.html?id='+data.id,1000,800);
+          } else if(obj.event === 'reduction'){
+             layer.confirm('确认要还原吗？', function(index){
+              //发异步删除数据
+              $.post('/Admin/Goods/recycle_bin_update_status', {id:data.id,status: 0}, function(res){
+
+                  if (res.code == 200) {
+                
+                    layer.msg(res.msg,{icon:1,time:1000});
+                    obj.del();
+                  
+                  }else{
+
+                    layer.msg(res.msg,{icon:1,time:1000});
+                  }
+              })
+
+            });
           }
         });
-
-        //监听单元格编辑
-        table.on('edit(useruv)', function(obj){
-          var value = obj.value //得到修改后的值
-          ,data = obj.data //得到所在行所有键值
-          ,field = obj.field; //得到字段
-          layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
-        })
 
         var $ = layui.$, active = {
           getCheckData: function(){ //获取选中数据
@@ -175,63 +179,7 @@
               })
             })
           },
-          Upper_Shelf: function () { //批量上架
-            var checkStatus = table.checkStatus('idTest')
-            ,data = checkStatus.data;
-
-            if(data == ''){
-              layer.msg('未选中', {icon: 1});
-              return false;
-            }
-            var id = [];
-            for (var i = 0; i < data.length; i++) {
-              id.push(data[i].id)
-            }
-             layer.confirm('确认要上架吗？', function(index){
-              //发异步删除数据
-              $.post('/Admin/Goods/goods_state_update', {id:id,state: 0}, function(res){
-
-                  if (res.code == 200) {
-                  
-                    layer.msg(res.msg,{icon:1,time:1000});
-                    table.reload('idTest');
-                  }else{
-
-                    layer.msg(res.msg,{icon:1,time:1000});
-                  }
-
-              })
-            })
-          },
-          Lower_Shelf: function () { //批量下架
-            var checkStatus = table.checkStatus('idTest')
-            ,data = checkStatus.data;
-
-            if(data == ''){
-              layer.msg('未选中', {icon: 1});
-              return false;
-            }
-            var id = [];
-            for (var i = 0; i < data.length; i++) {
-              id.push(data[i].id)
-            }
-             layer.confirm('确认要下架吗？', function(index){
-              //发异步删除数据
-              $.post('/Admin/Goods/goods_state_update', {id:id,state: 1}, function(res){
-
-                  if (res.code == 200) {
-                  
-                    layer.msg(res.msg,{icon:1,time:1000});
-                    table.reload('idTest');
-                  }else{
-
-                    layer.msg(res.msg,{icon:1,time:1000});
-                  }
-
-              })
-            })
-          }
-          ,reload: function(){
+          reload: function(){
             var demoReload = $('#demoReload');
             //执行重载
             tableIns.reload({

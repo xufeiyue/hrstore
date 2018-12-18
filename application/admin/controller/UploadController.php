@@ -19,9 +19,13 @@ class UploadController extends Controller
         // 移动到框架应用根目录/public/uploads/ 目录下
         $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads' .DS .'member');
 
+        $detail = $info->getInfo();
+
+        $detail['size'] = round($detail['size']/1024,1).'kb';
+
         if ($info) {
             // $this->success('文件上传成功：' . $info->getRealPath());
-            return json(['code'=> 0 ,'data'=> '/uploads/member/' . $info->getSaveName()]);
+            return json(['code'=> 0 ,'data'=> '/uploads/member/' . $info->getSaveName(), 'info' => urlencode(json_encode($detail))]);
         } else {
             // 上传失败获取错误信息
             // $this->error($file->getError());
