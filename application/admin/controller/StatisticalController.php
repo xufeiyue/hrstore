@@ -74,13 +74,10 @@ class StatisticalController extends AdminController
 
 		if ($_POST) {
 		
-			if (!$this->is_jurisdiction) {
-				$data['store_id'] = input('post.store_id/d');
+			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
-				if (!$data['store_id'])
-					return json(['code' => 400 , 'msg' => '请选择店铺']);
-
-			}
+			if (!$data['store_id'])
+				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
 			$data['problem'] = input('post.problem/s');
 
@@ -119,13 +116,10 @@ class StatisticalController extends AdminController
 
 		if ($_POST) {
 			
-			if (!$this->is_jurisdiction) {
-				$data['store_id'] = input('post.store_id/d');
+			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
-				if (!$data['store_id'])
-					return json(['code' => 400 , 'msg' => '请选择店铺']);
-
-			}
+			if (!$data['store_id'])
+				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
 			$data['problem'] = input('post.problem/s');
 
@@ -246,13 +240,10 @@ class StatisticalController extends AdminController
 
 		if ($_POST) {
 			
-			if (!$this->is_jurisdiction) {
-				$data['store_id'] = input('post.store_id/d');
+			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
-				if (!$data['store_id'])
-					return json(['code' => 400 , 'msg' => '请选择店铺']);
-
-			}
+			if (!$data['store_id'])
+				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
 			$data['title'] = input('post.title/s');
 
@@ -328,13 +319,10 @@ class StatisticalController extends AdminController
 
 		if ($_POST) {
 			
-			if (!$this->is_jurisdiction) {
-				$data['store_id'] = input('post.store_id/d');
+			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
-				if (!$data['store_id'])
-					return json(['code' => 400 , 'msg' => '请选择店铺']);
-
-			}
+			if (!$data['store_id'])
+				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
 			$data['title'] = input('post.title/s');
 
