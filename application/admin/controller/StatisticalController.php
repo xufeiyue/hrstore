@@ -5,6 +5,7 @@ use think\Request;
 use app\admin\model\Problem;
 use app\admin\model\Questionnaire;
 use app\admin\model\ItemBank;
+use app\admin\model\Goods;
 class StatisticalController extends AdminController
 {
 	/*
@@ -671,5 +672,46 @@ class StatisticalController extends AdminController
 		if($del)
 			return json(['code' => 200 , 'msg' => '删除成功']);
 			return json(['code' => 400 , 'msg' => '删除失败']);
+	}
+
+	//渲染商品收藏排行模板
+	public function collection_ranking_list(){
+
+		return view();
+	}
+
+	//ajax获取商品收藏数据
+	public function ajax_collection_ranking_list(){
+
+		$where = [];
+
+		$goods_name = input('post.goods_name');
+
+		if ($goods_name) {
+
+			$where['goods_name'] = ['like',"%{$goods_name}%"];
+		}
+
+		if ($this->is_jurisdiction) { //判断是管理员还是商家
+			
+			$where['store_id'] = $this->is_jurisdiction;
+		}
+
+		$where['status'] = 0;
+
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+		$limit = input('post.limit/d') ? : 10;
+
+		$order = ['collection_number' => 'desc','id' => 'desc'];
+
+		$data = (new Goods)->Common_Select($offset,$limit,$where,$order);
+
+		foreach ($data['data'] as $key => $value) {
+			
+			$data['data'][$key]['key'] = $key + 1 + $offset; //排序从1开始 +页数
+		}
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
 }
