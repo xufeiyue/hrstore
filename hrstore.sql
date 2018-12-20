@@ -1,24 +1,22 @@
 /*
- Navicat Premium Data Transfer
+Navicat MySQL Data Transfer
 
- Source Server         : homestead
- Source Server Type    : MySQL
- Source Server Version : 50724
- Source Host           : 192.168.10.10:3306
- Source Schema         : ceshi
+Source Server         : localhost_3306
+Source Server Version : 50711
+Source Host           : localhost:3306
+Source Database       : ceshi
 
- Target Server Type    : MySQL
- Target Server Version : 50724
- File Encoding         : 65001
+Target Server Type    : MYSQL
+Target Server Version : 50711
+File Encoding         : 65001
 
- Date: 17/12/2018 17:44:22
+Date: 2018-12-18 20:52:41
 */
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for th_activity
+-- Table structure for `th_activity`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_activity`;
 CREATE TABLE `th_activity` (
@@ -44,7 +42,11 @@ CREATE TABLE `th_activity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动表';
 
 -- ----------------------------
--- Table structure for th_activity_library
+-- Records of th_activity
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_activity_library`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_activity_library`;
 CREATE TABLE `th_activity_library` (
@@ -69,7 +71,11 @@ CREATE TABLE `th_activity_library` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动库表';
 
 -- ----------------------------
--- Table structure for th_admin_log
+-- Records of th_activity_library
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_admin_log`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_admin_log`;
 CREATE TABLE `th_admin_log` (
@@ -81,10 +87,21 @@ CREATE TABLE `th_admin_log` (
   `user_name` varchar(50) DEFAULT '' COMMENT '账号',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统日志表';
 
 -- ----------------------------
--- Table structure for th_advertisement
+-- Records of th_admin_log
+-- ----------------------------
+INSERT INTO `th_admin_log` VALUES ('48', '1545048933', '1', '登录系统', '127.0.0.1', 'admin');
+INSERT INTO `th_admin_log` VALUES ('49', '1545049915', '3', '登录系统', '127.0.0.1', '小川小川');
+INSERT INTO `th_admin_log` VALUES ('50', '1545049928', '1', '登录系统', '127.0.0.1', 'admin');
+INSERT INTO `th_admin_log` VALUES ('51', '1545049963', '3', '登录系统', '127.0.0.1', '小川小川');
+INSERT INTO `th_admin_log` VALUES ('52', '1545050001', '1', '登录系统', '127.0.0.1', 'admin');
+INSERT INTO `th_admin_log` VALUES ('53', '1545050108', '3', '登录系统', '127.0.0.1', '小川小川');
+INSERT INTO `th_admin_log` VALUES ('54', '1545050534', '1', '登录系统', '127.0.0.1', 'admin');
+
+-- ----------------------------
+-- Table structure for `th_advertisement`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_advertisement`;
 CREATE TABLE `th_advertisement` (
@@ -101,7 +118,11 @@ CREATE TABLE `th_advertisement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告表';
 
 -- ----------------------------
--- Table structure for th_advertisement_type
+-- Records of th_advertisement
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_advertisement_type`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_advertisement_type`;
 CREATE TABLE `th_advertisement_type` (
@@ -112,10 +133,46 @@ CREATE TABLE `th_advertisement_type` (
   `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
   `store_id` int(10) unsigned DEFAULT '0' COMMENT '店铺id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告类型表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='广告类型表';
 
 -- ----------------------------
--- Table structure for th_goods
+-- Records of th_advertisement_type
+-- ----------------------------
+INSERT INTO `th_advertisement_type` VALUES ('1', '111', '0', '1545049417', '1545049417', '1');
+
+-- ----------------------------
+-- Table structure for `th_commodity_bank`
+-- ----------------------------
+DROP TABLE IF EXISTS `th_commodity_bank`;
+CREATE TABLE `th_commodity_bank` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '商品自增id',
+  `store_id` int(11) unsigned DEFAULT '0' COMMENT '店铺id',
+  `goods_name` varchar(255) DEFAULT '' COMMENT '商品名称',
+  `goods_images` varchar(2000) DEFAULT '' COMMENT '商品图片已json形式存储',
+  `goods_original_price` decimal(20,2) unsigned DEFAULT '0.00' COMMENT '商品原价',
+  `goods_present_price` decimal(20,2) unsigned DEFAULT '0.00' COMMENT '商品现价',
+  `goods_detail` text COMMENT '商品详情',
+  `goods_specifications` varchar(255) DEFAULT '' COMMENT '商品规则已json形式存储',
+  `goods_attribute` varchar(255) DEFAULT '' COMMENT '商品属性已json形式存储',
+  `goods_stock` int(11) unsigned DEFAULT '0' COMMENT '库存',
+  `state` tinyint(1) unsigned DEFAULT '0' COMMENT '0上架1下架',
+  `status` tinyint(1) unsigned DEFAULT '0' COMMENT '0正常1删除2清除',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `type_id` int(11) unsigned DEFAULT '0' COMMENT '商品类型id',
+  `images_detail` text COMMENT ' 图片信息',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='商品库表';
+
+-- ----------------------------
+-- Records of th_commodity_bank
+-- ----------------------------
+INSERT INTO `th_commodity_bank` VALUES ('4', '0', '232323', '[\"\\/uploads\\/member\\/20181218\\\\9b0cfbea07a2104cd4451bd29f90be16.jpg\",\"\\/uploads\\/member\\/20181218\\\\bb79e27bdafdab56d21871a7286ae063.png\",\"\\/uploads\\/member\\/20181218\\\\5f990b51bad337ea4bafc81de2980a2a.jpg\",\"\\/uploads\\/member\\/20181218\\\\056626c9f4f4b45744486f7a8419544d.jpg\"]', '500.00', '482.00', '23232', '[\"12\",\"2\",\"34\",\"6\"]', '[\"23\"]', '50', '1', '0', '1545132853', '1545137220', '9', '[\"{\\\"name\\\":\\\"\\\\u6d88\\\\u606f_\\\\u770b\\\\u56fe\\\\u738b.jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php855E.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"36.9kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u8bed\\\\u97f3\\\\u6587\\\\u4ef6\\\\u540e\\\\u53f0\\\\u4e0a\\\\u4f20\\\\u63a8\\\\u9001\\\\u7ba1\\\\u7406\\\\u610f\\\\u89c1.png\\\",\\\"type\\\":\\\"image\\\\\\/png\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\phpCC8.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"191.8kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u6211\\\\u4e5f\\\\u6765\\\\u4e92\\\\u52a8_\\\\u770b\\\\u56fe\\\\u738b(1).jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php4F64.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"77.2kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u6211\\\\u4e5f\\\\u6765\\\\u8bc4\\\\u4ef7_\\\\u770b\\\\u56fe\\\\u738b(1).jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php4F65.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"79.3kb\\\"}\"]');
+INSERT INTO `th_commodity_bank` VALUES ('5', '0', '123213213', '[\"\\/uploads\\/member\\/20181218\\\\4f709f72ed2f9194cf95d33395d8ad24.png\"]', '5500.00', '2200.00', '333', '[\"1\"]', '[\"2\"]', '50', '1', '0', '1545135274', '1545135274', '4', '[\"{\\\"name\\\":\\\"\\\\u8bed\\\\u97f3\\\\u6587\\\\u4ef6\\\\u540e\\\\u53f0\\\\u4e0a\\\\u4f20\\\\u63a8\\\\u9001\\\\u7ba1\\\\u7406\\\\u610f\\\\u89c1.png\\\",\\\"type\\\":\\\"image\\\\\\/png\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php704E.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"191.8kb\\\"}\"]');
+INSERT INTO `th_commodity_bank` VALUES ('6', '0', '123123', '[\"\\/uploads\\/member\\/20181218\\\\d86fcfc04473c07ff78d6652b24a75b5.jpg\"]', '500.00', '100.00', '123123', '[\"33\"]', '[\"66\"]', '50', '1', '0', '1545135339', '1545135339', '9', '[\"{\\\"name\\\":\\\"\\\\u65e0\\\\u7f51\\\\u7edc_\\\\u770b\\\\u56fe\\\\u738b.jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php6C98.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"28.9kb\\\"}\"]');
+
+-- ----------------------------
+-- Table structure for `th_goods`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_goods`;
 CREATE TABLE `th_goods` (
@@ -134,11 +191,22 @@ CREATE TABLE `th_goods` (
   `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
   `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
   `type_id` int(11) unsigned DEFAULT '0' COMMENT '商品类型id',
+  `images_detail` text COMMENT ' 图片信息',
+  `pid` int(11) unsigned DEFAULT '0' COMMENT '商品库id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='商品表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='商品表';
 
 -- ----------------------------
--- Table structure for th_goods_type
+-- Records of th_goods
+-- ----------------------------
+INSERT INTO `th_goods` VALUES ('4', '1', '232323', '[\"\\/uploads\\/member\\/20181218\\\\9b0cfbea07a2104cd4451bd29f90be16.jpg\",\"\\/uploads\\/member\\/20181218\\\\bb79e27bdafdab56d21871a7286ae063.png\",\"\\/uploads\\/member\\/20181218\\\\5f990b51bad337ea4bafc81de2980a2a.jpg\",\"\\/uploads\\/member\\/20181218\\\\056626c9f4f4b45744486f7a8419544d.jpg\"]', '500.00', '482.00', '23232', '[\"12\",\"2\",\"34\",\"6\"]', '[\"23\"]', '50', '1', '0', '1545132853', '1545133617', '2', '[\"{\\\"name\\\":\\\"\\\\u6d88\\\\u606f_\\\\u770b\\\\u56fe\\\\u738b.jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php855E.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"36.9kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u8bed\\\\u97f3\\\\u6587\\\\u4ef6\\\\u540e\\\\u53f0\\\\u4e0a\\\\u4f20\\\\u63a8\\\\u9001\\\\u7ba1\\\\u7406\\\\u610f\\\\u89c1.png\\\",\\\"type\\\":\\\"image\\\\\\/png\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\phpCC8.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"191.8kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u6211\\\\u4e5f\\\\u6765\\\\u4e92\\\\u52a8_\\\\u770b\\\\u56fe\\\\u738b(1).jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php4F64.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"77.2kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u6211\\\\u4e5f\\\\u6765\\\\u8bc4\\\\u4ef7_\\\\u770b\\\\u56fe\\\\u738b(1).jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php4F65.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"79.3kb\\\"}\"]', '0');
+INSERT INTO `th_goods` VALUES ('5', '0', '123123', '[\"\\/uploads\\/member\\/20181218\\\\d86fcfc04473c07ff78d6652b24a75b5.jpg\"]', '500.00', '100.00', '123123', '[\"33\"]', '[\"66\"]', '50', '1', '0', '1545136868', '1545136868', '9', '[\"{\\\"name\\\":\\\"\\\\u65e0\\\\u7f51\\\\u7edc_\\\\u770b\\\\u56fe\\\\u738b.jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php6C98.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"28.9kb\\\"}\"]', '6');
+INSERT INTO `th_goods` VALUES ('6', '0', '123213213', '[\"\\/uploads\\/member\\/20181218\\\\4f709f72ed2f9194cf95d33395d8ad24.png\"]', '5500.00', '2200.00', '333', '[\"1\"]', '[\"2\"]', '50', '1', '0', '1545136892', '1545136892', '4', '[\"{\\\"name\\\":\\\"\\\\u8bed\\\\u97f3\\\\u6587\\\\u4ef6\\\\u540e\\\\u53f0\\\\u4e0a\\\\u4f20\\\\u63a8\\\\u9001\\\\u7ba1\\\\u7406\\\\u610f\\\\u89c1.png\\\",\\\"type\\\":\\\"image\\\\\\/png\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php704E.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"191.8kb\\\"}\"]', '5');
+INSERT INTO `th_goods` VALUES ('7', '0', '232323', '[\"\\/uploads\\/member\\/20181218\\\\9b0cfbea07a2104cd4451bd29f90be16.jpg\",\"\\/uploads\\/member\\/20181218\\\\bb79e27bdafdab56d21871a7286ae063.png\",\"\\/uploads\\/member\\/20181218\\\\5f990b51bad337ea4bafc81de2980a2a.jpg\",\"\\/uploads\\/member\\/20181218\\\\056626c9f4f4b45744486f7a8419544d.jpg\"]', '500.00', '482.00', '23232', '[\"12\",\"2\",\"34\",\"6\"]', '[\"23\"]', '50', '1', '1', '1545136892', '1545136892', '2', '[\"{\\\"name\\\":\\\"\\\\u6d88\\\\u606f_\\\\u770b\\\\u56fe\\\\u738b.jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php855E.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"36.9kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u8bed\\\\u97f3\\\\u6587\\\\u4ef6\\\\u540e\\\\u53f0\\\\u4e0a\\\\u4f20\\\\u63a8\\\\u9001\\\\u7ba1\\\\u7406\\\\u610f\\\\u89c1.png\\\",\\\"type\\\":\\\"image\\\\\\/png\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\phpCC8.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"191.8kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u6211\\\\u4e5f\\\\u6765\\\\u4e92\\\\u52a8_\\\\u770b\\\\u56fe\\\\u738b(1).jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php4F64.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"77.2kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u6211\\\\u4e5f\\\\u6765\\\\u8bc4\\\\u4ef7_\\\\u770b\\\\u56fe\\\\u738b(1).jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php4F65.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"79.3kb\\\"}\"]', '4');
+INSERT INTO `th_goods` VALUES ('9', '0', '232323', '[\"\\/uploads\\/member\\/20181218\\\\9b0cfbea07a2104cd4451bd29f90be16.jpg\",\"\\/uploads\\/member\\/20181218\\\\bb79e27bdafdab56d21871a7286ae063.png\",\"\\/uploads\\/member\\/20181218\\\\5f990b51bad337ea4bafc81de2980a2a.jpg\",\"\\/uploads\\/member\\/20181218\\\\056626c9f4f4b45744486f7a8419544d.jpg\"]', '500.00', '482.00', '23232', '[\"12\",\"2\",\"34\",\"6\"]', '[\"23\"]', '50', '1', '1', '1545137244', '1545137244', '9', '[\"{\\\"name\\\":\\\"\\\\u6d88\\\\u606f_\\\\u770b\\\\u56fe\\\\u738b.jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php855E.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"36.9kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u8bed\\\\u97f3\\\\u6587\\\\u4ef6\\\\u540e\\\\u53f0\\\\u4e0a\\\\u4f20\\\\u63a8\\\\u9001\\\\u7ba1\\\\u7406\\\\u610f\\\\u89c1.png\\\",\\\"type\\\":\\\"image\\\\\\/png\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\phpCC8.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"191.8kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u6211\\\\u4e5f\\\\u6765\\\\u4e92\\\\u52a8_\\\\u770b\\\\u56fe\\\\u738b(1).jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php4F64.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"77.2kb\\\"}\",\"{\\\"name\\\":\\\"\\\\u6211\\\\u4e5f\\\\u6765\\\\u8bc4\\\\u4ef7_\\\\u770b\\\\u56fe\\\\u738b(1).jpg\\\",\\\"type\\\":\\\"image\\\\\\/jpeg\\\",\\\"tmp_name\\\":\\\"D:\\\\\\\\wamp\\\\\\\\tmp\\\\\\\\php4F65.tmp\\\",\\\"error\\\":0,\\\"size\\\":\\\"79.3kb\\\"}\"]', '4');
+
+-- ----------------------------
+-- Table structure for `th_goods_type`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_goods_type`;
 CREATE TABLE `th_goods_type` (
@@ -149,10 +217,23 @@ CREATE TABLE `th_goods_type` (
   `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(1) unsigned DEFAULT '0' COMMENT '0正常1删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='商品类型表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='商品类型表';
 
 -- ----------------------------
--- Table structure for th_information
+-- Records of th_goods_type
+-- ----------------------------
+INSERT INTO `th_goods_type` VALUES ('1', '10', '1', '1545049492', '1545049492', '0');
+INSERT INTO `th_goods_type` VALUES ('2', '11', '1', '1545049544', '1545049544', '0');
+INSERT INTO `th_goods_type` VALUES ('3', '2022', '2', '1545049738', '1545049738', '0');
+INSERT INTO `th_goods_type` VALUES ('4', '222222', '0', '1545050272', '1545050272', '0');
+INSERT INTO `th_goods_type` VALUES ('5', '555', '1', '1545050431', '1545050431', '1');
+INSERT INTO `th_goods_type` VALUES ('6', '5454', '1', '1545050520', '1545050520', '1');
+INSERT INTO `th_goods_type` VALUES ('7', '666677788', '0', '1545050705', '1545050705', '1');
+INSERT INTO `th_goods_type` VALUES ('8', '666', '1', '1545050638', '1545050638', '1');
+INSERT INTO `th_goods_type` VALUES ('9', '家电', '0', '1545135306', '1545135306', '0');
+
+-- ----------------------------
+-- Table structure for `th_information`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_information`;
 CREATE TABLE `th_information` (
@@ -173,7 +254,11 @@ CREATE TABLE `th_information` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统基本信息';
 
 -- ----------------------------
--- Table structure for th_item_bank
+-- Records of th_information
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_item_bank`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_item_bank`;
 CREATE TABLE `th_item_bank` (
@@ -191,7 +276,11 @@ CREATE TABLE `th_item_bank` (
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='总题库';
 
 -- ----------------------------
--- Table structure for th_problem
+-- Records of th_item_bank
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_problem`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_problem`;
 CREATE TABLE `th_problem` (
@@ -210,7 +299,11 @@ CREATE TABLE `th_problem` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='店铺下题库';
 
 -- ----------------------------
--- Table structure for th_questionnaire
+-- Records of th_problem
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `th_questionnaire`
 -- ----------------------------
 DROP TABLE IF EXISTS `th_questionnaire`;
 CREATE TABLE `th_questionnaire` (
@@ -230,28 +323,5 @@ CREATE TABLE `th_questionnaire` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='调研问卷表';
 
 -- ----------------------------
--- Table structure for th_user
+-- Records of th_questionnaire
 -- ----------------------------
-DROP TABLE IF EXISTS `th_user`;
-CREATE TABLE `th_user` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_name` varchar(50) NOT NULL COMMENT '用户名',
-  `password` char(32) NOT NULL COMMENT '密码',
-  `status` tinyint(3) unsigned DEFAULT '1' COMMENT '1有效0冻结',
-  `createTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
-  `reg_ip` bigint(20) unsigned DEFAULT NULL COMMENT '注册ip',
-  `last_login_time` int(10) unsigned DEFAULT '0' COMMENT '最后登录时间',
-  `last_login_ip` bigint(20) unsigned DEFAULT NULL COMMENT '最后登录ip',
-  `update_time` int(11) unsigned DEFAULT NULL COMMENT '更新时间',
-  `role_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '角色id',
-  `store_id` int(11) unsigned DEFAULT NULL COMMENT '店铺id',
-  `state` tinyint(1) unsigned DEFAULT '0' COMMENT '0正常1删除',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
-INSERT INTO `th_user`(`id`, `user_name`, `password`, `status`, `createTime`, `reg_ip`, `last_login_time`, `last_login_ip`, `update_time`, `role_id`, `store_id`, `state`) VALUES (1, 'admin', '21232F297A57A5A743894A0E4A801FC3', 1, 2147483647, 119119, 2147483647, 0, 2, 0, NULL, 0);
-INSERT INTO `th_user`(`id`, `user_name`, `password`, `status`, `createTime`, `reg_ip`, `last_login_time`, `last_login_ip`, `update_time`, `role_id`, `store_id`, `state`) VALUES (2, 'admin1', '4297f44b13955235245b2497399d7a93', 1, 1517565931, NULL, 0, NULL, NULL, 1, NULL, 0);
-INSERT INTO `th_user`(`id`, `user_name`, `password`, `status`, `createTime`, `reg_ip`, `last_login_time`, `last_login_ip`, `update_time`, `role_id`, `store_id`, `state`) VALUES (3, '小川小川', '21232F297A57A5A743894A0E4A801FC3', 1, 1544586957, NULL, 0, NULL, 1544586957, 2, 1, 0);
-

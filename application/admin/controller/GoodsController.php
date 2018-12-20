@@ -5,6 +5,7 @@ use think\Db;
 use think\Request;
 use app\admin\model\GoodsType;
 use app\admin\model\Goods;
+use app\admin\model\CommodityBank;
 class GoodsController extends AdminController
 {
 	/*
@@ -160,6 +161,18 @@ class GoodsController extends AdminController
 
 		$data = (new Goods)->Common_Select($offset,$limit,$where,$order);
 
+		foreach ($data['data'] as $key => $value) {
+			
+			if ($value['pid']) {
+				
+				$data['data'][$key]['pid_name'] = '商品库';
+
+			}else{
+
+				$data['data'][$key]['pid_name'] = '自创';
+			}
+		}
+
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
 
@@ -177,11 +190,11 @@ class GoodsController extends AdminController
 
 			if($state == '上架'){
 
-				$state = 0;
+				$data['state'] = 0;
 
 			}else{
-
-				$state = 1;
+				
+				$data['state'] = 1;
 			}
 
 			$data['type_id'] = input('post.type_id/d');
@@ -250,7 +263,6 @@ class GoodsController extends AdminController
 
 		if ($_POST) {
 
-
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
 			if (!$data['store_id'])
@@ -260,24 +272,31 @@ class GoodsController extends AdminController
 
 			if($state == '上架'){
 
-				$state = 0;
+				$data['state'] = 0;
 
 			}else{
 				
-				$state = 1;
+				$data['state'] = 1;
 			}
 
 			$data['type_id'] = input('post.type_id/d');
 
 			$data['goods_name'] = input('post.goods_name/s');		
 
-			$images = input('post.file/a');
+			$images = input('post.images/a');
 
 			$data['goods_images'] = json_encode($images);	
 
 			$images_detail = input('post.file_detail/a');
 
-			$data['images_detail'] = json_encode($images_detail);	
+			$images_detail1 = [];
+
+			foreach ($images_detail as $key => $value) {
+				
+				$images_detail1[] = urldecode($value);
+			}
+
+			$data['images_detail'] = json_encode($images_detail1);
 
 			$data['goods_original_price'] = input('post.goods_original_price/f');		
 
@@ -355,7 +374,7 @@ class GoodsController extends AdminController
 			return json(['code' => 400 , 'msg' => '删除失败']);
 	}
 
-	//批量删除商品类型
+	//批量删除商品
 	public function goods_delAll(){
 
 		$id = array_unique(input('post.id/a'));
@@ -428,6 +447,18 @@ class GoodsController extends AdminController
 
 		$data = (new Goods)->Common_Select($offset,$limit,$where,$order);
 
+		foreach ($data['data'] as $key => $value) {
+			
+			if ($value['pid']) {
+				
+				$data['data'][$key]['pid_name'] = '商品库';
+				
+			}else{
+
+				$data['data'][$key]['pid_name'] = '自创';
+			}
+		}
+
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
 
@@ -443,5 +474,353 @@ class GoodsController extends AdminController
 		if($update)
 			return json(['code' => 200 , 'msg' => '操作成功']);
 			return json(['code' => 400 , 'msg' => '操作失败']);
+	}
+
+	//渲染商品库模板
+	public function commodity_bank_list(){
+
+		return view();
+	}
+
+	//ajax获取商品库数据
+	public function ajax_commodity_bank_list(){
+
+		$where = [];
+
+		$goods_name = input('post.goods_name/s');
+
+		if($goods_name){
+
+			$where['goods_name']  = ['like',"%{$goods_name}%"];
+		}
+
+		if ($this->is_jurisdiction) { //判断是管理员还是商家
+			
+			$where['store_id'] = $this->is_jurisdiction;
+		}
+
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+		$limit = input('post.limit/d') ? : 10;
+
+		$order = ['id' => 'desc'];
+
+		$where['status'] = 0;
+
+		$data = (new CommodityBank)->Common_Select($offset,$limit,$where,$order);
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
+	}
+
+	//新增商品库商品
+	public function commodity_bank_add(){
+
+		if ($_POST) {
+
+			$state = 1;
+
+			$data['type_id'] = input('post.type_id/d');
+
+			$data['goods_name'] = input('post.goods_name/s');		
+
+			$images = input('post.file/a');
+
+			$data['goods_images'] = json_encode($images);
+
+			$images_detail = input('post.file_detail/a');
+
+			$images_detail1 = [];
+
+			foreach ($images_detail as $key => $value) {
+				
+				$images_detail1[] = urldecode($value);
+			}
+
+			$data['images_detail'] = json_encode($images_detail1);
+
+			$data['goods_original_price'] = input('post.goods_original_price/f');		
+
+			$data['goods_present_price'] = input('post.goods_present_price/f');		
+
+			$data['goods_stock'] = input('post.goods_stock/d');		
+
+			$goods_specifications = input('post.goods_specifications/a');		
+
+			$data['goods_specifications'] = json_encode($goods_specifications);
+
+			$goods_attribute = input('post.goods_attribute/a');		
+
+			$data['goods_attribute'] = json_encode($goods_attribute);
+
+			$data['goods_detail'] = input('post.goods_detail/s');
+
+			$data['create_time'] = time();
+
+			$data['update_time'] = time();
+
+			$add = (new CommodityBank)->Common_Insert($data);
+
+			if($add)
+				return json(['code' => 200 , 'msg' => '新增成功']);
+				return json(['code' => 400 , 'msg' => '新增失败']);
+
+		}else{
+
+			$goods_type = [];
+
+			$order = ['id' => 'desc'];
+
+			$goods_type = (new GoodsType)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
+
+			$this->assign('goods_type',$goods_type);
+
+			return view();
+		}
+	}
+
+	//更新商品库商品
+	public function commodity_bank_edit(){
+
+		$id = input('id/d');
+
+		if ($_POST) {
+
+			$data['state'] = 1; //默认下架
+
+			$data['type_id'] = input('post.type_id/d');
+
+			$data['goods_name'] = input('post.goods_name/s');		
+
+			$images = input('post.images/a');
+
+			$data['goods_images'] = json_encode($images);	
+
+			$images_detail = input('post.file_detail/a');
+
+			$images_detail1 = [];
+
+			foreach ($images_detail as $key => $value) {
+				
+				$images_detail1[] = urldecode($value);
+			}
+
+			$data['images_detail'] = json_encode($images_detail1);
+
+			$data['goods_original_price'] = input('post.goods_original_price/f');		
+
+			$data['goods_present_price'] = input('post.goods_present_price/f');		
+
+			$data['goods_stock'] = input('post.goods_stock/d');		
+
+			$goods_specifications = input('post.goods_specifications/a');		
+
+			$data['goods_specifications'] = json_encode($goods_specifications);
+
+			$goods_attribute = input('post.goods_attribute/a');		
+
+			$data['goods_attribute'] = json_encode($goods_attribute);
+
+			$data['goods_detail'] = input('post.goods_detail/s');
+
+			$data['update_time'] = time();
+
+			$edit = (new CommodityBank)->Common_Update($data,['id' => $id]);
+
+			if($edit)
+				return json(['code' => 200 , 'msg' => '更新成功']);
+				return json(['code' => 400 , 'msg' => '更新失败']);
+
+		}else{
+
+			$goods_type = [];
+
+			$order = ['id' => 'desc'];
+
+			$list = (new CommodityBank)->Common_Find(['id' => $id]);
+
+			$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
+
+			$list['goods_images'] = json_decode($list['goods_images'],true);
+
+			$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
+
+			$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
+
+			$list['goods_specifications_num'] = count($list['goods_specifications']);
+
+			$list['goods_attribute_num'] = count($list['goods_attribute']);
+
+			$images_detail = json_decode($list['images_detail'],true);
+
+			$list['images_detail1'] = [];
+
+			$list['images_detail2'] = [];
+
+			foreach ($images_detail as $key => $value) {
+				
+				$list['images_detail1'][] = json_decode($value,true);
+
+				$list['images_detail2'][] = urlencode($value) ;
+			}
+
+			$this->assign('list',$list);
+
+			$this->assign('goods_type',$goods_type);
+
+			return view();
+		}
+	}
+	//删除商品库商品
+	public function commodity_bank_del(){
+
+		$id = input('post.id/d');
+
+		$del = (new CommodityBank)->Common_Update(['status' => 1],['id' => $id]);
+
+		if($del)
+			return json(['code' => 200 , 'msg' => '删除成功']);
+			return json(['code' => 400 , 'msg' => '删除失败']);
+	}
+
+	//批量删除商品库商品
+	public function commodity_bank_delAll(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$del = (new CommodityBank)->Common_Update(['status' => 1],['id' => ['in', $id]]);
+
+		if($del)
+			return json(['code' => 200 , 'msg' => '删除成功']);
+			return json(['code' => 400 , 'msg' => '删除失败']);
+	}
+
+	//拉取商品库商品
+	public function pull_up_goods(){
+
+		return view();
+	}
+
+	//ajax获取商品库数据
+	public function ajax_pull_up_goods(){
+
+		$where = [];
+
+		$goods_name = input('post.goods_name/s');
+
+		if($goods_name){
+
+			$where['goods_name']  = ['like',"%{$goods_name}%"];
+		}
+
+		$order = ['id' => 'desc'];
+
+		$where['status'] = 0;
+
+		$Goods = (new Goods)->Goods_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => $this->is_jurisdiction],$order);
+
+		if (!empty($Goods)) {
+			
+			$where['id'] = ['not in', $Goods];
+		}
+
+		$data = (new CommodityBank)->CommodityBank_Select($where,$order);
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data ]);
+	}
+
+	//拉取信息到店铺下商品列表
+	public function store_goods_list(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$order = ['id' => 'desc'];
+
+		$data = (new CommodityBank)->CommodityBank_Select(['id' => ['in',$id] , 'status' => 0],$order);
+
+		$arr = [];
+
+		foreach ($data as $key => $value) {
+			
+			$arr[$key]['goods_name'] = $value['goods_name'];
+
+			$arr[$key]['goods_images'] = $value['goods_images'];
+
+			$arr[$key]['goods_original_price'] = $value['goods_original_price'];
+
+			$arr[$key]['goods_present_price'] = $value['goods_present_price'];
+
+			$arr[$key]['goods_detail'] = $value['goods_detail'];
+
+			$arr[$key]['state'] = 1;
+
+			$arr[$key]['goods_specifications'] = $value['goods_specifications'];
+
+			$arr[$key]['goods_attribute'] = $value['goods_attribute'];
+
+			$arr[$key]['goods_stock'] = $value['goods_stock'];
+
+			$arr[$key]['type_id'] = $value['type_id'];
+
+			$arr[$key]['pid'] = $value['id'];
+
+			$arr[$key]['images_detail'] = $value['images_detail'];
+
+			$arr[$key]['store_id'] = $this->is_jurisdiction;
+
+			$arr[$key]['create_time'] = time();
+
+			$arr[$key]['update_time'] = time();
+
+		}
+
+		$add = (new Goods)->Common_InsertAll($arr);
+
+		if($add)
+			return json(['code' => 200 , 'msg' => '拉取成功']);
+			return json(['code' => 400 , 'msg' => '拉取失败']);
+
+	}
+
+	//商品查看（不可修改）
+	public function goods_see(){
+
+		$id = input('id/d');
+
+		$goods_type = [];
+
+		$order = ['id' => 'desc'];
+
+		$list = (new CommodityBank)->Common_Find(['id' => $id]);
+
+		$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
+
+		$list['goods_images'] = json_decode($list['goods_images'],true);
+
+		$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
+
+		$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
+
+		$list['goods_specifications_num'] = count($list['goods_specifications']);
+
+		$list['goods_attribute_num'] = count($list['goods_attribute']);
+
+		$images_detail = json_decode($list['images_detail'],true);
+
+		$list['images_detail1'] = [];
+
+		$list['images_detail2'] = [];
+
+		foreach ($images_detail as $key => $value) {
+			
+			$list['images_detail1'][] = json_decode($value,true);
+
+			$list['images_detail2'][] = urlencode($value) ;
+		}
+
+		$this->assign('list',$list);
+
+		$this->assign('goods_type',$goods_type);
+
+		return view();
 	}
 }

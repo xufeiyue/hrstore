@@ -101,13 +101,11 @@ class ActivityController extends AdminController
 				$data['state'] = 1;
 			}
 
-			if (!$this->is_jurisdiction) {
-				$data['store_id'] = input('post.store_id/d');
+			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
-				if (!$data['store_id'])
-					return json(['code' => 400 , 'msg' => '请选择店铺']);
+			if (!$data['store_id'])
+				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
-			}
 
 			$data['activity_name'] = input('post.activity_name/s');
 
@@ -152,13 +150,10 @@ class ActivityController extends AdminController
 				$data['state'] = 1;
 			}
 
-			if (!$this->is_jurisdiction) {
-				$data['store_id'] = input('post.store_id/d');
+			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
-				if (!$data['store_id'])
-					return json(['code' => 400 , 'msg' => '请选择店铺']);
-
-			}
+			if (!$data['store_id'])
+				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
 			$data['activity_name'] = input('post.activity_name/s');
 
