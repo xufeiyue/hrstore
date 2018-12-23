@@ -714,4 +714,33 @@ class StatisticalController extends AdminController
 
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
+
+	//编辑
+	public function collection_ranking_edit(){
+
+		$id = input('id/d');
+
+		if ($_POST) {
+
+			$data['collection_number'] = input('post.collection_number/d');
+
+			$data['update_time'] = time();
+
+			$edit = (new Goods)->Common_Update($data,['id' => $id]);
+
+			if($edit)
+				return json(['code' => 200 , 'msg' => '更新成功']);
+				return json(['code' => 400 , 'msg' => '更新失败']);
+
+		}else{
+
+			$order = ['id' => 'desc'];
+
+			$list = (new Goods)->Common_Find(['id' => $id]);
+
+			$this->assign('list',$list);
+
+			return view();
+		}
+	}
 }
