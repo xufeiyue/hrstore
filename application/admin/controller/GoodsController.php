@@ -181,6 +181,8 @@ class GoodsController extends AdminController
 
 		if ($_POST) {
 
+			$whether = ['on','off'];
+
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
 			if (!$data['store_id'])
@@ -188,13 +190,57 @@ class GoodsController extends AdminController
 
 			$state = input('post.state/s');
 
-			if($state == '上架'){
+			$sell_well = input('post.sell_well/s');
+
+			$characteristic = input('post.characteristic/s');
+
+			$popularity = input('post.popularity/s');
+
+			$relation = input('post.relation/s');
+
+			if($state == $whether[0]){
 
 				$data['state'] = 0;
 
 			}else{
 				
 				$data['state'] = 1;
+			}
+
+			if($sell_well == $whether[0]){
+
+				$data['sell_well'] = 0;
+
+			}else{
+				
+				$data['sell_well'] = 1;
+			}
+
+			if($characteristic == $whether[0]){
+
+				$data['characteristic'] = 0;
+
+			}else{
+				
+				$data['characteristic'] = 1;
+			}
+
+			if($popularity == $whether[0]){
+
+				$data['popularity'] = 0;
+
+			}else{
+				
+				$data['popularity'] = 1;
+			}
+
+			if($relation == $whether[0]){
+
+				$data['relation'] = 0;
+
+			}else{
+				
+				$data['relation'] = 1;
 			}
 
 			$data['type_id'] = input('post.type_id/d');
@@ -263,6 +309,8 @@ class GoodsController extends AdminController
 
 		if ($_POST) {
 
+			$whether = ['on','off'];
+
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
 			if (!$data['store_id'])
@@ -270,13 +318,57 @@ class GoodsController extends AdminController
 
 			$state = input('post.state/s');
 
-			if($state == '上架'){
+			$sell_well = input('post.sell_well/s');
+
+			$characteristic = input('post.characteristic/s');
+
+			$popularity = input('post.popularity/s');
+
+			$relation = input('post.relation/s');
+
+			if($state == $whether[0]){
 
 				$data['state'] = 0;
 
 			}else{
 				
 				$data['state'] = 1;
+			}
+
+			if($sell_well == $whether[0]){
+
+				$data['sell_well'] = 0;
+
+			}else{
+				
+				$data['sell_well'] = 1;
+			}
+
+			if($characteristic == $whether[0]){
+
+				$data['characteristic'] = 0;
+
+			}else{
+				
+				$data['characteristic'] = 1;
+			}
+
+			if($popularity == $whether[0]){
+
+				$data['popularity'] = 0;
+
+			}else{
+				
+				$data['popularity'] = 1;
+			}
+
+			if($relation == $whether[0]){
+
+				$data['relation'] = 0;
+
+			}else{
+				
+				$data['relation'] = 1;
 			}
 
 			$data['type_id'] = input('post.type_id/d');
