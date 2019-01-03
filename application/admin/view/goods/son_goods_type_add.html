@@ -1,37 +1,33 @@
 {include file="public/header"}
     <div class="x-body">
         <form class="layui-form">
-        <input type="hidden" id="id" value="{$list['id']}" name="id" lay-verify="id">
-        {if condition="$is_jurisdiction == 0 && $list['pid'] == 0"}
+        {if condition="$is_jurisdiction == 0"}
           <div class="layui-form-item">
-            <label  for="store_id" class="layui-form-label">
-              <span class="x-red">*</span>选择店铺
+            <label  for="pid" class="layui-form-label">
+              <span class="x-red">*</span>类型名称
             </label>
             <div class="layui-input-block">
-              <select name="store_id" lay-filter="store_id">
-                <option value="0">请选择</option>
-                {volist name="store" id="vo"}
-                    <option value="{$vo.id}" {if condition="$list['store_id'] eq $vo['id']"}selected="selected"{/if}>{$vo.name}</option>
-                {/volist}
+              <select name="pid" lay-filter="pid">
+                    <option value="{$list.id}">{$list.goods_type_name}</option>
               </select>
             </div>
           </div>
         {/if}
+        <input type="hidden" name="store_id" value="{$list['store_id']}">
           <div class="layui-form-item">
               <label for="activity_name" class="layui-form-label">
-                  <span class="x-red">*</span>类型名称
+                  <span class="x-red">*</span>子分类名称
               </label>
               <div class="layui-input-inline">
-                  <input type="text" id="goods_type_name" value="{$list['goods_type_name']}" name="goods_type_name" lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="text" id="goods_type_name" name="goods_type_name" lay-verify="required" autocomplete="off" class="layui-input">
               </div>
-             
           </div>
 
           <div class="layui-form-item">
               <label for="L_repass" class="layui-form-label">
               </label>
-              <button  class="layui-btn" lay-filter="edit" lay-submit="">
-                  更新
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  增加
               </button>
           </div>
       </form>
@@ -43,10 +39,11 @@
           ,layer = layui.layer;
          
           //监听提交
-          form.on('submit(edit)', function(data){
+          form.on('submit(add)', function(data){
+            console.log(data);
             
             //发异步，把数据提交给php
-            $.post('/Admin/Goods/goods_type_edit', data.field, function(res){
+            $.post('/Admin/Goods/son_goods_type_add', data.field, function(res){
 
                 if(res.code == 200){
                     layer.alert(res.msg, {icon: 1},function () {
