@@ -45,6 +45,8 @@ class GoodsController extends AdminController
 
 		$data = (new GoodsType)->Common_Select($offset,$limit,$where,$order);
 
+		$data['data'] = Model('Common/Tree')->toFormatTree($data['data'],'goods_type_name');
+
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
 
@@ -126,6 +128,39 @@ class GoodsController extends AdminController
 		if($del)
 			return json(['code' => 200 , 'msg' => '删除成功']);
 			return json(['code' => 400 , 'msg' => '删除失败']);
+	}
+
+	//新增子分类
+	public function son_goods_type_add(){
+
+		$pid = input('pid/d'); //分类id
+
+		if ($_POST) {
+			
+			$data['pid'] = $pid;
+
+			$data['store_id'] = input('post.store_id/d');
+
+			$data['goods_type_name'] = input('post.goods_type_name/s');
+
+			$data['create_time'] = time();
+
+			$data['update_time'] = time();
+			
+			$add = (new GoodsType)->Common_Insert($data);
+
+			if ($add)
+				return json(['code' => 200 , 'msg' => '新增成功']);
+				return json(['code' => 400 , 'msg' => '新增失败']);
+
+		}else{
+
+			$list = (new GoodsType)->Common_Find(['id' => $pid]);
+
+			$this->assign('list',$list);
+
+			return view();
+		}
 	}
 
 	//渲染商品列表模板
@@ -296,6 +331,8 @@ class GoodsController extends AdminController
 
 			$goods_type = (new GoodsType)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
 
+			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
+
 			$this->assign('goods_type',$goods_type);
 
 			return view();
@@ -424,6 +461,8 @@ class GoodsController extends AdminController
 
 			$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
 
+			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
+
 			$list['goods_images'] = json_decode($list['goods_images'],true);
 
 			$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
@@ -500,6 +539,8 @@ class GoodsController extends AdminController
 		$order = ['id' => 'desc'];
 
 		$data = (new GoodsType)->type(['store_id' => $store_id , 'status' => 0],$order);
+
+		$data = Model('Common/Tree')->toFormatTree($data,'goods_type_name');
 
 		if($data)
 			return json(['code' => 200 , 'msg' => '请求成功' , 'data' => $data]);
@@ -664,6 +705,8 @@ class GoodsController extends AdminController
 
 			$goods_type = (new GoodsType)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
 
+			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
+
 			$this->assign('goods_type',$goods_type);
 
 			return view();
@@ -731,6 +774,8 @@ class GoodsController extends AdminController
 			$list = (new CommodityBank)->Common_Find(['id' => $id]);
 
 			$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
+
+			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 
 			$list['goods_images'] = json_decode($list['goods_images'],true);
 
