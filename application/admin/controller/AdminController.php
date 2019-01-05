@@ -43,7 +43,7 @@ class AdminController extends Controller
 		$menu = $this->getMenus($controller);
 
         $is_jurisdiction = is_jurisdiction(); //判断是否是店铺
-
+ 
         $store = [
             ['id' => 1 , 'name' => '名称1'],
             ['id' => 2 , 'name' => '名称2'],
