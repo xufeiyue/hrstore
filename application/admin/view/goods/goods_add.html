@@ -31,6 +31,20 @@
         </div>
 
         <div class="layui-form-item">
+          <label  for="activity_id" class="layui-form-label">
+            <span class="x-red">*</span>选择活动
+          </label>
+          <div class="layui-input-block">
+            <select name="activity_id" lay-filter="activity_id" id="activity_id">
+              <option value="0">请选择</option>
+              {volist name="activity" id="vo"}
+                  <option value="{$vo.id}">{$vo.activity_name}</option>
+              {/volist}
+            </select>
+          </div>
+        </div>
+
+        <div class="layui-form-item">
             <label for="activity_name" class="layui-form-label">
                 <span class="x-red">*</span>商品名称
             </label>
@@ -127,14 +141,14 @@
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">热销：</label>
+            <label class="layui-form-label">爆款：</label>
             <div class="layui-input-block">
               <input type="checkbox" name="sell_well" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">特色：</label>
+            <label class="layui-form-label">个人中心：</label>
             <div class="layui-input-block">
               <input type="checkbox" name="characteristic" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
             </div>
@@ -292,6 +306,18 @@
               }
               $("#type_id").html('');
               $("#type_id").append(html);
+              form.render('select');
+            })
+            $.post('/Admin/Goods/store_activity_list',{store_id: data.value},function(res){
+              var html = '';
+              html += '<option value="0">请选择</option>';
+              if (res.code == 200) {
+                for (var i = 0; i < res.data.length; i++) {
+                  html += '<option value="'+res.data[i].id+'">'+res.data[i].activity_name+'</option>'
+                }
+              }
+              $("#activity_id").html('');
+              $("#activity_id").append(html);
               form.render('select');
             })
           })

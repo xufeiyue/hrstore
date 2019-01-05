@@ -16,25 +16,21 @@
 
     <script src="js/jquery-1.10.2.min.js"></script>
     <script src="js/time.js"></script>
-    <script>
-        $(function () {
-            var elm = $('#shortbar');
-            var startPos = $(elm).offset().top;
-            $.event.add(window, "scroll", function () {
-                var p = $(window).scrollTop();
-                if (p > startPos) {
-                    elm.addClass('sortbar-fixed');
-                } else {
-                    elm.removeClass('sortbar-fixed');
-                }
-            });
-        });
 
-    </script>
 </head>
 <body>
 <!--图片轮换-->
-
+<header data-am-widget="header" class="am-header am-header-default sq-head ">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.back()" class="">
+            <i class="am-icon-chevron-left"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        <a href="" class="">人气商品排行榜</a>
+    </h1>
+</header>
+<div style="height: 49px;"></div>
 <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0" style="position: relative;">
     <ul class="am-slides">
         <li><img src="images/banner1.png" /></li>
@@ -44,7 +40,7 @@
 </div>
 <div class="">
     <div class="List-head" style="padding: 0 10px; margin-top: 10px;">
-        <h1 class="List-head-name">产品分类</h1>
+        <h1 class="List-head-name">人气商品</h1>
     </div>
     <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  >
         <li class="RQPH-area">

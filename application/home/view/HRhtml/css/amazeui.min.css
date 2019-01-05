@@ -9288,6 +9288,12 @@ select {
 	text-align: center;
 	color: #eee
 }
+.am-header-default .am-header-nav p{
+	display: inline-block;
+	min-width: 36px;
+	text-align: center;
+	color: #eee
+}
 .am-header-default .am-header-nav>a+a {
 	margin-left: 5px
 }

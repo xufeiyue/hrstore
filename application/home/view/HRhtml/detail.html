@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>超市 </title>
+		<title>商品详情</title>
         <meta name="description" content="">
         <meta name="keywords" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -38,25 +38,27 @@
 		    <li><img src="images/pic.png" /></li>
 		  </ul>
 		</div>
-		<div class="detal-info">
+		<div class="detal-info" style=" margin-top: 10px;">
+			<span style="padding: 5px 10px; background: #ff4646; color: #ffffff;">产品名称</span>
 			<p>特价武夷山桐木关正山小种红茶高档礼盒</p>
 			<h2>商城价：<span>￥52.00</span></h2>
+			<div class="ZLY_info" style="overflow: hidden;">
+				<span style="float: left;">优惠价格：</span>
+				<ul style="float: left;">
+					<li>优惠券￥60</li>
+					<!--<li>优惠券￥60</li>-->
+					<!--<li>优惠券￥60</li>-->
+				</ul>
+			</div>
+			<span style="font-size: 1.3rem;">活动时间：2018-11-25至2019-12-29</span>
 		</div>
-		<div class="d-amount">
-        	<h4>数量：</h4>
-            <div class="d-stock">
-              <a class="decrease">-</a>
-                <input id="num" readonly="" class="text_box" name="" type="text" value="1">
-                <input id="id" type="hidden" value="644">
-                <a class="increase">+</a>
-               <span id="dprice" class="price" style="display:none"> 36</span>
-            </div>
-        </div>
+
+
         <div style="background: #eee; height: 10px;"></div>
-        <div class="am-tabs detail-list" data-am-tabs>
-		  <ul class="am-tabs-nav am-nav am-nav-tabs">
-		    <li class="am-active"><a href="#tab1">商品详情</a></li>
-		    <li><a href="#tab2">商品评论</a></li>
+        <div class="am-tabs detail-list" style="background: #ffffff;" data-am-tabs>
+		  <ul class="am-tabs-nav am-nav am-nav-tabs" style="border-bottom: 1px solid #ff4646;">
+		    <li class="am-active"><img src="images/ZLY_chanpinxiangqing.jpg" </li>
+		    <!--<li><a href="#tab2">商品评论</a></li>-->
 		  </ul>
 		
 		  <div class="am-tabs-bd">
@@ -66,51 +68,7 @@
                     <p>保质期: >2年</p>
                     <img src="images/test11.png" />
 		    </div>
-		    <div class="am-tab-panel am-fade detail " id="tab2">
-		         <div class="comment">
-		         	<span>好评：</span>
-		         	<div class="com-good"></div>
-		         	<span>100%</span>
-		         </div>
-		         <div class="comment">
-		         	<span>中评：</span>
-		         	<div class="com-bad"></div>
-		         	<span>0%</span>
-		         </div>
-		         <div class="comment">
-		         	<span>差评：</span>
-		         	<div class="com-bad"></div>
-		         	<span>0%</span>
-		         </div>
-		         <ul class="comment-list">
-		           <li><a href="">全部</a></li>
-		           <li><a href="">好评（20）</a></li>
-		           <li><a href="">中评（5）</a></li>
-		           <li><a href="">差评（0）</a></li>
-		         </ul>
-		         <ul class="comment-pic">
-		         	<li>
-		         		<div class="tit">
-		         			<img src="images/tx.png" class="tx" />
-		         			<span>songke2014</span>
-		         			<i> [2016-01-01]</i>
-		         		</div>
-		         		<div class="comment-con">
-		         			买了些给家人，都说不错！
-		         		</div>
-		         	</li>
-		         	<li>
-		         		<div class="tit">
-		         			<img src="images/tx.png" class="tx" />
-		         			<span>songke2014</span>
-		         			<i> [2016-01-01]</i>
-		         		</div>
-		         		<div class="comment-con">
-		         			买了些给家人，都说不错！
-		         		</div>
-		         	</li>
-		         </ul>
-		    </div>
+
 		  </div>
 		</div>
 		
@@ -118,8 +76,8 @@
 		<!--底部-->
  <div style=" height: 55px;"></div>
  <ul class="fix-shopping">
- 	<li><a href="shopcart.html" class="join">加入购物车</a></li>
- 	<li><a href="tureorder.html" class="imm-buy">立即购买</a></li>
+ 	<li style="background: #ffba35;"><a href="shopcart.html" class="join">领取优惠券</a></li>
+ 	<li style="width: 35%;"><a href="tureorder.html" class="imm-buy">加入收藏</a></li>
  </ul>
  
  <script>
