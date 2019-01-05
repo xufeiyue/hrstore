@@ -12,7 +12,6 @@ return [
         '__IMAGES__'    =>  '/static/home/images',
     ],
 	  // 控制器类后缀
-    'controller_suffix'      => false,
+    'controller_suffix'      => true,
     'ADMIN_MENU_LIST'      =>false,//缓存菜单
-    'ECS-OSS'=>'http://oa-oss.slkfz.cn/',
 ];
