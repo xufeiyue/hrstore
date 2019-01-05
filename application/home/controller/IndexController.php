@@ -50,4 +50,11 @@ class IndexController extends CommonController
     return view();
   }
 
+  //商品详情
+  public function detail(){
+
+    $id = input('id/d'); //商品id
+
+    return view();
+  }
 }

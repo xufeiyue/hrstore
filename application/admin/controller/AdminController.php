@@ -8,6 +8,7 @@ use admin\model\Auth;
 use admin\model\Menu;
 use admin\model\AuthGroup;
 use think\Session;
+use app\admin\model\Store;
 class AdminController extends Controller
 {
     public $is_jurisdiction;
@@ -48,7 +49,11 @@ class AdminController extends Controller
             ['id' => 2 , 'name' => '名称2'],
             ['id' => 3 , 'name' => '名称3']
         ];
-            
+        
+        $store_model = new Store();
+
+        $store = $store_model->Common_All_Select(['status' => 1],[],['store_id id','store_name name']);
+
         $this->is_jurisdiction = $is_jurisdiction;
 
         $this->assign('store',$store);
