@@ -6,6 +6,7 @@ use app\home\model\Goods;
 use app\home\model\GoodsType;
 use app\home\model\Activity;
 use app\home\model\CollectionAndCoupons;
+use app\home\model\BrowsingLog;
 class IndexController extends CommonController
 {
   public $title;
@@ -28,6 +29,7 @@ class IndexController extends CommonController
     $longitude = '123.454688';
 
     $latitude = '41.778517';
+
 
     $store = (new Store)->Common_Find($where,['juli' => 'ASC'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]); // 根据经纬度查询最近的一家门店 距离Km
 
@@ -96,6 +98,29 @@ class IndexController extends CommonController
     $this->title = '商品详情';
 
     $goods_id = input('id/d');//商品id
+
+    //新增访问数量
+    (new Goods)->Common_SetInc('number_of_visits',['id' => $goods_id]);
+
+    $log['pid'] = $goods_id;
+
+    $log['userId'] = $this->userId;
+
+    $log['type'] = 1;
+
+    $log['status'] = 0;
+
+    $BrowsingLog = (new BrowsingLog)->Common_Find($log);
+
+    if (empty($BrowsingLog) && $goods_id) {
+      
+      $log['createTime'] = time();
+
+      $log['updateTime'] = time();
+
+      //新增浏览记录
+      (new BrowsingLog)->Common_Insert($log);
+    }
 
     $goods_detail = (new Goods)->Common_Find(['id' => $goods_id]);
     
@@ -177,13 +202,23 @@ class IndexController extends CommonController
       $collection = (new CollectionAndCoupons)->Common_Find(['goods_id' => $data['goods_id'] , 'userId' => 1, 'status' => 0,'type' => 1]);
 
       if ($collection && $data['type'] == 1) {
+
+        (new Goods)->Common_SetDec('collection_number',['id' => $data['goods_id']]); //-1
+        
         $line = (new CollectionAndCoupons)->Common_Update(['status' => 1],['id' => $collection['id']]);
         return json(['code' => 200 , 'msg' => '取消收藏']);
       }
 
+
       $data['createTime'] = time();
 
       $data['updateTime'] = time();
+
+      if ($data['type'] == 1) {
+
+        (new Goods)->Common_SetInc('collection_number',['id' => $data['goods_id']]); //+1
+      
+      }
 
       $line = (new CollectionAndCoupons)->Common_Insert($data);
 
@@ -201,6 +236,16 @@ class IndexController extends CommonController
   public function xfx(){
 
     $this->title = '新发现 新生活';
+
+    $this->assign('title',$this->title);
+
+    return view();
+  }
+
+  //底部人气排行
+  public function rqph(){
+
+    $this->title = '人气商品排行榜';
 
     $this->assign('title',$this->title);
 

@@ -73,4 +73,15 @@ class Common
 		return Db::name($this->table)->where($where)->delete();
 	}
 
+	//新增字段数量
+	public function Common_SetInc($field='',$where=[]){
+
+		return Db::name($this->table)->where($where)->setInc($field);
+	}
+
+	//减少字段数量
+	public function Common_SetDec($field='',$where=[]){
+
+		return Db::name($this->table)->where($where)->setDec($field);
+	}
 }

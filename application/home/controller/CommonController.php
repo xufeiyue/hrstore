@@ -5,9 +5,15 @@ use wechat\Wechat;
 use think\Request;
 class CommonController extends Controller
 {
+	public $store_id;
+	public $userId;
 
 	//网页授权
 	public function _initialize(){
+
+		$this->store_id = 1;
+
+		$this->userId = 1;
 		// $url = Request()->domain().'/home/Common/getChatInfo';
 		// $wechat = new Wechat();
 		// $wechat->accredit($url);
