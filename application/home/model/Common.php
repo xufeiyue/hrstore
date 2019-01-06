@@ -27,22 +27,24 @@ class Common
 	}
 
 	//全部数据
-	public function Common_All_Select($where=[],$order=[]){
+	public function Common_All_Select($where=[],$order=[],$field=[]){
 
 		$data = Db::name($this->table)
 			->where($where)
 			->order($order)
-			->field('*,FROM_UNIXTIME(create_time)create_time')
+			->field($field)
 			->select();
 
 		return $data;
 	}
 
 	//公共详情
-	public function Common_Find($where=[]){
+	public function Common_Find($where=[],$order=[],$field=[]){
 
 		return Db::name($this->table)
 				->where($where)
+				->order($order)
+				->field($field)
 				->find();
 	}
 

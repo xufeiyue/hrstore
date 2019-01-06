@@ -11,9 +11,9 @@
 	    </header>
 	    <div style="height: 49px;"></div>
 	    <ul class="city-list">
-	    	<li class="curr"><a href="">沈阳十三纬路店<i style="font-style:normal;">距您1000kg</i></a></li>
-			<li><a href="">沈阳十三纬路店<i style="font-style:normal;">距您1000kg</i></a></li>
-			<li><a href="">沈阳十三纬路店<i style="font-style:normal;">距您1000kg</i></a></li>
+	    	{foreach name="store_list" item="vo"}
+			<li {if condition="$vo['class'] eq 1"}class="curr"{/if}><a href="{:url('Index/index',['store_id' => $vo['store_id']])}">{$vo['store_name']}<i style="font-style:normal;">距您{$vo['juli']}km</i></a></li>
+			{/foreach}
 	    </ul>
 	</body>
 </html>

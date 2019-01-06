@@ -17,7 +17,7 @@
 	<header data-am-widget="header" class="am-header am-header-default tm-head" id="shortbar" >
         <div class="am-header-left am-header-nav">
             <a href="city_info.html">
-                <p style="font-size: 12px; margin-top: -35px;">沈阳沈河区文化路81号</p>
+                <p style="font-size: 12px; margin-top: -35px;">{$store['store_name']}</p>
             </a>
         </div>
         <div class="am-header-right am-header-nav">
@@ -27,8 +27,9 @@
         </div>
     </header>
   <ul class="am-slides">
-    <li><img src="__IMAGES__/banner1.png" /></li>
-    <li><img src="__IMAGES__/banner1.png" /></li>
+    {foreach name="banner_list" item="vo"}
+    <li> <a href="{:url('Index/detail',['id' => $vo['id']])}" ><img src="{$vo['goods_images']}" /></a></li>
+    {/foreach}
   </ul>
 </div>
 <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  >
@@ -54,12 +55,12 @@
  <ul class="sq-nav"  >
      <div class="List-head" style="padding: 0 3px;">
          <h1 class="List-head-name">产品分类</h1>
-         <a href="category.html" class="List-head-more">更多分类<i class="fa fa-chevron-circle-right fa-lg"></i></a>
+         <a href="{:url('Index/category')}" class="List-head-more">更多分类<i class="fa fa-chevron-circle-right fa-lg"></i></a>
      </div>
      {foreach name="goods_type_list" item="vo" key="k" }
       <li>
         <div class="am-gallery-item">
-            <a href="category.html" class="">
+            <a href="{:url('Index/category')}" class="">
               <img src="{$vo['url']}" />
               <p>{$vo['goods_type_name']}</p>
             </a>
@@ -68,21 +69,33 @@
      {/foreach}
       <li>
         <div class="am-gallery-item">
-            <a href="category.html" class="">
+            <a href="{:url('Index/category')}" class="">
               <img src="__IMAGES__/icon7.png" />
               <p>全部</p>
             </a>
         </div>
       </li>
   </ul>
- <!--精品专区-->
+ <!--活动图片-->
     <div class="sq-title">
         <a href="LQ_LieBiao.html">
-        <img src="__IMAGES__/Active-area.jpg" width="24"/>
+        <img src="{$activity['activity_url']}" width="24"/>
         </a>
     </div>
     <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  >
+        {foreach name="goods_top_list" item="vo" key="k" }
         <li class="Active-area">
+            <div class="am-gallery-item">
+                <a href="{:url('Index/detail',['id' => $vo['id']])}" class="">
+                    <img src="{$vo['goods_images']}" />
+                    <h3 class="am-gallery-title">{$vo['goods_name']}</h3>
+                    <div class="am-gallery-desc am-gallery-yuan">原价￥{$vo['goods_original_price']}</div>
+                    <div class="am-gallery-desc">折扣价￥{$vo['goods_present_price']}</div>
+                </a>
+            </div>
+        </li>
+        {/foreach}
+       <!--  <li class="Active-area">
             <div class="am-gallery-item">
                 <a href="detail.html" class="">
                     <img src=" __IMAGES__/test.png" />
@@ -101,30 +114,20 @@
                     <div class="am-gallery-desc">折扣价￥52</div>
                 </a>
             </div>
-        </li>
-        <li class="Active-area">
-            <div class="am-gallery-item">
-                <a href="detail.html" class="">
-                    <img src=" __IMAGES__/test.png" />
-                    <h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>
-                    <div class="am-gallery-desc am-gallery-yuan">原价￥52</div>
-                    <div class="am-gallery-desc">折扣价￥52</div>
-                </a>
-            </div>
-        </li>
+        </li> -->
     </ul>
 
  <div style="height: 55px;"></div>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
         <li>
-            <a href="index.html" class="curr">
+            <a href="{:url('Index/index')}" class="curr">
                 <span class="am-icon-home fa fa-credit-card fa-lg"></span>
                 <span class="am-navbar-label">聚优惠</span>
             </a>
         </li>
         <li>
-            <a href="XFX.html">
+            <a href="{:url('Index/xfx')}">
                 <span class="am-icon-th-large fa fa-heart-o fa-lg"></span>
                 <span class="am-navbar-label">新发现</span>
             </a>

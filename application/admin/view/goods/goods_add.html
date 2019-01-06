@@ -44,6 +44,23 @@
           </div>
         </div>
 
+       <div class="layui-form-item">
+            <label for="start_time" class="layui-form-label">
+                <span class="x-red">*</span>开始时间
+            </label>
+              <div class="layui-input-inline">
+                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="start_time" id="start" placeholder="请输入开始时间">
+              </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="end_time" class="layui-form-label">
+                <span class="x-red">*</span>结束时间
+            </label>
+              <div class="layui-input-inline">
+                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="end_time" id="end" placeholder="请输入结束时间">
+              </div>
+        </div>
+
         <div class="layui-form-item">
             <label for="activity_name" class="layui-form-label">
                 <span class="x-red">*</span>商品名称
@@ -178,17 +195,28 @@
       </form>
     </div>
     <script>
-        layui.use(['form','layer','upload','layedit'], function(){
+        layui.use(['form','layer','upload','layedit','laydate'], function(){
             $ = layui.jquery;
           var form = layui.form
           ,upload = layui.upload
           ,layedit = layui.layedit
+          ,laydate = layui.laydate
           ,layer = layui.layer;
           layedit.set({
             uploadImage: {
               url: '/Admin/Upload/editor_upload', 
               type: 'post'
             }
+          });
+          //日期时间选择器
+          laydate.render({
+            elem: '#start'
+            ,type: 'datetime'
+          });
+
+          laydate.render({
+            elem: '#end'
+            ,type: 'datetime'
           });
           //注意：layedit.set 一定要放在 build 前面，否则配置全局接口将无效。
           var index = layedit.build('goods_detail',{

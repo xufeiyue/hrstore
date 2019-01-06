@@ -5,6 +5,7 @@ use app\home\model\Store;
 use app\home\model\Goods;
 use app\home\model\GoodsType;
 use app\home\model\Activity;
+use app\home\model\CollectionAndCoupons;
 class IndexController extends CommonController
 {
   public $title;
@@ -15,12 +16,34 @@ class IndexController extends CommonController
 
     $this->title = '首页';
 
-    $store = (new Store)->Common_Find(['store_id' => 1]); // 先写死
+    $store_id = input('store_id/d');
 
-    //轮播图
+    $where = [];
 
+    if ($store_id) {
+      
+      $where = ['store_id' => $store_id];
+    }
 
-    $where = ['store_id' => $store['store_id'], 'status' => 0, 'sell_well' => 0];
+    $longitude = '123.454688';
+
+    $latitude = '41.778517';
+
+    $store = (new Store)->Common_Find($where,['juli' => 'ASC'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]); // 根据经纬度查询最近的一家门店 距离Km
+
+    $activity = (new Activity)->Common_Find(['banner' => 1]); //轮播活动
+
+    $banner_list = (new Goods)->Common_All_Select(['activity_id' => $activity['id'], 'status' => 0, 'state' => 0], ['id' => 'desc'],['id','goods_images']);//轮播图
+
+    foreach ($banner_list as $key => $value) {
+      
+      if ($value['goods_images']) {
+
+        $banner_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0];
+      }
+    }
+
+    $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
 
     $offset = 0;
 
@@ -41,11 +64,22 @@ class IndexController extends CommonController
       }
     }
 
+    //底部商品列表
+    $goods_top_list = (new Goods)->Common_Select(8,17,$where,$order,$goods_field); //商品列表
+
     $where = ['store_id' => $store['store_id'], 'status' => 0, 'pid' => 0];
 
     $goods_type_field = ['id','goods_type_name','url'];
     //产品分类
     $goods_type_list = (new GoodsType)->Common_Select($offset,$limit-1,$where,$order,$goods_type_field); 
+
+    $this->assign('store',$store);
+
+    $this->assign('goods_top_list',$goods_top_list);
+
+    $this->assign('activity',$activity);
+
+    $this->assign('banner_list',$banner_list);
 
     $this->assign('goods_list',$goods_list);
 
@@ -61,7 +95,31 @@ class IndexController extends CommonController
 
     $this->title = '商品详情';
 
-    $id = input('id/d'); //商品id
+    $goods_id = input('id/d');//商品id
+
+    $goods_detail = (new Goods)->Common_Find(['id' => $goods_id]);
+    
+    if ($goods_detail['goods_images']) {
+        
+      $goods_detail['goods_images'] = json_decode($goods_detail['goods_images'],true);
+    }
+
+    $goods_detail['start_time'] = date('Y-m-d H:i:s',$goods_detail['start_time']);
+
+    $goods_detail['end_time'] = date('Y-m-d H:i:s',$goods_detail['end_time']);
+
+    $collection = 0;
+
+    $data = (new CollectionAndCoupons)->Common_Find(['goods_id' => $goods_id , 'userId' => 1, 'status' => 0,'type' => 1]); //是否收藏
+
+    if ($data) {
+
+      $collection = 1; //收藏
+    }
+
+    $this->assign('collection',$collection);
+
+    $this->assign('goods_detail',$goods_detail);
 
     $this->assign('title',$this->title);
 
@@ -71,7 +129,78 @@ class IndexController extends CommonController
   //店铺列表
   public function cityDian(){
 
-    $this->title = '选择门店12';
+    $this->title = '选择门店';
+
+    $longitude = '123.454688';
+
+    $latitude = '41.778517';
+
+    $store_list = (new store)->Common_All_Select(['status' => 1],['store_id' => 'desc'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]);
+
+    foreach ($store_list as $key => $value) {
+      
+      if ($key == 0) {
+
+        $store_list[$key]['class'] = 1;
+      
+      }else{
+
+        $store_list[$key]['class'] = 0;
+      }
+    }
+
+    $this->assign('store_list',$store_list);
+
+    $this->assign('title',$this->title);
+
+    return view();
+  }
+
+  //收藏与加入优惠卷
+  public function collection_and_coupons_update(){
+
+      $data['goods_id'] = input('post.goods_id/d'); //商品id
+
+      $data['type'] = input('post.type/d'); //1收藏 2优惠券
+
+      if ($data['type'] == 1) {
+         
+        $msg = '收藏成功';
+      
+      }elseif ($data['type'] == 2) {
+
+        $msg = '领取成功';
+      }
+
+      $data['userId'] = 1;
+
+      $collection = (new CollectionAndCoupons)->Common_Find(['goods_id' => $data['goods_id'] , 'userId' => 1, 'status' => 0,'type' => 1]);
+
+      if ($collection && $data['type'] == 1) {
+        $line = (new CollectionAndCoupons)->Common_Update(['status' => 1],['id' => $collection['id']]);
+        return json(['code' => 200 , 'msg' => '取消收藏']);
+      }
+
+      $data['createTime'] = time();
+
+      $data['updateTime'] = time();
+
+      $line = (new CollectionAndCoupons)->Common_Insert($data);
+
+      if($line)
+        return json(['code' => 200 , 'msg' => $msg]);
+  }
+
+  //产品分类
+  public function category(){
+
+    return view();
+  }
+
+  //底部新发现
+  public function xfx(){
+
+    $this->title = '新发现 新生活';
 
     $this->assign('title',$this->title);
 

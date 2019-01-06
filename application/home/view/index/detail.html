@@ -13,23 +13,24 @@
       <!--图片轮换-->
     <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
       <ul class="am-slides">
-        <li><img src="__IMAGES__/pic.png" /></li>
-        <li><img src="__IMAGES__/pic.png" /></li>
+      {foreach name="goods_detail['goods_images']" item="vo" key="k"}
+        <li><img src="{$vo}"/></li>
+      {/foreach}
       </ul>
     </div>
     <div class="detal-info" style=" margin-top: 10px;">
       <span style="padding: 5px 10px; background: #ff4646; color: #ffffff;">产品名称</span>
-      <p>特价武夷山桐木关正山小种红茶高档礼盒</p>
-      <h2>商城价：<span>￥52.00</span></h2>
+      <p>{$goods_detail['goods_name']}</p>
+      <h2>商城价：<span>￥{$goods_detail['goods_original_price']}</span></h2>
       <div class="ZLY_info" style="overflow: hidden;">
         <span style="float: left;">优惠价格：</span>
         <ul style="float: left;">
-          <li>优惠券￥60</li>
+          <li>优惠券￥{$goods_detail['goods_present_price']}</li>
           <!--<li>优惠券￥60</li>-->
           <!--<li>优惠券￥60</li>-->
         </ul>
       </div>
-      <span style="font-size: 1.3rem;">活动时间：2018-11-25至2019-12-29</span>
+      <span style="font-size: 1.3rem;">活动时间：{$goods_detail['start_time']}至{$goods_detail['end_time']}</span>
     </div>
 
 
@@ -42,49 +43,48 @@
     
       <div class="am-tabs-bd">
         <div class="am-tab-panel am-fade am-in am-active detail " id="tab1" >
-                <p>产地: 中国大陆</p>
+        {$goods_detail['goods_detail']}
+                <!-- <p>产地: 中国大陆</p>
                     <p>功效: 瘦身,美容,提神,抗氧化,保健,降三高</p>
                     <p>保质期: >2年</p>
-                    <img src="__IMAGES__/test11.png" />
+                    <img src="__IMAGES__/test11.png" /> -->
         </div>
 
       </div>
     </div>
     
-    
+    <input type="hidden" id="goods_id" value="{$goods_detail['id']}">
     <!--底部-->
  <div style=" height: 55px;"></div>
  <ul class="fix-shopping">
-  <li style="background: #ffba35;"><a href="shopcart.html" class="join">领取优惠券</a></li>
-  <li style="width: 35%;"><a href="tureorder.html" class="imm-buy">加入收藏</a></li>
+  <li style="background: #ffba35;"><a class="join">领取优惠券</a></li>
+  {if condition="$collection eq 0"}
+  <li style="width: 35%;"><a class="imm-buy">加入收藏</a></li>
+  {/if}
+  {if condition="$collection eq 1"}
+  <li style="width: 35%;"><a class="imm-buy" style="background: darkgray;">已收藏</a></li>
+  {/if}
  </ul>
  
- <script>
-  //购物数量加减
-  $(function(){
-    $('.increase').click(function(){
-      var self = $(this);
-      var current_num = parseInt(self.siblings('input').val());
-      current_num += 1;
-      self.siblings('input').val(current_num);
-      update_item(self.siblings('input').data('item-id'));
-    })    
-    $('.decrease').click(function(){
-      var self = $(this);
-      var current_num = parseInt(self.siblings('input').val());
-      if(current_num > 1){
-        current_num -= 1;
-        self.siblings('input').val(current_num);
-        update_item(self.siblings('input').data('item-id'));
-      }
+ <script type="text/javascript">
+  var goods_id = $("#goods_id").val();
+   $(".join").click(function(){
+    $.post("{:url('Index/collection_and_coupons_update')}",{goods_id: goods_id, type: 2},function(res){
+        alert(res.msg)
     })
-  })
-</script>
+   })
+   $(".imm-buy").click(function(){
+    $.post("{:url('Index/collection_and_coupons_update')}",{goods_id: goods_id, type: 1},function(res){
+        if ($(".imm-buy").text() == '已收藏') {
+          $(".imm-buy").css("background","#ff5500");
+          $(".imm-buy").text("加入收藏");
+        }else{
+          $(".imm-buy").css("background","darkgray");
+          $(".imm-buy").text("已收藏");
+        }
+        alert(res.msg)
+    })
+   })
+ </script>
  
- 
- 
- 
-<script src="__JS__/jquery.min.js"></script>
-<script src="__JS__/amazeui.min.js"></script>
-  </body>
-</html>
+{include file="common/footer"}

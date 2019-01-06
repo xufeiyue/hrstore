@@ -285,6 +285,10 @@ class GoodsController extends AdminController
 				$data['relation'] = 1;
 			}
 
+			$data['start_time'] = strtotime(input('post.start_time/s'));
+
+			$data['end_time'] = strtotime(input('post.end_time/s'));
+
 			$data['type_id'] = input('post.type_id/d');
 
 			$data['activity_id'] = input('post.activity_id/d');
@@ -421,6 +425,10 @@ class GoodsController extends AdminController
 				$data['relation'] = 1;
 			}
 
+			$data['start_time'] = strtotime(input('post.start_time/s'));
+
+			$data['end_time'] = strtotime(input('post.end_time/s'));
+
 			$data['type_id'] = input('post.type_id/d');
 
 			$data['activity_id'] = input('post.activity_id/d');
@@ -480,6 +488,10 @@ class GoodsController extends AdminController
 
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
+
+			$list['start_time'] = date('Y-m-d H:i:s',$list['start_time']);
+
+			$list['end_time'] = date('Y-m-d H:i:s',$list['end_time']);
 
 			$list['goods_images'] = json_decode($list['goods_images'],true);
 
