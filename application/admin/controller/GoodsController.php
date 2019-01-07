@@ -6,6 +6,7 @@ use think\Request;
 use app\admin\model\GoodsType;
 use app\admin\model\Goods;
 use app\admin\model\CommodityBank;
+use app\admin\model\Activity;
 class GoodsController extends AdminController
 {
 	/*
@@ -59,6 +60,8 @@ class GoodsController extends AdminController
 
 			$data['goods_type_name'] = input('post.goods_type_name/s');
 
+			$data['url'] = input('post.url/s');
+
 			$data['create_time'] = time();
 
 			$data['update_time'] = time();
@@ -85,6 +88,8 @@ class GoodsController extends AdminController
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
 			$data['goods_type_name'] = input('post.goods_type_name/s');
+
+			$data['url'] = input('post.url/s');
 
 			$data['create_time'] = time();
 
@@ -142,6 +147,8 @@ class GoodsController extends AdminController
 			$data['store_id'] = input('post.store_id/d');
 
 			$data['goods_type_name'] = input('post.goods_type_name/s');
+
+			$data['url'] = input('post.url/s');
 
 			$data['create_time'] = time();
 
@@ -278,7 +285,13 @@ class GoodsController extends AdminController
 				$data['relation'] = 1;
 			}
 
+			$data['start_time'] = strtotime(input('post.start_time/s'));
+
+			$data['end_time'] = strtotime(input('post.end_time/s'));
+
 			$data['type_id'] = input('post.type_id/d');
+
+			$data['activity_id'] = input('post.activity_id/d');
 
 			$data['goods_name'] = input('post.goods_name/s');		
 
@@ -332,6 +345,10 @@ class GoodsController extends AdminController
 			$goods_type = (new GoodsType)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
+
+			$activity = (new Activity)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_name']);
+
+			$this->assign('activity',$activity);
 
 			$this->assign('goods_type',$goods_type);
 
@@ -408,7 +425,13 @@ class GoodsController extends AdminController
 				$data['relation'] = 1;
 			}
 
+			$data['start_time'] = strtotime(input('post.start_time/s'));
+
+			$data['end_time'] = strtotime(input('post.end_time/s'));
+
 			$data['type_id'] = input('post.type_id/d');
+
+			$data['activity_id'] = input('post.activity_id/d');
 
 			$data['goods_name'] = input('post.goods_name/s');		
 
@@ -461,7 +484,14 @@ class GoodsController extends AdminController
 
 			$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
 
+			$activity = (new Activity)->Common_All_Select(['store_id' => $list['store_id'] , 'status' => 0],['id' => 'desc'],['id','activity_name']);
+
+
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
+
+			$list['start_time'] = date('Y-m-d H:i:s',$list['start_time']);
+
+			$list['end_time'] = date('Y-m-d H:i:s',$list['end_time']);
 
 			$list['goods_images'] = json_decode($list['goods_images'],true);
 
@@ -487,6 +517,8 @@ class GoodsController extends AdminController
 			}
 
 			$this->assign('list',$list);
+
+			$this->assign('activity',$activity);
 
 			$this->assign('goods_type',$goods_type);
 
@@ -541,6 +573,20 @@ class GoodsController extends AdminController
 		$data = (new GoodsType)->type(['store_id' => $store_id , 'status' => 0],$order);
 
 		$data = Model('Common/Tree')->toFormatTree($data,'goods_type_name');
+
+		if($data)
+			return json(['code' => 200 , 'msg' => '请求成功' , 'data' => $data]);
+			return json(['code' => 400 , 'msg' => '请求成功,没有数据']);
+	}
+
+	//店铺下活动
+	public function store_activity_list(){
+
+		$store_id = input('post.store_id/d');
+
+		$order = ['id' => 'desc'];
+
+		$data = (new Activity)->Common_All_Select(['store_id' => $store_id , 'status' => 0],$order,['id','activity_name']);
 
 		if($data)
 			return json(['code' => 200 , 'msg' => '请求成功' , 'data' => $data]);

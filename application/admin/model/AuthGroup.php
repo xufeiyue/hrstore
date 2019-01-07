@@ -293,7 +293,10 @@ class AuthGroup extends Model {
         }
 
         $s = Db::name($modelname)->where(array('id'=>array('IN',$ids)))->field('id')->select();
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
         if(count($s)===$count){
             return true;
         }else{
