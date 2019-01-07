@@ -62,9 +62,34 @@
                 </div>
           </div>
           <div class="layui-form-item">
+            <label  for="link_state" class="layui-form-label">
+              <span class="x-red">*</span>选择状态
+            </label>
+            <div class="layui-input-block">
+              <select name="link_state" lay-filter="link_state">
+                <option value="0">内连接</option>
+                <option value="1">外连接</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>链接地址
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="url" name="url" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">新发现：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="new_discovery" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+          <div class="layui-form-item">
             <label class="layui-form-label">活动开关状态：</label>
             <div class="layui-input-block">
-              <input type="checkbox" checked="" name="state" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+              <input type="checkbox" name="state" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
             </div>
           </div>
           <div class="layui-form-item">

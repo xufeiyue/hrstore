@@ -23,66 +23,17 @@
         <h1 class="List-head-name">人气商品</h1>
     </div>
     <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  >
+        {foreach name="goods_list" item="vo" key="k"}
         <li class="RQPH-area">
             <div class="am-gallery-item">
-                <a href="detail.html" class="">
-                    <img src="__IMAGES__/test.png" />
-                    <!--<h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>-->
-                    <div class="am-gallery-desc am-gallery-yuan">原价￥52</div>
-                    <div class="am-gallery-desc am-gallery-color">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</div>
+                <a href="{:url('Index/detail',['id' => $vo['id']])}" class="">
+                    <img src="{$vo['goods_images']}" />
+                    <div class="am-gallery-desc am-gallery-yuan">原价￥{$vo['goods_original_price']}</div>
+                    <div class="am-gallery-desc am-gallery-color">{$vo['goods_name']}</div>
                 </a>
             </div>
         </li>
-        <li class="RQPH-area">
-            <div class="am-gallery-item">
-                <a href="detail.html" class="">
-                    <img src=" __IMAGES__/test.png" />
-                    <!--<h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>-->
-                    <div class="am-gallery-desc am-gallery-yuan">原价￥52</div>
-                    <div class="am-gallery-desc am-gallery-color">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</div>
-                </a>
-            </div>
-        </li>
-        <li class="RQPH-area">
-            <div class="am-gallery-item">
-                <a href="detail.html" class="">
-                    <img src=" __IMAGES__/test.png" />
-                    <!--<h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>-->
-                    <div class="am-gallery-desc am-gallery-yuan">原价￥52</div>
-                    <div class="am-gallery-desc am-gallery-color">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</div>
-                </a>
-            </div>
-        </li>
-        <li class="RQPH-area">
-            <div class="am-gallery-item">
-                <a href="detail.html" class="">
-                    <img src=" __IMAGES__/test.png" />
-                    <!--<h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>-->
-                    <div class="am-gallery-desc am-gallery-yuan">原价￥52</div>
-                    <div class="am-gallery-desc am-gallery-color">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</div>
-                </a>
-            </div>
-        </li>
-        <li class="RQPH-area">
-            <div class="am-gallery-item">
-                <a href="detail.html" class="">
-                    <img src=" __IMAGES__/test.png" />
-                    <!--<h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>-->
-                    <div class="am-gallery-desc am-gallery-yuan">原价￥52</div>
-                    <div class="am-gallery-desc am-gallery-color">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</div>
-                </a>
-            </div>
-        </li>
-        <li class="RQPH-area">
-            <div class="am-gallery-item">
-                <a href="detail.html" class="">
-                    <img src=" __IMAGES__/test.png" />
-                    <!--<h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>-->
-                    <div class="am-gallery-desc am-gallery-yuan">原价￥52</div>
-                    <div class="am-gallery-desc am-gallery-color">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</div>
-                </a>
-            </div>
-        </li>
+        {/foreach}
     </ul>
 </div>
 <!--底部导航-->

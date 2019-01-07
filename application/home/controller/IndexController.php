@@ -247,7 +247,27 @@ class IndexController extends CommonController
 
     $this->title = '人气商品排行榜';
 
+    $offset = 0;
+
+    $limit = 10;
+
+    $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
+
+    $order = ['number_of_visits' => 'desc'];
+
+    $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
+
+    $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field);
+
+    foreach ($goods_list as $key => $value) {
+      if ($value['goods_images']) {
+        $goods_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0];
+      }
+    }
+
     $this->assign('title',$this->title);
+
+    $this->assign('goods_list',$goods_list);
 
     return view();
   }

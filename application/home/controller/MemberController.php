@@ -43,6 +43,20 @@ class MemberController extends CommonController
 		return view();
 	}
 
+	//完善资料
+	public function infor(){
+
+		$this->title = '个人资料';
+
+		$member = (new Member)->Common_Find(['id' => $this->userId]);
+
+		$this->assign('member',$member);
+
+		$this->assign('title',$this->title);
+
+		return view();
+	}
+
 	//收藏列表
 	public function collect(){
 

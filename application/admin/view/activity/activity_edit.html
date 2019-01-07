@@ -65,6 +65,34 @@
                 </div>
           </div>
           <div class="layui-form-item">
+            <label  for="link_state" class="layui-form-label">
+              <span class="x-red">*</span>选择状态
+            </label>
+            <div class="layui-input-block">
+              <select name="link_state" lay-filter="link_state">
+                <option value="0" {if condition="$list['link_state'] eq 0"}selected="selected"{/if}>内连接</option>
+                <option value="1" {if condition="$list['link_state'] eq 1"}selected="selected"{/if}>外连接</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>链接地址
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="url" name="url" value="{$list['url']}" autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  <span class="x-red">*</span>选择外链接时填写
+              </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">新发现：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" {if condition="$list['new_discovery'] eq 0"}checked=""{/if} name="new_discovery" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+          <div class="layui-form-item">
             <label class="layui-form-label">活动开关状态：</label>
             <div class="layui-input-block">
               <input type="checkbox" {if condition="$list['state'] eq 0"}checked=""{/if} name="state" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">

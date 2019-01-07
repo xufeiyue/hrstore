@@ -301,6 +301,10 @@ class GoodsController extends AdminController
 
 			$images_detail = input('post.file_detail/a');
 
+			if (empty($images_detail)) {
+				return json(['code' => 400 , 'msg' => '请上传图片']);
+			}
+
 			$images_detail1 = [];
 
 			foreach ($images_detail as $key => $value) {
@@ -440,6 +444,10 @@ class GoodsController extends AdminController
 			$data['goods_images'] = json_encode($images);	
 
 			$images_detail = input('post.file_detail/a');
+
+			if (empty($images_detail)) {
+				return json(['code' => 400 , 'msg' => '请上传图片']);
+			}
 
 			$images_detail1 = [];
 
