@@ -8,9 +8,9 @@ class Wechat extends Controller
     protected $appsecret = '232323';
 
     //授权
-	public function accredit($redirect_url=''){
+	public function accredit($redirect_url='',$state=''){
 
-		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_url}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_url}&response_type=code&scope=snsapi_userinfo&state={$state}#wechat_redirect";
 
         $this->redirect($url);
 	}
