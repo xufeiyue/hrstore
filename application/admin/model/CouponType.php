@@ -6,6 +6,7 @@
  * Time: 11:23
  */
 namespace app\admin\model;
+use think\Db;
 use think\Model;
 
 class CouponType extends Common{
@@ -61,4 +62,30 @@ class CouponType extends Common{
         return $hash;
     }
 
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param array $where
+     * @param array $order
+     * @param string $field
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function get_type_list($offset=0, $limit=10, $where=[], $order=[], $field=''){
+
+        $data = Db::name($this->table)
+            ->where($where)
+            ->limit($offset,$limit)
+            ->order($order)
+            ->field($field)
+            ->select();
+
+        $count = Db::name($this->table)
+            ->where($where)
+            ->count();
+
+        return ['data' => $data , 'count' => $count];
+    }
 }

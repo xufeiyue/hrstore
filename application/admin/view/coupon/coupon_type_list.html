@@ -24,7 +24,7 @@
 
     <div class="layui-btn-group demoTable">
         <button class="layui-btn" data-type="getCheckData">批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('添加用户','./add_coupon_type.html',600,400)"><i class="layui-icon"></i>添加</button>
+        <button class="layui-btn" onclick="x_admin_show('添加类型','./add_coupon_type.html',600,400)"><i class="layui-icon"></i>添加</button>
     </div>
     <table class="layui-table"  id="demo" lay-filter="useruv">
     </table>
@@ -72,12 +72,13 @@
             ,cols: [[ //表头
                 {checkbox: true, fixed: true,style:'height:100px;'}
                 ,{field: 'card_type_id',  title: 'ID', sort: true ,align: 'center'}
-                ,{field: 'card_type_name',edit: 'text', title: '卡券类型名称',align: 'center'}
-
-                // ,{field: 'sex', title: '性别', align: 'center',templet: '#switchTpl', unresize: true}
-                // ,{field: 'email', title: '邮箱',align: 'center',width: 200}
-                // ,{field: 'sign', title: '签名',align: 'center',event: 'setSign'}
-                ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
+                ,{field: 'card_type_name',title: 'text', title: '卡券类型名称',align: 'center'}
+                ,{field: 'ticket_name',title: 'text', title: '卡券名称',align: 'center'}
+                ,{field: 'reserve',title: 'text', title: '库存',align: 'center'}
+                ,{field: 'face_value', title: '面值',align: 'center'}
+                 ,{field: 'start_time', title: '活动开始时间', align: 'center'}
+                 ,{field: 'end_time', title: '活动结束时间',align: 'center',width: 200}
+                 ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
             ]]
         });
 
