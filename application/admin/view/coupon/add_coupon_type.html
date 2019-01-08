@@ -1,0 +1,211 @@
+{include file="public/header"}
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="card_type_name" class="layui-form-label">
+                <span class="x-red">*</span>卡券类型名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="card_type_name" name="card_type_name" required="" lay-verify="card_type_name"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="start_time" class="layui-form-label">
+                <span class="x-red">*</span>活动开始日期
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="start_time" id="start_time" placeholder="请输入开始时间">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="end_time" class="layui-form-label">
+                <span class="x-red">*</span>活动截止日期
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="end_time" id="end_time" placeholder="请输入开始时间">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="ticket_name" class="layui-form-label">
+                <span class="x-red">*</span>卡券名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="ticket_name" name="ticket_name" required="" lay-verify="ticket_name"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="ticket_type" class="layui-form-label">
+                <span class="x-red">*</span>优惠类型
+            </label>
+            <div class="layui-input-inline">
+                <input type="radio" name="ticket_type" value="1" title="全平台通用" >
+                <input type="radio" name="ticket_type" value="2" title="普通优惠券" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="reserve" class="layui-form-label">
+                <span class="x-red">*</span>数量
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="reserve" name="reserve" required="" lay-verify="reserve"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="face_value" class="layui-form-label">
+                <span class="x-red">*</span>面值
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="face_value" name="face_value" required="" lay-verify="face_value"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">使用说明</label>
+            <div class="layui-input-block">
+                <textarea name="instructions" placeholder="请输入内容" class="layui-textarea" id="instructions"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">适用范围</label>
+            <div class="layui-input-block">
+                <textarea name="scope_of_application" placeholder="请输入内容" class="layui-textarea" id="scope_of_application"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <button  class="layui-btn" lay-filter="add" lay-submit="">
+                增加
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form','layer','upload','laydate','layedit'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,laydate = layui.laydate
+            ,layedit = layui.layedit
+            ,layer = layui.layer
+            ,upload = layui.upload;
+        layedit.set({
+            uploadImage: {
+                url: '/Admin/Upload/editor_upload',
+                type: 'post'
+            }
+        });
+        //注意：layedit.set 一定要放在 build 前面，否则配置全局接口将无效。
+        var index = layedit.build('activity_detail',{
+            height: 180,
+        }); //建立编辑器
+
+        layedit.sync(index)
+
+        //日期时间选择器
+        laydate.render({
+            elem: '#start_time'
+            ,type: 'date'
+        });
+
+        laydate.render({
+            elem: '#end_time'
+            ,type: 'date'
+        });
+
+        //拖拽上传
+        upload.render({
+            elem: '#test10'
+            ,url: '/Admin/Upload/upload'
+            ,accept: 'images'
+            ,exts: 'jpg|png' //允许上传类型
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#test10').html('');
+                    $('#test10').append('<img src="'+ result +'" alt="'+ file.name +'" style="width: 30%;height: 30%" class="layui-upload-img">')
+                });
+            }
+            ,done: function(res){ //上传成功 赋值
+                $('#activity_url').val(res.data);
+                layer.msg('上传成功', {icon: 1});
+            }
+        });
+
+        //自定义验证规则
+        form.verify({
+            nikename: function(value){
+                if(value.length < 5){
+                    return '昵称至少得5个字符啊';
+                }
+            }
+            ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+            ,repass: function(value){
+                if($('#L_pass').val()!=$('#L_repass').val()){
+                    return '两次密码不一致';
+                }
+            },
+            activity_detail: function(value) {
+                return layedit.sync(index);
+            }
+        });
+
+        //监听指定开关
+        form.on('switch(switchTest)', function(data){
+            console.log(data.othis)
+            // layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+            //   offset: '6px'
+            // });
+            // layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+        //监听提交
+        form.on('submit(add)', function(data){
+            //console.log(data);
+
+            //发异步，把数据提交给php
+            $.post('/Admin/Coupon/add_coupon_type', data.field, function(res){
+
+                if(res.code == 1){
+                    layer.alert(res.msg, {icon: 1},function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+
+                        //关闭当前frame
+                        parent.layer.close(index);
+
+                        window.parent.location.reload();
+
+                    });
+                }else{
+                    layer.msg(res.msg,{time: 1000});
+                    // layer.alert(res.msg, {icon: 1});
+                }
+            })
+
+
+            return false;
+        });
+
+
+    });
+
+</script>
+<script>var _hmt = _hmt || []; (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script>
+</body>
+
+</html>
