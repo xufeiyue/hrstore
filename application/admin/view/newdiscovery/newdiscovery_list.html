@@ -1,0 +1,172 @@
+{include file="public/header"}
+
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">演示</a>
+        <a>
+          <cite>导航元素</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+     
+      <div class="layui-btn-group demoTable">
+        <button class="layui-btn" data-type="getCheckData">批量删除</button>
+        <button class="layui-btn" onclick="x_admin_show('新增新发现','./newdiscovery_add.html',600,400)"><i class="layui-icon"></i>新增</button>
+      </div>
+      <table class="layui-table" id="demo" lay-filter="useruv">
+      </table>
+    </div>
+      <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+      </script>
+      <script type="text/html" id="switchTpl">
+        <input type="checkbox" name="state" value="{{d.id}}" lay-skin="switch" lay-text="ON|OFF" lay-filter="stateDemo" {{ d.state == 0 ? 'checked' : '' }}>
+
+      </script>
+      <script type="text/html" id="portrait" >
+
+          <a href="{{d.src}}"><img src="{{d.src}}"  style="width: 100%;height: 100%"></a>
+        
+      </script>
+    <script>
+
+    layui.use(['table','laydate'], function(){
+      var laydate = layui.laydate;
+      var table = layui.table;
+      var form = layui.form;
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+
+
+
+      //第一个实例
+      var tableIns = table.render({
+        elem: '#demo'
+        ,method: 'post'
+        ,defaultToolbar: ['filter', 'print', 'exports']
+        // ,toolbar: 'default'
+        ,url: '/Admin/Newdiscovery/ajax_newdiscovery_list' //数据接口
+        ,page: true //开启分页
+        ,cellMinWidth : 95
+        ,height : "600"
+        ,limit: 20
+        ,id: 'idTest'
+        ,cols: [[ //表头
+           {checkbox: true, fixed: true,style:'height:100px;'}
+          ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
+          ,{field: 'src', title: '图片',align: 'center',templet: '#portrait'}
+          ,{field: 'url', title: '路径',align: 'center'}
+          ,{field: 'create_time', title: '创建时间',align: 'center'}
+          ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
+        ]]
+      });
+
+        //监听工具条
+        table.on('tool(useruv)', function(obj){
+          var data = obj.data;
+          console.log(data);
+          if(obj.event === 'detail'){
+            layer.msg('ID：'+ data.id + ' 的查看操作');
+          }else if(obj.event === 'del'){
+            layer.confirm('确认要删除吗？', function(index){
+              //发异步删除数据
+              $.post('/Admin/Newdiscovery/newdiscovery_del', {id:data.id}, function(res){
+
+                  if (res.code == 200) {
+                
+                    layer.msg(res.msg,{icon:1,time:1000});
+                    obj.del();
+                  
+                  }else{
+
+                    layer.msg(res.msg,{icon:1,time:1000});
+                  }
+
+              })
+
+            });
+          } else if(obj.event === 'edit'){
+             x_admin_show('编辑','newdiscovery_edit.html?id='+data.id,600,400);
+          }
+        });
+
+        //监听单元格编辑
+        table.on('edit(useruv)', function(obj){
+          var value = obj.value //得到修改后的值
+          ,data = obj.data //得到所在行所有键值
+          ,field = obj.field; //得到字段
+          layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+        })
+
+        var $ = layui.$, active = {
+          getCheckData: function(){ //获取选中数据
+            var checkStatus = table.checkStatus('idTest')
+            ,data = checkStatus.data;
+
+            if(data == ''){
+              layer.msg('未选中', {icon: 1});
+              return false;
+            }
+            var id = [];
+            for (var i = 0; i < data.length; i++) {
+              id.push(data[i].id)
+            }
+             layer.confirm('确认要删除吗？', function(index){
+              //发异步删除数据
+              $.post('/Admin/Newdiscovery/newdiscovery_delAll', {id:id}, function(res){
+
+                  if (res.code == 200) {
+                  
+                    layer.msg(res.msg,{icon:1,time:1000});
+                    table.reload('idTest');
+                  }else{
+
+                    layer.msg(res.msg,{icon:1,time:1000});
+                  }
+
+              })
+            })
+          }
+          ,reload: function(){
+            var demoReload = $('#demoReload');
+            //执行重载
+            tableIns.reload({
+              page: {
+                curr: 1 //重新从第 1 页开始
+              }
+              ,where: {
+                  goods_type_name: demoReload.val(),
+              }
+            })
+          }
+        };
+        
+        $('.demoTable .layui-btn').on('click', function(){
+          var type = $(this).data('type');
+          active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

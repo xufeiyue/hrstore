@@ -1,36 +1,31 @@
 {include file="common/header"}
-<header data-am-widget="header" class="am-header am-header-default sq-head ">
-    <div class="am-header-left am-header-nav">
-        <a href="javascript:history.back()" class="">
-            <i class="am-icon-chevron-left"></i>
-        </a>
+<div class="LQ_Box">
+    <header data-am-widget="header" class="am-header am-header-default sq-head ">
+        <div class="am-header-left am-header-nav">
+            <a href="javascript:history.back()" class="">
+                <i class="am-icon-chevron-left"></i>
+            </a>
+        </div>
+        <h1 class="am-header-title">
+            <a href="" class="">{$title}</a>
+        </h1>
+    </header>
+    <div style="height: 49px;"></div>
+    <header class="LQ_head">
+        <p>
+            {$Activity['activity_name']}
+        </p>
+    </header>
+    <input type="hidden" id="activity_id" value="{$Activity['id']}">
+    <div class="LQ_info">
+        <img class="HD_TuPian" src="{$Activity['activity_url']}"/>
+        <div class="LQ_HDbox">
+            {$Activity['activity_detail']}
+        </div>
+        <span class="lingqu" style="color: #ffffff;background: #ff4f5f; display: block; width: 60%; margin: 20px auto;font-size: 2rem;text-align: center; padding: 8px 0;">
+            领取优惠券
+        </span>
     </div>
-    <h1 class="am-header-title">
-        <a href="" class="">{$title}</a>
-    </h1>
-</header>
-<div style="height: 49px;"></div>
-<div class="XFX-box">
-    <ul class="XFX-list">
-        {foreach name="NewDiscovery" item="vo" key="k"}
-        <li class="List-faxian">
-            <a href="{$vo['url']}">
-                <img src="{$vo['src']}">
-            </a>
-        </li>
-        {/foreach}
-        <!-- <li class="List-faxian">
-            <a href="LQ_XiangQing.html">
-                <img src="__IMAGES__/XFXlist2.jpg">
-            </a>
-        </li>
-        <li class="List-faxian">
-            <a href="LQ_LieBiao.html">
-                <img src="__IMAGES__/XFXlist3.jpg">
-            </a>
-        </li> -->
-
-    </ul>
 </div>
 <!--底部导航-->
 <div style="height: 55px;"></div>
@@ -68,4 +63,12 @@
         </li>
     </ul>
 </div>
+<script type="text/javascript">
+    var activity_id = $("#activity_id").val();
+    $(".lingqu").click(function(){
+        $.post("{:url('Index/collection_and_coupons_update')}",{goods_id: activity_id, type: 3},function(res){
+            alert(res.msg)
+        })
+    })
+</script>
 {include file="common/footer"}

@@ -7,6 +7,7 @@ use app\home\model\GoodsType;
 use app\home\model\Activity;
 use app\home\model\CollectionAndCoupons;
 use app\home\model\BrowsingLog;
+use app\home\model\NewDiscovery;
 class IndexController extends CommonController
 {
   public $title;
@@ -123,7 +124,7 @@ class IndexController extends CommonController
     }
 
     $goods_detail = (new Goods)->Common_Find(['id' => $goods_id]);
-    
+
     if ($goods_detail['goods_images']) {
         
       $goods_detail['goods_images'] = json_decode($goods_detail['goods_images'],true);
@@ -192,7 +193,7 @@ class IndexController extends CommonController
          
         $msg = '收藏成功';
       
-      }elseif ($data['type'] == 2) {
+      }else{
 
         $msg = '领取成功';
       }
@@ -237,7 +238,11 @@ class IndexController extends CommonController
 
     $this->title = '新发现 新生活';
 
+    $NewDiscovery = (new NewDiscovery)->Common_All_Select(['status' => 0,'store_id' => $this->store_id], ['id' => 'desc'],['id','src','url']);
+
     $this->assign('title',$this->title);
+
+    $this->assign('NewDiscovery',$NewDiscovery);
 
     return view();
   }
