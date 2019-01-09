@@ -27,8 +27,8 @@
         </div>
     </header>
   <ul class="am-slides">
-    {foreach name="banner_list" item="vo"}
-    <li> <a href="{:url('Index/detail',['id' => $vo['id']])}" ><img src="{$vo['goods_images']}" /></a></li>
+    {foreach name="Advertisement" item="vo"}
+    <li> <a href="{$vo['url']}" ><img src="{$vo['image']}" /></a></li>
     {/foreach}
   </ul>
 </div>

@@ -8,6 +8,8 @@ use app\home\model\Activity;
 use app\home\model\CollectionAndCoupons;
 use app\home\model\BrowsingLog;
 use app\home\model\NewDiscovery;
+use app\home\model\Advertisement;
+use app\home\model\AdvertisementType;
 class IndexController extends CommonController
 {
   public $title;
@@ -36,15 +38,19 @@ class IndexController extends CommonController
 
     $activity = (new Activity)->Common_Find(['banner' => 1]); //轮播活动
 
-    $banner_list = (new Goods)->Common_All_Select(['activity_id' => $activity['id'], 'status' => 0, 'state' => 0], ['id' => 'desc'],['id','goods_images']);//轮播图
+    // $banner_list = (new Goods)->Common_All_Select(['activity_id' => $activity['id'], 'status' => 0, 'state' => 0], ['id' => 'desc'],['id','goods_images']);//轮播图
 
-    foreach ($banner_list as $key => $value) {
+    // foreach ($banner_list as $key => $value) {
       
-      if ($value['goods_images']) {
+    //   if ($value['goods_images']) {
 
-        $banner_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0];
-      }
-    }
+    //     $banner_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0];
+    //   }
+    // }
+
+    $AdvertisementType = (new AdvertisementType)->Common_Find(['store_id' => $store['store_id'], 'status' => 0, 'type_name' => '首页']);
+
+    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
 
     $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
 
@@ -82,7 +88,7 @@ class IndexController extends CommonController
 
     $this->assign('activity',$activity);
 
-    $this->assign('banner_list',$banner_list);
+    $this->assign('Advertisement',$Advertisement);
 
     $this->assign('goods_list',$goods_list);
 
@@ -252,6 +258,10 @@ class IndexController extends CommonController
 
     $this->title = '人气商品排行榜';
 
+    $AdvertisementType = (new AdvertisementType)->Common_Find(['store_id' => $this->store_id, 'status' => 0, 'type_name' => '人气']);
+
+    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $this->store_id, 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
+
     $offset = 0;
 
     $limit = 10;
@@ -272,7 +282,44 @@ class IndexController extends CommonController
 
     $this->assign('title',$this->title);
 
+    $this->assign('Advertisement',$Advertisement);
+
     $this->assign('goods_list',$goods_list);
+
+    return view();
+  }
+
+  //推荐爆款列表
+  public function tuijian(){
+
+    $this->title = '推荐爆款';
+
+    $AdvertisementType = (new AdvertisementType)->Common_Find(['store_id' => $this->store_id, 'status' => 0, 'type_name' => '爆款']);
+
+    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $this->store_id, 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
+
+    $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
+
+    $order = ['number_of_visits' => 'desc']; //爆款人气排序
+
+    $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
+
+    $goods_list = (new Goods)->Common_All_Select($where,$order,$goods_field); //商品列表
+
+    foreach ($goods_list as $key => $value) {
+
+      if ($value['goods_images']) {
+      
+        $goods_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
+      
+      }
+
+      $goods_list[$key]['key'] = $key + 1; //排名
+    }
+
+    $this->assign('goods_list',$goods_list);
+
+    $this->assign('Advertisement',$Advertisement);
 
     return view();
   }
