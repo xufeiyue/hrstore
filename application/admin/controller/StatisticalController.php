@@ -246,17 +246,6 @@ class StatisticalController extends AdminController
 			if (!$data['store_id'])
 				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
-			$new_discovery = input('post.new_discovery/s');
-
-			if ($new_discovery == 'on') {
-				
-				$data['new_discovery'] = 0;
-			
-			}else{
-
-				$data['new_discovery'] = 1;
-			}
-
 			$data['title'] = input('post.title/s');
 
 			$data['start_time'] = strtotime(input('post.start_time'));
@@ -335,17 +324,6 @@ class StatisticalController extends AdminController
 
 			if (!$data['store_id'])
 				return json(['code' => 400 , 'msg' => '请选择店铺']);
-
-			$new_discovery = input('post.new_discovery/s');
-
-			if ($new_discovery == 'on') {
-				
-				$data['new_discovery'] = 0;
-			
-			}else{
-
-				$data['new_discovery'] = 1;
-			}
 
 			$data['title'] = input('post.title/s');
 

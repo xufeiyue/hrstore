@@ -92,8 +92,6 @@ class ActivityController extends AdminController
 
 			$state = input('post.state/s');
 
-			$new_discovery = input('post.new_discovery/s');
-
 			if ($state == 'on') {
 				
 				$data['state'] = 0;
@@ -101,15 +99,6 @@ class ActivityController extends AdminController
 			}else{
 
 				$data['state'] = 1;
-			}
-
-			if ($new_discovery == 'on') {
-				
-				$data['new_discovery'] = 0;
-			
-			}else{
-
-				$data['new_discovery'] = 1;
 			}
 
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
@@ -155,8 +144,6 @@ class ActivityController extends AdminController
 				
 			$state = input('post.state/s');
 
-			$new_discovery = input('post.new_discovery/s');
-
 			if ($state == 'on') {
 				
 				$data['state'] = 0;
@@ -164,15 +151,6 @@ class ActivityController extends AdminController
 			}else{
 
 				$data['state'] = 1;
-			}
-
-			if ($new_discovery == 'on') {
-				
-				$data['new_discovery'] = 0;
-			
-			}else{
-
-				$data['new_discovery'] = 1;
 			}
 
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
