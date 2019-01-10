@@ -60,6 +60,8 @@ class GoodsController extends AdminController
 
 			$data['goods_type_name'] = input('post.goods_type_name/s');
 
+			$data['original_classification'] = input('post.original_classification/s');
+
 			$data['url'] = input('post.url/s');
 
 			$data['create_time'] = time();
@@ -88,6 +90,8 @@ class GoodsController extends AdminController
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
 			$data['goods_type_name'] = input('post.goods_type_name/s');
+
+			$data['original_classification'] = input('post.original_classification/s');
 
 			$data['url'] = input('post.url/s');
 
@@ -712,7 +716,13 @@ class GoodsController extends AdminController
 
 			$images = input('post.file/a');
 
+			if (empty($images)) {
+				
+				return json(['code' => 400 , 'msg' => '请上传图片']);
+			}
+
 			$data['goods_images'] = json_encode($images);
+
 
 			$images_detail = input('post.file_detail/a');
 
@@ -781,6 +791,11 @@ class GoodsController extends AdminController
 			$data['goods_name'] = input('post.goods_name/s');		
 
 			$images = input('post.images/a');
+
+			if (empty($images)) {
+				
+				return json(['code' => 400 , 'msg' => '请上传图片']);
+			}
 
 			$data['goods_images'] = json_encode($images);	
 

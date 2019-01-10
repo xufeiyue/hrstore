@@ -10,6 +10,7 @@ use app\home\model\BrowsingLog;
 use app\home\model\NewDiscovery;
 use app\home\model\Advertisement;
 use app\home\model\AdvertisementType;
+use app\home\model\Region;
 class IndexController extends CommonController
 {
   public $title;
@@ -167,7 +168,7 @@ class IndexController extends CommonController
 
     $latitude = '41.778517';
 
-    $store_list = (new store)->Common_All_Select(['status' => 1],['store_id' => 'desc'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]);
+    $store_list = (new store)->Common_All_Select(['status' => 1],['juli' => 'ASC'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]);
 
     foreach ($store_list as $key => $value) {
       
@@ -388,4 +389,15 @@ class IndexController extends CommonController
 
     return view();
   }
+
+  //城市
+  public function city(){
+
+    $region = (new Region)->Common_All_Select(['fid' => ['>',0]]);
+
+    $this->assign('region',$region);
+
+    return view();
+  }
+
 }
