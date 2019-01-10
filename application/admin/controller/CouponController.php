@@ -54,7 +54,6 @@ class CouponController extends Controller{
     // 增加卡券类型
     public function add_coupon_type(){
         if(Request::instance()->post()){
-            $data['card_type_name'] = input('post.card_type_name') ;
             $data['instructions'] = input('post.instructions');
             $data['start_time'] = strtotime(input('post.start_time'));
             $data['end_time'] = strtotime(input('post.end_time'));
@@ -82,7 +81,17 @@ class CouponController extends Controller{
         if(Request::instance()->post()){
 
         }else{
+            // 获取卡券类型列表
+            $coupon_type_list = $this->coupon_type->Common_All_Select();
+            $this->assign('coupon_type_list',$coupon_type_list);
             return view();
         }
     }
+
+    // 渲染搜索商品列表
+    public function search_goods(){
+        return view();
+    }
+
+
 }
