@@ -1,0 +1,243 @@
+{include file="public/header"}
+
+<div class="x-body">
+    <div class="layui-row">
+        <div class="demoTable layui-form layui-col-md12 x-so">
+            <div class="layui-inline">
+                <input class="layui-input" name="goods_name" placeholder="请输入商品名称" id="demoReload" autocomplete="off">
+            </div>
+            <button class="layui-btn" data-type="reload">搜索</button>
+        </div>
+    </div>
+    <table class="layui-table" id="demo" lay-filter="useruv">
+    </table>
+</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">选择</a>
+</script>
+<script type="text/html" id="switchTpl">
+
+
+</script>
+<script type="text/html" id="portrait" >
+
+    <a href="{{d.activity_url}}"><img src="{{d.activity_url}}"  style="width: 100%;height: 100%"></a>
+
+</script>
+<script>
+
+    layui.use(['table','laydate'], function(){
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var form = layui.form;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+
+
+
+        //第一个实例
+        var tableIns = table.render({
+            elem: '#demo'
+            ,method: 'post'
+            ,defaultToolbar: ['filter', 'print', 'exports']
+            // ,toolbar: 'default'
+            ,url: '/Admin/Goods/ajax_goods_list' //数据接口
+            ,page: true //开启分页
+            ,cellMinWidth : 95
+            ,height : "600"
+            ,limit: 20
+            ,id: 'idTest'
+            ,cols: [[ //表头
+
+                {field: 'id',  title: 'ID', sort: true ,align: 'center'}
+                ,{field: 'goods_name', title: '商品名称',align: 'center'}
+                ,{field: 'goods_original_price', title: '商品原价',align: 'center'}
+                ,{field: 'goods_present_price', title: '商品现价',align: 'center'}
+                ,{field: 'pid_name', title: '来自',align: 'center'}
+                ,{field: 'create_time', title: '创建时间',align: 'center'}
+                ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
+            ]]
+        });
+
+        //监听状态操作
+        form.on('switch(stateDemo)', function(obj){
+            var state;
+            if (obj.elem.checked) {
+                state = 0;
+            }else{
+                state = 1;
+            }
+            // layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+            //发异步更新数据
+            $.post('/Admin/Goods/goods_state_update', {id:this.value,state: state}, function(res){
+                if (res.code == 200) {
+
+                    layer.msg(res.msg,{icon:1,time:1000});
+
+                }else{
+
+                    layer.msg(res.msg,{icon:1,time:1000});
+                }
+
+            })
+        });
+
+        //监听工具条
+        table.on('tool(useruv)', function(obj){
+            var data = obj.data;
+            console.log(data);
+            if(obj.event === 'detail'){
+                layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if(obj.event === 'del'){
+                layer.confirm('确认要删除吗？', function(index){
+                    //发异步删除数据
+                    $.post('/Admin/Goods/goods_del', {id:data.id}, function(res){
+
+                        if (res.code == 200) {
+
+                            layer.msg(res.msg,{icon:1,time:1000});
+                            obj.del();
+
+                        }else{
+
+                            layer.msg(res.msg,{icon:1,time:1000});
+                        }
+
+                    })
+
+                });
+            } else if(obj.event === 'edit'){
+                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                parent.$("#goods_id").val(data.id);
+                parent.$('#goods_name').val(data.goods_name);
+                parent.layer.close(index);
+
+            }
+        });
+
+
+
+        var $ = layui.$, active = {
+            getCheckData: function(){ //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+
+                if(data == ''){
+                    layer.msg('未选中', {icon: 1});
+                    return false;
+                }
+                var id = [];
+                for (var i = 0; i < data.length; i++) {
+                    id.push(data[i].id)
+                }
+                layer.confirm('确认要删除吗？', function(index){
+                    //发异步删除数据
+                    $.post('/Admin/Goods/goods_delAll', {id:id}, function(res){
+
+                        if (res.code == 200) {
+
+                            layer.msg(res.msg,{icon:1,time:1000});
+                            table.reload('idTest');
+                        }else{
+
+                            layer.msg(res.msg,{icon:1,time:1000});
+                        }
+
+                    })
+                })
+            },
+            Upper_Shelf: function () { //批量上架
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+
+                if(data == ''){
+                    layer.msg('未选中', {icon: 1});
+                    return false;
+                }
+                var id = [];
+                for (var i = 0; i < data.length; i++) {
+                    id.push(data[i].id)
+                }
+                layer.confirm('确认要上架吗？', function(index){
+                    //发异步删除数据
+                    $.post('/Admin/Goods/goods_state_update', {id:id,state: 0}, function(res){
+
+                        if (res.code == 200) {
+
+                            layer.msg(res.msg,{icon:1,time:1000});
+                            table.reload('idTest');
+                        }else{
+
+                            layer.msg(res.msg,{icon:1,time:1000});
+                        }
+
+                    })
+                })
+            },
+            Lower_Shelf: function () { //批量下架
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+
+                if(data == ''){
+                    layer.msg('未选中', {icon: 1});
+                    return false;
+                }
+                var id = [];
+                for (var i = 0; i < data.length; i++) {
+                    id.push(data[i].id)
+                }
+                layer.confirm('确认要下架吗？', function(index){
+                    //发异步删除数据
+                    $.post('/Admin/Goods/goods_state_update', {id:id,state: 1}, function(res){
+
+                        if (res.code == 200) {
+
+                            layer.msg(res.msg,{icon:1,time:1000});
+                            table.reload('idTest');
+                        }else{
+
+                            layer.msg(res.msg,{icon:1,time:1000});
+                        }
+
+                    })
+                })
+            }
+            ,reload: function(){
+                var demoReload = $('#demoReload');
+                //执行重载
+                tableIns.reload({
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        goods_name: demoReload.val(),
+                    }
+                })
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+</script>
+<script>var _hmt = _hmt || []; (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script>
+</body>
+
+</html>

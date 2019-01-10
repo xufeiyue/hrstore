@@ -2,12 +2,14 @@
 <div class="x-body">
     <form class="layui-form">
         <div class="layui-form-item">
-            <label for="card_type_name" class="layui-form-label">
-                <span class="x-red">*</span>卡券类型名称
+            <label for="goods_name" class="layui-form-label">
+                <span class="x-red">*</span>商品名称
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="card_type_name" name="card_type_name" required="" lay-verify="card_type_name"
-                       autocomplete="off" class="layui-input">
+                <input type="text" id="goods_name" readonly="readonly" name="goods_name" required="" lay-verify="goods_name"
+                       autocomplete="off" class="layui-input" value="">
+                <input type="hidden" name="goods_id" id="goods_id" value=""/>
+                <input type="button" name="btn" value="请选择商品" 	class="layui-btn layui-btn-normal" onclick="serach_goods()">
             </div>
             <div class="layui-form-mid layui-word-aux">
                 <span class="x-red">*</span>
@@ -15,23 +17,17 @@
         </div>
         <div class="layui-form-item">
             <label for="start_time" class="layui-form-label">
-                <span class="x-red">*</span>活动开始日期
+                <span class="x-red">*</span>卡券名称
             </label>
             <div class="layui-input-inline">
-                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="start_time" id="start_time" placeholder="请输入开始时间">
+                <select name="card_type_id">
+                    {volist name="coupon_type_list" id="vo"}
+                        <option value="{$vo.card_type_id}">{$vo.ticket_name}</option>
+                    {/volist}
+                </select>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label for="end_time" class="layui-form-label">
-                <span class="x-red">*</span>活动截止日期
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="end_time" id="end_time" placeholder="请输入开始时间">
-            </div>
-            <div class="layui-form-mid layui-word-aux">
 
-            </div>
-        </div>
         <div class="layui-form-item">
             <label for="ticket_name" class="layui-form-label">
                 <span class="x-red">*</span>卡券名称
@@ -41,48 +37,7 @@
                        autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label for="ticket_type" class="layui-form-label">
-                <span class="x-red">*</span>优惠类型
-            </label>
-            <div class="layui-input-inline">
-                <input type="radio" name="ticket_type" value="1" title="全平台通用" >
-                <input type="radio" name="ticket_type" value="2" title="普通优惠券" >
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="reserve" class="layui-form-label">
-                <span class="x-red">*</span>数量
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="reserve" name="reserve" required="" lay-verify="reserve"
-                       autocomplete="off" class="layui-input">
-            </div>
-            <div class="layui-form-mid layui-word-aux">
-
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="face_value" class="layui-form-label">
-                <span class="x-red">*</span>面值
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="face_value" name="face_value" required="" lay-verify="face_value"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">使用说明</label>
-            <div class="layui-input-block">
-                <textarea name="instructions" placeholder="请输入内容" class="layui-textarea" id="instructions"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">适用范围</label>
-            <div class="layui-input-block">
-                <textarea name="scope_of_application" placeholder="请输入内容" class="layui-textarea" id="scope_of_application"></textarea>
-            </div>
-        </div>
+        
         <div class="layui-form-item">
             <button  class="layui-btn" lay-filter="add" lay-submit="">
                 增加
@@ -91,6 +46,7 @@
     </form>
 </div>
 <script>
+
     layui.use(['form','layer','upload','laydate','layedit'], function(){
         $ = layui.jquery;
         var form = layui.form
@@ -196,8 +152,18 @@
             return false;
         });
 
-
     });
+
+    function serach_goods(){
+        layer.open({
+            type: 2,
+            area: ['100%', '100%'],
+            fix: false, //不固定
+            maxmin: true,
+            title:'查询商品',
+            content: '/Admin/coupon/search_goods'
+        });
+    }
 
 </script>
 <script>var _hmt = _hmt || []; (function() {
