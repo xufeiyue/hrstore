@@ -236,8 +236,38 @@ class IndexController extends CommonController
   //产品分类
   public function category(){
 
+    $type_id = input('type_id/d') ? : 0;
+
+    $where = ['store_id' => $this->store_id, 'status' => 0, 'pid' => 0];
+
+    $GoodsType = (new GoodsType)->Common_All_Select($where, ['id' => 'desc'],['id','goods_type_name','url']); //全部分类
+
+    $Goods = [];
+
+    if ($type_id) {
+
+      $Goods = (new Goods)->Common_All_Select(['type_id' => $type_id, 'status' => 0],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
+    
+    }else{
+
+      if ($GoodsType) {
+        
+        $type_id = $GoodsType['0']['id'];
+
+        $Goods = (new Goods)->Common_All_Select(['type_id' => $GoodsType['0']['id'], 'status' => 0],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
+
+      }
+    }
+
+    $this->assign('type_id',$type_id);
+
+    $this->assign('Goods',$Goods);
+
+    $this->assign('GoodsType',$GoodsType);
+
     return view();
   }
+
 
   //底部新发现
   public function xfx(){

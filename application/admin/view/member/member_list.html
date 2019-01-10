@@ -20,17 +20,17 @@
           <div class="demoTable layui-form layui-col-md12 x-so">
 
           <div class="layui-inline">
-          <input class="layui-input" placeholder="开始日" name="start" id="start">
-          <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <input class="layui-input" name="username" placeholder="请输入用户名" id="demoReload" autocomplete="off">
+          <!-- <input class="layui-input" placeholder="开始日" name="start" id="start"> -->
+          <!-- <input class="layui-input" placeholder="截止日" name="end" id="end"> -->
+            <input class="layui-input" name="nickname" placeholder="请输入用户名" id="demoReload" autocomplete="off">
           </div>
           <button class="layui-btn" data-type="reload">搜索</button>
         </div>
       </div>
 
       <div class="layui-btn-group demoTable">
-        <button class="layui-btn" data-type="getCheckData">批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('添加用户','./member_add.html',600,400)"><i class="layui-icon"></i>添加</button>
+        <!-- <button class="layui-btn" data-type="getCheckData">批量删除</button> -->
+        <!-- <button class="layui-btn" onclick="x_admin_show('添加用户','./member_add.html',600,400)"><i class="layui-icon"></i>添加</button> -->
         <!-- <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
         <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
       </div>
@@ -38,17 +38,17 @@
       </table>
     </div>
       <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a>
-        <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+        <!-- <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a> -->
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a> -->
       </script>
       <script type="text/html" id="switchTpl">
-        <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.sex == 0 ? 'checked' : '' }}>
+        <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.sex == 2 ? 'checked' : '' }}>
 
       </script>
       <script type="text/html" id="portrait" >
 
-          <a href="{{d.head_portrait}}"><img src="{{d.head_portrait}}"  style="width: 100%;height: 100%"></a>
+          <a href="{{d.wx_url}}"><img src="{{d.wx_url}}"  style="width: 100%;height: 100%"></a>
         
       </script>
     <script>
@@ -83,11 +83,11 @@
         ,cols: [[ //表头
            {checkbox: true, fixed: true,style:'height:100px;'}
           ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
-          ,{field: 'username',edit: 'text', title: '用户名',align: 'center'}
-          ,{field: 'head_portrait', title: '头像',align: 'center',templet: '#portrait'}
-          ,{field: 'sex', title: '性别', align: 'center',templet: '#switchTpl', unresize: true}
-          ,{field: 'email', title: '邮箱',align: 'center',width: 200} 
-          ,{field: 'sign', title: '签名',align: 'center',event: 'setSign'}
+          ,{field: 'nickname',edit: 'text', title: '昵称',align: 'center'}
+          ,{field: 'wx_url', title: '头像',align: 'center',templet: '#portrait'}
+          ,{field: 'sex', title: '性别', align: 'center'}
+          ,{field: 'create_time', title: '创建时间',align: 'center',width: 200} 
+          // ,{field: 'sign', title: '签名',align: 'center',event: 'setSign'}
           ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
         ]]
       });
@@ -99,7 +99,7 @@
 
          //监听性别操作
         form.on('switch(sexDemo)', function(obj){
-          layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+          // layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
         });
 
         //监听工具条
@@ -107,7 +107,7 @@
           var data = obj.data;
           console.log(data);
           if(obj.event === 'detail'){
-            layer.msg('ID：'+ data.id + ' 的查看操作');
+            // layer.msg('ID：'+ data.id + ' 的查看操作');
           } else if(obj.event === 'del'){
             layer.confirm('确认要删除吗？', function(index){
               //发异步删除数据
@@ -199,7 +199,7 @@
                 curr: 1 //重新从第 1 页开始
               }
               ,where: {
-                  username: demoReload.val(),
+                  nickname: demoReload.val(),
                   start: $("#start").val(),
                   end: $("#end").val()
               }

@@ -156,4 +156,10 @@ class MemberController extends CommonController
 			return json(['code' => 400 , 'msg' => '清除失败']);
 	}
 
+	//我的卡卷
+	public function yhq(){
+
+		return view();
+	}
+
 }

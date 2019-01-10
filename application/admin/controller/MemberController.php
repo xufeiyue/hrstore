@@ -13,16 +13,14 @@ class MemberController extends Controller
 	//ajax获取数据
 	public function ajax_member_list(){
 
-		$username = input('post.username/s');
+		$nickname = input('post.nickname/s');
 
 		$where = [];
 
-		if($username){
+		if($nickname){
 
-			$where['username']  = ['like',"%{$username}%"];
+			$where['nickname']  = ['like',"%{$nickname}%"];
 		}
-
-		$where['status'] = 1;
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
@@ -31,6 +29,22 @@ class MemberController extends Controller
 		$order = ['id' => 'desc'];
 
 		$data = (new Member)->Common_Select($offset,$limit,$where,$order);
+
+		foreach ($data['data'] as $key => $value) {
+			
+			if ($value['sex'] == 1) {
+				
+				$data['data'][$key]['sex'] = '男'; 
+
+			}elseif ($value['sex'] == 2) {
+
+				$data['data'][$key]['sex'] = '女'; 
+
+			}else{
+
+				$data['data'][$key]['sex'] = '不限'; 	
+			}
+		}
 
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
