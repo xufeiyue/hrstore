@@ -159,7 +159,7 @@ class IndexController extends CommonController
   }
 
   //店铺列表
-  public function cityDian(){
+  public function citydian(){
 
     $this->title = '选择门店';
 
