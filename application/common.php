@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 use think\Db;
 use admin\model\AuthGroup;
+use think\Request;
 function is_jurisdiction(){
     $store = session('store_id');
     if($store)
@@ -288,13 +289,13 @@ function tree_to_list($tree, $child = '_child', $order='id', &$list = array()){
 }
 
 //发送短信
-function Sms($mobilephone='',$template='',$log_type=0)
+function Sms($mobilephone='',$template='',$log_type=1)
 {   
     if ($template == '' || $mobilephone=='') {
         return true;
     }
-    $checkcode = rand(1000,9999);
-    //$template = 'SMS_126740003';
+
+    $checkcode = rand(100000,999999);
 
     $content = ['code' => $checkcode];
 
@@ -308,24 +309,26 @@ function Sms($mobilephone='',$template='',$log_type=0)
        
         //添加短信日志
         $data = array(
-            'log_phone' => $mobilephone,
-            'log_captcha'=> $checkcode,
-            'log_type'=> $log_type,
-            'log_msg' => '短信发送成功',
-            // 'log_ip' => $this->request->ip(),
-            'add_time'=>time()
+            'phone' => $mobilephone,
+            'code'=> $checkcode,
+            'type'=> $log_type,
+            'msg' => '短信发送成功',
+            'ip' => Request()->ip(),
+            'create_time'=>time(),
+            'update_time' => time()
             );
         $rs = Db::table('th_sms_log')->insert($data);
         return true;
     }
     else{
         $date = array(
-            'log_phone' => $mobilephone,
-            'log_captcha'=> $checkcode,
-            'log_type'=> $log_type,
-            'log_msg' => '短信发送失败',
-            // 'log_ip' => $this->request->ip(),
-            'add_time'=>time()
+            'phone' => $mobilephone,
+            'code'=> $checkcode,
+            'type'=> $log_type,
+            'msg' => '短信发送失败',
+            'ip' => Request()->ip(),
+            'create_time'=>time(),
+            'update_time' => time()
             );
         $rs = Db::table('th_sms_log')->insert($date); 
         return false;

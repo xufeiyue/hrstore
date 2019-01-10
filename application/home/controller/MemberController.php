@@ -1,10 +1,12 @@
 <?php
 namespace app\home\controller;
 use think\Controller;
+use think\Db;
 use app\home\model\Goods;
 use app\home\model\Member;
 use app\home\model\CollectionAndCoupons;
 use app\home\model\BrowsingLog;
+use app\home\model\SmsLog;
 class MemberController extends CommonController
 {
 
@@ -160,6 +162,53 @@ class MemberController extends CommonController
 	public function yhq(){
 
 		return view();
+	}
+
+	//发送短信
+	public function sms_send(){
+
+		$mobilephone = input('post.mobilephone/s');
+
+		vendor('sms.api_demo.SmsDemo');
+
+		$sms = Sms($mobilephone,config('SMS_Template_ID'),1);
+
+		if ($sms)
+			return json(['code' => 200, 'msg' => '短信发送成功']);
+			return json(['code' => 400 , 'msg' => '发送频繁，请稍后重试']);
+
+	}
+
+	//绑定手机号
+	public function update_member(){
+
+		$mobilephone = input('post.mobilephone/s');
+
+		$code = input('post.code/s');
+
+		$sms = (new SmsLog)->Common_Find(['phone' => $mobilephone, 'code' => $code , 'create_time' => ['>',time() - 300], 'status' => 0]);
+
+		if (!$sms)
+			return json(['code' => 400 , 'msg' => '验证码不正确']);
+
+		// 启动事务
+		Db::startTrans();
+		try{
+		   $sms_edit = (new SmsLog)->Common_Update(['status' => 1],['id' => $sms['id']]);
+
+		   $member_edit = (new Member)->Common_Update(['mobilephone' => $mobilephone],['id' => $this->userId]);
+		   if ($sms_edit && $member_edit) {
+		   	 // 提交事务
+		     Db::commit();
+		     return json(['code' => 200 , 'msg' => '绑定成功']);
+		   }
+		     
+		} catch (\Exception $e) {
+		    // 回滚事务
+		    Db::rollback();
+		}
+		return json(['code' => 400 , 'msg' => '绑定失败']);
+
 	}
 
 }
