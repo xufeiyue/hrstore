@@ -11,8 +11,8 @@
 	    </header>
 	    <div style="height: 49px;"></div>
 	    <div class="cate-search">
-	    	<input type="text" class="cate-input" placeholder="请输入您要的搜索的产品关键词" />
-	    	<input type="button" class="cate-btn" />
+	    	<input type="text" name="goods_name" id="goods_name" value="" class="cate-input" placeholder="请输入您要的搜索的产品关键词" />
+	    	<input type="button" class="cate-btn" onclick="sousuo()" />
 	    </div>
 	    <div class="content-list">
 	    	<div class="list-left">
@@ -101,7 +101,21 @@
 			</ul>
 		</div>
  
- 
+ <script type="text/javascript">
+ 	function sousuo(){
+
+ 		var goods_name = $("#goods_name").val();
+
+ 		if (!$.trim(goods_name)) {
+
+ 			alert('请输入商品名称');
+
+ 			return false
+ 		}
+
+ 		window.location.href = "{:url('Index/sousuo')}" + '?goods_name=' + goods_name
+ 	}
+ </script>
  
  
 {include file="common/footer"}

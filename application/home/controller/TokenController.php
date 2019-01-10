@@ -36,7 +36,7 @@ class TokenController
         $tmpStr = implode($tmpArr);
         //哈希加密  在laravel里面是Hash::
         $tmpStr = sha1($tmpStr);
-        //按照微信的套路 给你一个signature没用是不可能的 这里就用得上了
+
         if ($tmpStr == $signature) {
             return true;
         } else {

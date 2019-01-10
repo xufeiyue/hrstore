@@ -246,7 +246,7 @@ class IndexController extends CommonController
 
     if ($type_id) {
 
-      $Goods = (new Goods)->Common_All_Select(['type_id' => $type_id, 'status' => 0],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
+      $Goods = (new Goods)->Common_All_Select(['type_id' => $type_id, 'state' => 0, 'status' => 0],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
     
     }else{
 
@@ -254,8 +254,20 @@ class IndexController extends CommonController
         
         $type_id = $GoodsType['0']['id'];
 
-        $Goods = (new Goods)->Common_All_Select(['type_id' => $GoodsType['0']['id'], 'status' => 0],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
+        $Goods = (new Goods)->Common_All_Select(['type_id' => $GoodsType['0']['id'], 'state' => 0, 'status' => 0],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
 
+      }
+    }
+
+    if ($Goods) {
+      
+      foreach ($Goods as $key => $value) {
+
+        if ($value['goods_images']) {
+        
+          $Goods[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
+        
+        }
       }
     }
 
@@ -350,6 +362,29 @@ class IndexController extends CommonController
     $this->assign('goods_list',$goods_list);
 
     $this->assign('Advertisement',$Advertisement);
+
+    return view();
+  }
+
+  //搜索
+  public function sousuo(){
+
+    $goods_name = input('goods_name/s');
+
+    $a = ['goods_name' => ['like',"%{$goods_name}%"], 'state' => 0, 'status' => 0, 'store_id' => $this->store_id];
+
+    $goods = (new Goods)->Common_All_Select(['goods_name' => ['like',"%{$goods_name}%"], 'state' => 0, 'status' => 0, 'store_id' => $this->store_id],['id' => 'desc'],['id','goods_name','goods_original_price','goods_present_price','goods_images']);
+
+    foreach ($goods as $key => $value) {
+
+        if ($value['goods_images']) {
+        
+          $goods[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
+        
+        }
+      }
+
+    $this->assign('goods',$goods);
 
     return view();
   }
