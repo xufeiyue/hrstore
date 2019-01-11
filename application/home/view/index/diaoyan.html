@@ -91,9 +91,10 @@
     </h1>
 </header>
 <div style="height: 49px;"></div>
+<input type="hidden" name="id" id="id" value="{$id}">
 <div class="DiaoYan">
     <div class="Ti_box">
-        <h1 class="Ti_name">我是问题调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一</h1>
+        <!-- <h1 class="Ti_name">我是问题调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一</h1>
         <ul class="Ti_info">
             <li class="Ti_list Ti_Color"><i>A</i><p>调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一</p></li>
             <li class="Ti_list"><i>B</i><p>调查答案一</p></li>
@@ -104,8 +105,73 @@
             <span class="turn_left">上一题</span>
             <span class="turn_right">下一题</span>
             <span class="submit_btn">提交</span>
-        </div>
+        </div> -->
     </div>
 </div>
+
+<script type="text/javascript">
+    
+    $(function(){
+
+        var num = 0;//初始数量
+
+        var count = 0; //总数量
+
+        var data = [];
+
+        var id = $("#id").val()
+
+        $.post("{:url('Index/ajax_diaoyan_list')}",{id: id},function(res){
+
+            data = res.data
+            count = res.data.length
+            set_problem(data[num],num);
+        })
+ // Ti_Color 选中样式
+        function set_problem(data,num){
+
+            var html = ''
+
+            html += '<h1 class="Ti_name">第'+(num+1)+'题：'+data.problem+'</h1>';
+            html += '<ul class="Ti_info">';
+            for (b in data.content) {
+                html +=    '<li class="Ti_list"><i>'+b+'.</i><p>'+data.content[b]+'</p></li>';
+            }
+            html += '</ul>';
+            html += '<div class="turn_box">';
+            html +=     '<span class="turn_left">上一题</span>';
+            if (num+1 < count) {
+                html +=     '<span class="turn_right">下一题</span>';
+            }
+            if (num+1 == count) {
+                html +=     '<span class="submit_btn">提交</span>';
+            }
+            html += '</div>';
+            $(".Ti_box").html('')
+            $(".Ti_box").append(html)
+
+        }
+
+        $(document).on('click','.Ti_list',function(){
+            $(".Ti_list").siblings().removeClass('Ti_Color');  
+            $(this).addClass('Ti_Color')
+        })
+
+        $(document).on('click','.turn_right',function(){
+            console.log(data)
+            num++;
+            set_problem(data[num],num);
+        })
+
+        $(document).on('click','.turn_left',function(){
+            if (num > 0) {
+                num--;
+                set_problem(data[num],num);
+            }
+        })
+
+    })
+
+</script>
 
 {include file="common/footer"}

@@ -11,6 +11,8 @@ use app\home\model\NewDiscovery;
 use app\home\model\Advertisement;
 use app\home\model\AdvertisementType;
 use app\home\model\Region;
+use app\home\model\Questionnaire;
+use app\home\model\Problem;
 class IndexController extends CommonController
 {
   public $title;
@@ -98,6 +100,65 @@ class IndexController extends CommonController
     $this->assign('title',$this->title);
 
     return view();
+  }
+
+  //ajax获取首页数据
+  public function ajax_index(){
+
+    $store_id = input('store_id/d');
+
+    $where = [];
+
+    if ($store_id) {
+      
+      $where = ['store_id' => $store_id];
+    }
+
+    $longitude = input('post.longitude/s') ? : '123.454688';
+
+    $latitude = input('post.latitude/s') ? : '41.778517';
+
+
+    $store = (new Store)->Common_Find($where,['juli' => 'ASC'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]); // 根据经纬度查询最近的一家门店 距离Km
+
+    $activity = (new Activity)->Common_Find(['banner' => 1]); //轮播活动
+
+    $AdvertisementType = (new AdvertisementType)->Common_Find(['store_id' => $store['store_id'], 'status' => 0, 'type_name' => '首页']);
+
+    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
+
+    $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
+
+    $offset = 0;
+
+    $limit = 8;
+
+    $order = ['id' => 'desc'];
+
+    $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
+
+    $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field); //商品列表
+
+    foreach ($goods_list as $key => $value) {
+
+      if ($value['goods_images']) {
+      
+        $goods_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
+      
+      }
+    }
+
+    //底部商品列表
+    $goods_top_list = (new Goods)->Common_Select(8,17,$where,$order,$goods_field); //商品列表
+
+    $where = ['store_id' => $store['store_id'], 'status' => 0, 'pid' => 0];
+
+    $goods_type_field = ['id','goods_type_name','url'];
+    //产品分类
+    $goods_type_list = (new GoodsType)->Common_Select($offset,$limit-1,$where,$order,$goods_type_field);
+
+    return json(['code' => 200, 'msg' => '请求成功', 'data' => ['store' => $store, 'goods_top_list' => $goods_top_list, 'activity' => $activity, 'Advertisement' => $Advertisement, 'goods_list' => $goods_list, 'goods_type_list' => $goods_type_list]]);
+
   }
 
   //商品详情
@@ -400,10 +461,34 @@ class IndexController extends CommonController
     return view();
   }
 
-  //新发现调研
+  //渲染模板
   public function diaoyan(){
 
+    $id = input('id/d');//调研问卷id
+
+    $this->assign('id',$id);
+
     return view();
+  }
+
+  //新发现调研
+  public function ajax_diaoyan_list(){
+
+    $id = input('id/d');//调研问卷id
+
+    $questionnaire = (new Questionnaire)->Common_Find(['id' => $id]);
+
+    $problem = (new Problem)->Common_All_Select(['id' => ['in',$questionnaire['problem_id']]],['id' => 'desc'],['id','type','problem','answer','content']);
+
+    foreach ($problem as $key => $value) {
+      
+      $problem[$key]['content'] = json_decode($value['content'],true);
+    }
+
+    if ($problem)
+      return json(['code' => 200, 'msg' => '请求成功', 'data' => $problem]);
+      return json(['code' => 400, 'msg' => '请求失败', 'data' => []]);
+
   }
 
 }

@@ -17,7 +17,7 @@
 	<header data-am-widget="header" class="am-header am-header-default tm-head" id="shortbar" >
         <div class="am-header-left am-header-nav">
             <a href="city_info.html">
-                <p style="font-size: 12px; margin-top: -35px;">{$store['store_name']}</p>
+                <p style="font-size: 12px; margin-top: -35px;" id="store_name">{$store['store_name']}</p>
             </a>
         </div>
         <div class="am-header-right am-header-nav">
@@ -26,7 +26,7 @@
             </a>
         </div>
     </header>
-  <ul class="am-slides">
+  <ul class="am-slides" id="Advertisement">
     {foreach name="Advertisement" item="vo"}
     <li> <a href="{$vo['url']}" ><img src="{$vo['image']}" /></a></li>
     {/foreach}
@@ -37,6 +37,7 @@
         <h1 class="List-head-name">推荐爆款</h1>
         <a href="Tuijian.html"  class="List-head-more">更多爆款<i class="fa fa-chevron-circle-right fa-lg"></i></a>
     </div>
+    <p id="goods_list">
     {foreach name="goods_list" item="vo" key="k" }
     <li>
         <div class="am-gallery-item">
@@ -49,7 +50,7 @@
         </div>
     </li>
     {/foreach}
-
+    </p>
 </ul>
 <!--导航-->
  <ul class="sq-nav"  >
@@ -57,6 +58,7 @@
          <h1 class="List-head-name">产品分类</h1>
          <a href="{:url('Index/category')}" class="List-head-more">更多分类<i class="fa fa-chevron-circle-right fa-lg"></i></a>
      </div>
+     <p id="goods_type_list">
      {foreach name="goods_type_list" item="vo" key="k" }
       <li>
         <div class="am-gallery-item">
@@ -67,6 +69,7 @@
         </div>
       </li>
      {/foreach}
+     </p>
       <li>
         <div class="am-gallery-item">
             <a href="{:url('Index/category')}" class="">
@@ -77,12 +80,12 @@
       </li>
   </ul>
  <!--活动图片-->
-    <div class="sq-title">
-        <a href="{:url('Activity/lq_huodong',['id' => $activity['id']])}">
+    <div class="sq-title" id="activity">
+        <!-- <a href="{:url('Activity/lq_huodong',['id' => $activity['id']])}">
         <img src="{$activity['activity_url']}" width="24"/>
-        </a>
+        </a> -->
     </div>
-    <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  >
+    <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  id="goods_top_list">
         {foreach name="goods_top_list" item="vo" key="k" }
         <li class="Active-area">
             <div class="am-gallery-item">
@@ -193,12 +196,97 @@
                 var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
                 var speed = res.speed; // 速度，以米/每秒计
                 var accuracy = res.accuracy; // 位置精度
+
+                getinfo(latitude,longitude)
             },
             error: function (error) {
 
             }
         });
     });
+
+    function getinfo(latitude,longitude){
+
+        $.post("{:url('Index/ajax_index')}",{latitude: latitude, longitude: longitude},function(res){
+
+            var store = res.data.store
+            var Advertisement = res.data.Advertisement
+            var goods_list = res.data.goods_list
+            var goods_type_list = res.data.goods_type_list
+            var goods_top_list = res.data.goods_top_list
+            var activity = res.data.activity
+
+            $("#store_name").text(store.store_name);
+
+            var Advertisement_html = '';
+            for (i in Advertisement) {
+                html += '<li> <a href="'+Advertisement[i].url+'" ><img src="'+Advertisement[i].image+'" /></a></li>';
+            }
+            $("#Advertisement").html('');
+            $("#Advertisement").append(Advertisement_html);
+
+            var goods_list_html = '';
+
+            for (i in goods_list) {
+                html += '<li>';
+                html +=    '<div class="am-gallery-item">';
+                html +=        '<a href="{:url("Index/detail")}?id='+goods_list[i].id+'" class="">';
+                html +=            '<img src="'+goods_list[i].goods_images+'" />';
+                html +=            '<h3 class="am-gallery-title">'+goods_list[i].goods_name+'</h3>';
+                html +=            '<div class="am-gallery-desc am-gallery-yuan">原价￥'+goods_list[i].goods_original_price+'</div>';
+                html +=            '<div class="am-gallery-desc">折扣价￥'+goods_list[i].goods_present_price+'</div>';
+                html +=        '</a>';
+                html +=    '</div>';
+                html += '</li>';
+            }
+            $("#goods_list_html").html('')
+            $("#goods_list_html").append(goods_list_html)
+
+            var goods_type_list_html = ''
+
+            for (i in goods_type_list) {
+
+                html += '<li>';
+                html +=     '<div class="am-gallery-item">';
+                html +=         '<a href="{:url("Index/category")}" class="">';
+                html +=            '<img src="{$vo['url']}" />';
+                html +=            '<p>{$vo['goods_type_name']}</p>';
+                html +=          '</a>';
+                html +=       '</div>';
+                html +=  '</li>';
+            }
+
+            $("#goods_type_list").html('')
+            $("#goods_type_list").append(goods_type_list_html)
+
+            var goods_top_list_html = '';
+
+            for (i in goods_top_list) {
+
+                html += '<li class="Active-area">';
+                html +=    '<div class="am-gallery-item">';
+                html +=        '<a href="{:url("Index/detail")}?id='+goods_top_list[i].id+'" class="">';
+                html +=            '<img src="'+goods_top_list[i].goods_images+'" />';
+                html +=            '<h3 class="am-gallery-title">'+goods_top_list[i].goods_name+'</h3>';
+                html +=            '<div class="am-gallery-desc am-gallery-yuan">原价￥'+goods_top_list[i].goods_original_price+'</div>';
+                html +=            '<div class="am-gallery-desc">折扣价￥'+goods_top_list[i].goods_present_price+'</div>';
+                html +=        '</a>';
+                html +=    '</div>';
+                html += '</li>';
+            }
+
+            $("#goods_top_list").html('')
+            $("#goods_top_list").append(goods_top_list_html)
+
+            var activity_html = ''
+            activity_html += '<a href="{:url("Activity/lq_huodong",['id' => $activity['id']])}">';
+            activity_html +=    '<img src="'+activity.activity_url+'" width="24"/>';
+            activity_html += '</a>';
+
+            $("#activity").html('')
+            $("#activity").append(activity_html)
+        })
+    }
 </script>
 {include file="common/footer"}
  
