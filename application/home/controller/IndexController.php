@@ -13,6 +13,7 @@ use app\home\model\AdvertisementType;
 use app\home\model\Region;
 use app\home\model\Questionnaire;
 use app\home\model\Problem;
+use app\home\model\Member;
 class IndexController extends CommonController
 {
   public $title;
@@ -118,6 +119,7 @@ class IndexController extends CommonController
 
     $latitude = input('post.latitude/s') ? : '41.778517';
 
+    (new Member)->Common_Update(['longitude' => $longitude, 'latitude' => $latitude],['id' => $this->userId]); //更新经纬度
 
     $store = (new Store)->Common_Find($where,['juli' => 'ASC'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]); // 根据经纬度查询最近的一家门店 距离Km
 
@@ -225,9 +227,11 @@ class IndexController extends CommonController
 
     $this->title = '选择门店';
 
-    $longitude = '123.454688';
+    $member = (new Member)->Common_Find(['id' => $this->userId]);
 
-    $latitude = '41.778517';
+    $longitude = $member['longitude'] ? :'123.454688';
+
+    $latitude = $member['latitude'] ? : '41.778517';
 
     $store_list = (new store)->Common_All_Select(['status' => 1],['juli' => 'ASC'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]);
 
