@@ -16,7 +16,7 @@
 <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0" style="position: relative;">
 	<header data-am-widget="header" class="am-header am-header-default tm-head" id="shortbar" >
         <div class="am-header-left am-header-nav">
-            <a href="city_info.html">
+            <a href="{:url('Index/city_info',['id' => $store['store_id']])}">
                 <p style="font-size: 12px; margin-top: -35px;" id="store_name">{$store['store_name']}</p>
             </a>
         </div>

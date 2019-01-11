@@ -254,6 +254,18 @@ class IndexController extends CommonController
     return view();
   }
 
+  //店铺详情
+  public function city_info(){
+
+    $id = input('id/d'); //店铺id
+
+    $store = (new Store)->Common_Find(['store_id' => $id]);
+
+    $this->assign('store',$store);
+
+    return view();
+  }
+
   //收藏与加入优惠卷
   public function collection_and_coupons_update(){
 
