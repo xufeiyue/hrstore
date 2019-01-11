@@ -1,0 +1,111 @@
+{include file="common/header"}
+<style>
+    .DiaoYan{
+        width: 90%;
+        margin: 0 auto;
+        overflow: hidden;
+        padding-bottom: 30px;
+    }
+    i{
+        font-style: normal;
+        float: left;
+        width: 20px;
+    }
+    h1{
+        font-size: 16px;
+        line-height: 24px;
+        margin: 0;
+        padding: 20px 0;
+    }
+    ul{
+        width: 90%;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    li{
+        width: 100%;
+        overflow: hidden;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+    li p{
+        float: left;
+        max-width: calc(100% - 20px);
+    }
+    .Ti_Color{
+        color: #d0784c;
+    }
+    .Ti_Color p{
+        text-decoration: underline;
+    }
+
+    .turn_box{
+        width: 90%;
+        margin: 20px auto;
+        overflow: hidden;
+    }
+    .turn_left{
+        float: left;
+        padding: 5px 15px;
+        border-radius: 5px;
+        background: #de8456;
+        text-align: center;
+        color: #fff;
+        display: block;
+        width:80px;
+    }
+    .turn_right{
+        float: right;
+        padding: 5px 15px;
+        border-radius: 5px;
+        background: #de8456;
+        text-align: center;
+        color: #fff;
+        display: block;
+        width:80px;
+    }
+    .submit_btn{
+        margin-top: 30px;
+        margin-left: calc(20% - 5px);
+        display: block;
+        width: 60%;
+        padding: 5px 0;
+        border-radius: 5px;
+        background: #de8456;
+        text-align: center;
+        color: #fff;
+        float: left;
+    }
+
+</style>
+
+<!--图片轮换-->
+<header data-am-widget="header" class="am-header am-header-default sq-head ">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.back()" class="">
+            <i class="am-icon-chevron-left"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        <a href="" class="">调研</a>
+    </h1>
+</header>
+<div style="height: 49px;"></div>
+<div class="DiaoYan">
+    <div class="Ti_box">
+        <h1 class="Ti_name">我是问题调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一</h1>
+        <ul class="Ti_info">
+            <li class="Ti_list Ti_Color"><i>A</i><p>调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一</p></li>
+            <li class="Ti_list"><i>B</i><p>调查答案一</p></li>
+            <li class="Ti_list"><i>C</i><p>调查答案一</p></li>
+            <li class="Ti_list"><i>D</i><p>调查答案一</p></li>
+        </ul>
+        <div class="turn_box">
+            <span class="turn_left">上一题</span>
+            <span class="turn_right">下一题</span>
+            <span class="submit_btn">提交</span>
+        </div>
+    </div>
+</div>
+
+{include file="common/footer"}

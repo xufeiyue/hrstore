@@ -400,4 +400,10 @@ class IndexController extends CommonController
     return view();
   }
 
+  //新发现调研
+  public function diaoyan(){
+
+    return view();
+  }
+
 }
