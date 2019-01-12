@@ -1,5 +1,6 @@
 <?php
 namespace app\admin\controller;
+use http\Env;
 use think\Controller;
 use think\Request;
 
@@ -50,6 +51,30 @@ class UploadController extends Controller
         if ($info) {
             // $this->success('文件上传成功：' . $info->getRealPath());
             return json(['code'=> 0 ,'data'=> ['src' => $request->domain().'/uploads/member/' . $info->getSaveName() , 'title' => '']]);
+        } else {
+            // 上传失败获取错误信息
+            // $this->error($file->getError());
+            return json(['code'=> 1, 'data'=> '','msg'=> '上传失败']);
+        }
+    }
+
+    public function excel_upload(Request $request){
+        // 获取表单上传文件
+        $file = $request->file('file');
+
+        if (empty($file)) {
+            return json(['code' => 0 , 'msg' => '请选择文件']);
+        }
+        // 移动到框架应用根目录/public/uploads/ 目录下
+        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads' .DS .'excels');
+
+        $detail = $info->getInfo();
+
+        $detail['size'] = round($detail['size']/1024,1).'kb';
+
+        if ($info) {
+            // $this->success('文件上传成功：' . $info->getRealPath());
+            return json(['code'=> 0 ,'data'=> $_SERVER['DOCUMENT_ROOT'].'/uploads/excels/' . $info->getSaveName(), 'info' => urlencode(json_encode($detail))]);
         } else {
             // 上传失败获取错误信息
             // $this->error($file->getError());

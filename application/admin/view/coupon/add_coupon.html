@@ -30,11 +30,11 @@
 
         <div class="layui-form-item">
             <label for="ticket_name" class="layui-form-label">
-                <span class="x-red">*</span>卡券名称
+                <span class="x-red">*</span>导入卡券
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="ticket_name" name="ticket_name" required="" lay-verify="ticket_name"
-                       autocomplete="off" class="layui-input">
+                <button type="button" class="layui-btn" id="test3"><i class="layui-icon"></i>上传文件</button>
+                <input type="hidden" name="file_url" id="file_url" value="" />
             </div>
         </div>
         
@@ -80,19 +80,12 @@
 
         //拖拽上传
         upload.render({
-            elem: '#test10'
-            ,url: '/Admin/Upload/upload'
-            ,accept: 'images'
-            ,exts: 'jpg|png' //允许上传类型
-            ,before: function(obj){
-                //预读本地文件示例，不支持ie8
-                obj.preview(function(index, file, result){
-                    $('#test10').html('');
-                    $('#test10').append('<img src="'+ result +'" alt="'+ file.name +'" style="width: 30%;height: 30%" class="layui-upload-img">')
-                });
-            }
+            elem: '#test3'
+            ,url: '/Admin/Upload/excel_upload'
+            ,accept: 'file'
+            ,exts: 'xlsx|xls' //允许上传类型
             ,done: function(res){ //上传成功 赋值
-                $('#activity_url').val(res.data);
+                $('#file_url').val(res.data);
                 layer.msg('上传成功', {icon: 1});
             }
         });
@@ -129,17 +122,17 @@
             //console.log(data);
 
             //发异步，把数据提交给php
-            $.post('/Admin/Coupon/add_coupon_type', data.field, function(res){
+            $.post('/Admin/Coupon/add_coupon', data.field, function(res){
 
                 if(res.code == 1){
                     layer.alert(res.msg, {icon: 1},function () {
                         // 获得frame索引
-                        var index = parent.layer.getFrameIndex(window.name);
+                        //var index = parent.layer.getFrameIndex(window.name);
 
                         //关闭当前frame
-                        parent.layer.close(index);
+                        layer.close();
 
-                        window.parent.location.reload();
+                        //window.parent.location.reload();
 
                     });
                 }else{
