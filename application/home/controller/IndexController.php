@@ -61,10 +61,13 @@ class IndexController extends CommonController
     $store = (new Store)->Common_Find($where,['juli' => 'ASC'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]); // 根据经纬度查询最近的一家门店 距离Km
 
     if ($store) {
+
       session('store_id',$store['store_id']);
+
+      session('expiration_time',time());
     }
 
-    $activity = (new Activity)->Common_Find(['banner' => 0]); //轮播活动
+    $activity = (new Activity)->Common_Find(['banner' => 0, 'store_id' => $store['store_id']]); //轮播活动
 
     $AdvertisementType = (new AdvertisementType)->Common_Find(['store_id' => $store['store_id'], 'status' => 0, 'type_name' => '首页']);
 
