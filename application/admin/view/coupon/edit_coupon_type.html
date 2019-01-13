@@ -7,7 +7,8 @@
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="ticket_name" name="ticket_name" required="" lay-verify="ticket_name"
-                       autocomplete="off" class="layui-input">
+                       autocomplete="off" class="layui-input" value="{$info['ticket_name']}">
+                <input type="hidden" name="card_type_id" value="{$info['card_type_id']}" />
             </div>
         </div>
         <div class="layui-form-item">
@@ -15,7 +16,8 @@
                 <span class="x-red">*</span>活动开始日期
             </label>
             <div class="layui-input-inline">
-                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="start_time" id="start_time" placeholder="请输入开始时间">
+                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="start_time" id="start_time" placeholder="请输入开始时间"
+                       value="{$info.start_time|date='Y-m-d',###}">
             </div>
         </div>
         <div class="layui-form-item">
@@ -23,7 +25,8 @@
                 <span class="x-red">*</span>活动截止日期
             </label>
             <div class="layui-input-inline">
-                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="end_time" id="end_time" placeholder="请输入开始时间">
+                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="end_time" id="end_time" placeholder="请输入开始时间"
+                       value="{$info.end_time|date='Y-m-d',###}">
             </div>
             <div class="layui-form-mid layui-word-aux">
 
@@ -35,45 +38,53 @@
                 <span class="x-red">*</span>优惠类型
             </label>
             <div class="layui-input-inline">
-                <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1"/>
-                <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2"/>
+                {if condition="$info['ticket_type'] eq 1"}
+                     <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1" checked/>
+                     <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2"/>
+                {else /}
+                    <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1" />
+                    <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2" checked/>
+                {/if}
             </div>
         </div>
         <div class="layui-form-item">
             <label for="card_ticket_type_img" class="layui-form-label">
                 <span class="x-red">*</span>卡券图片
             </label>
-            <input type="hidden" name="card_ticket_type_img" id="card_ticket_type_img" value="">
+            <input type="hidden" name="card_ticket_type_img" id="card_ticket_type_img" value="{$info['card_ticket_type_img']}">
             <div class="layui-upload-drag" id="b2" style="width: 40%;height: 40%">
+                {if condition="$info['card_ticket_type_img'] eq ''"}
                 <i class="layui-icon"></i>
                 <p>点击上传，或将文件拖拽到此处</p>
+                {else /}
+                <img src="{$info['card_ticket_type_img']}"  style="width: 30%;height: 30%" class="layui-upload-img">
+                {/if}
             </div>
         </div>
-
         <div class="layui-form-item">
             <label for="face_value" class="layui-form-label">
                 <span class="x-red">*</span>面值
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="face_value" name="face_value" required="" lay-verify="face_value"
-                       autocomplete="off" class="layui-input">
+                       autocomplete="off" class="layui-input" value="{$info['face_value']}">
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">使用说明</label>
             <div class="layui-input-block">
-                <textarea name="instructions" placeholder="请输入内容" class="layui-textarea" id="instructions"></textarea>
+                <textarea name="instructions" placeholder="请输入内容" class="layui-textarea" id="instructions">{$info['instructions']}</textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">适用范围</label>
             <div class="layui-input-block">
-                <textarea name="scope_of_application" placeholder="请输入内容" class="layui-textarea" id="scope_of_application"></textarea>
+                <textarea name="scope_of_application" placeholder="请输入内容" class="layui-textarea" id="scope_of_application">{$info['scope_of_application']}</textarea>
             </div>
         </div>
         <div class="layui-form-item">
             <button  class="layui-btn" lay-filter="add" lay-submit="">
-                增加
+                保存
             </button>
         </div>
     </form>
@@ -160,7 +171,7 @@
             //console.log(data);
 
             //发异步，把数据提交给php
-            $.post('/Admin/Coupon/add_coupon_type', data.field, function(res){
+            $.post('/Admin/Coupon/edit_coupon_type', data.field, function(res){
 
                 if(res.code == 1){
                     layer.alert(res.msg, {icon: 1},function () {

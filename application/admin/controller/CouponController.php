@@ -35,15 +35,23 @@ class CouponController extends Controller
     // 卡券类型列表
     public function coupon_type_list()
     {
+        $ticket_name = input('post.ticket_name/s');
 
-        $store_name = input('post.store_name/s');
+        $start_time = strtotime(input('post.start_time'));
 
-        $where = [];
+        $end_time = strtotime(input('post.end_time'));
 
-        if ($store_name) {
+        if((Request::instance()->post('start_time') !='') && (Request::instance()->post('end_time') !='')){
 
-            $where['store_name'] = ['like', "%{$store_name}%"];
+            $where['end_time'] = array('between',"$start_time,$end_time");
         }
+
+        if($ticket_name){
+
+            $where['ticket_name']  = ['like',"%{$ticket_name}%"];
+        }
+
+        $where['status'] = 1;
 
         $offset = (input('post.page/d') - 1) * input('post.limit/d') ?: 0;
 
@@ -63,15 +71,14 @@ class CouponController extends Controller
     {
         if (Request::instance()->post()) {
             $data['instructions'] = input('post.instructions');
+            $data['card_ticket_type_img'] = input('post.card_ticket_type_img');
             $data['start_time'] = strtotime(input('post.start_time'));
             $data['end_time'] = strtotime(input('post.end_time'));
             $data['scope_of_application'] = input('post.scope_of_application');
             $data['ticket_name'] = input('post.ticket_name');
-            $data['end_time_desc'] = input('post.end_time_desc');
-            $data['reserve'] = input('post.reserve');
+            $data['end_time_desc'] = input('post.end_time');
             $data['face_value'] = input('post.face_value');
             $data['ticket_type'] = input('post.ticket_type');
-            $data['end_time_desc'] = input('post.end_time');
             $data['create_time'] = time();
             $add = $this->coupon_type->Common_Insert($data);
             if ($add) {
@@ -84,6 +91,47 @@ class CouponController extends Controller
         }
     }
 
+
+    // 修改卡券类型
+
+    public function edit_coupon_type(){
+        if (Request::instance()->post()) {
+            $card_type_id = input('post.card_type_id');
+            $data['instructions'] = input('post.instructions');
+            $data['card_ticket_type_img'] = input('post.card_ticket_type_img');
+            $data['start_time'] = strtotime(input('post.start_time'));
+            $data['end_time'] = strtotime(input('post.end_time'));
+            $data['scope_of_application'] = input('post.scope_of_application');
+            $data['ticket_name'] = input('post.ticket_name');
+            $data['end_time_desc'] = input('post.end_time');
+            $data['face_value'] = input('post.face_value');
+            $data['ticket_type'] = input('post.ticket_type');
+            $data['create_time'] = time();
+            $add = $this->coupon_type->Common_Update($data,array('card_type_id'=>$card_type_id));
+            if ($add) {
+                return json(['code' => 1, 'msg' => '修改成功']);
+            } else {
+                return json(['code' => 2, 'msg' => '修改失败']);
+            }
+        } else {
+            $card_type_id = input('get.card_type_id');
+            $info = $this->coupon_type->Common_Find(array('card_type_id'=>$card_type_id));
+            $this->assign('info',$info);
+            return view();
+        }
+    }
+
+    // 删除卡券分类
+    public function del_coupon_type(){
+        $card_type_id = Request::instance()->param('card_type_id');
+        $data['status'] = '2';
+        $add = $this->coupon_type->Common_Update($data,array('card_type_id'=>$card_type_id));
+        if($add){
+            return json(['code' => 1 , 'msg' => '删除成功']);
+        }else{
+            return json(['code' => 2 , 'msg' => '删除失败']);
+        }
+    }
     // 添加卡券
     public function add_coupon()
     {
@@ -93,6 +141,22 @@ class CouponController extends Controller
             $data['goods_id'] = input('post.goods_id');
             $data['create_time'] = time();
             $file_url = input('post.file_url');
+
+            // 判断选中卡券类型是不是全场券
+            $ticket_type = $this->coupon_type->Common_Find(array('card_type_id'=>$data['card_type_id']));
+            if($ticket_type['ticket_type'] == 1){
+                // 全场券不用绑定goods_id
+                // 更新card_ticket_type表 goods_id
+                $data['goods_id'] = 0;
+
+            }else if ($ticket_type['ticket_type'] == 2){
+                // 更新card_ticket_type表 goods_id
+                $this->coupon_type->Common_Update(array('goods_id'=>$data['goods_id']),array('card_type_id'=>$data['card_type_id']));
+
+            }else{
+                return json(['code' => 2, 'msg' => '添加失败']);
+            }
+
             $file_url=str_replace("\\","/",$file_url);
             $excel_datas = $this->read_excel($file_url); //获取表中数据
             if($this->coupon->addCards($data,$excel_datas)){
@@ -101,13 +165,17 @@ class CouponController extends Controller
                 return json(['code' => 2, 'msg' => '添加失败']);
             }
 
+
         } else {
             // 获取卡券类型列表
-            $coupon_type_list = $this->coupon_type->Common_All_Select();
+            $where['status'] = 1;
+            $coupon_type_list = $this->coupon_type->Common_All_Select($where);
             $this->assign('coupon_type_list', $coupon_type_list);
             return view();
         }
     }
+
+
 
     // 渲染搜索商品列表
     public function search_goods()
