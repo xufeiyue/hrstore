@@ -17,7 +17,7 @@ class CommonController extends Controller
 		$module = $request->module(); //模块名
 
 		$controller = $request->controller(); //控制器
-		
+	
 		$action = $request->action();//方法
 
 		$this->store_id = 1;
@@ -29,6 +29,13 @@ class CommonController extends Controller
 			$member = session('wechat_user');
 
 			$this->userId = $member['id'];
+
+			$expiration_time = session('expiration_time');
+
+			 if ((time() - $expiration_time) > 1800 && $module = 'home' && $controller = 'Index' && $module = 'index') { //缓存时间已超过半个小时并且回到首页 重新定位最近的店铺
+
+			 	session('store_id',null);
+			 }
 
 			$this->store_id = session('store_id');
 
