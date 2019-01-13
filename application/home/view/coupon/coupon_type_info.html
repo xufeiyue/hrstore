@@ -6,47 +6,33 @@
         </a>
     </div>
     <h1 class="am-header-title">
-        <a href="" class="">全部卡券</a>
+        <a href="" class="">卡券详情</a>
     </h1>
 </header>
 <div style="height: 49px;"></div>
-<div class="quan-box" style="display: block;">
-    <ul class="pingtai">
-        {volist name="coupon_type_pt_list" id="vo"}
-        <li class="pingtai-list">
-            <div class="jinE pingtai-jinE">
-                <h1><i>￥</i>{$vo.face_value}</h1>
-                <p>平台卡券</p>
-            </div>
-            <div class="pingtai-info">
-                <p>{$vo.ticket_name}</p>
-                <div class="pingtai-function">
-                    <span>有效期：{$vo.end_time_desc}</span>
-                    <a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id']])}">立即领取</a>
-                </div>
-            </div>
-        </li>
-        {/volist}
-    </ul>
-    <ul class="danpin">
+<div style="width: 100%;">
+    <img style="width: 100%; height: auto;" src="{$info[0]['card_ticket_type_img']}"/>
+</div>
+<div class="ZLY_XingQing">
+    <div style=" padding: 20px 0;width:100%;">
+        <img class="TiaoMa" style="width: 70%;display: none; border: 0; margin: 0 auto;" src="images/ZLY_tiaoxing.jpg"/>
+        <span class="Quan_btn" style="display: block; margin: 20px auto;width: 60%;padding: 10px 0;color:#fff;text-align: center;background:#ff4f5f; ">立即使用</span>
+    </div>
+    <div style="background: #ffffff; padding: 10px; border-radius: 5px; font-size: 1.3rem;">
+        <p>
+            卡券名称：{$info[0]['ticket_name']}
+        </p>
+        <p>
+            活动时间：{$info[0]['start_time']|date='Y-m-d',###}至{$info[0]['end_time']|date='Y-m-d',###}
+        </p>
+        <p>
+            适用范围：{$info[0]['scope_of_application']}
+        </p>
+        <p>
+            使用说明：{$info[0]['instructions']}
 
-        <li class="danpin-list">
-            <div class="jinE danpin-jinE">
-                <h1><i>￥</i>1000</h1>
-                <p>单品卡券</p>
-            </div>
-            <div class="danpin-info">
-                <div class="danpin-product">
-                    <img src="images/tele.png">
-                </div>
-                <div class="danpin-function">
-                    <p>适用于单笔满1000美金跟投使用</p>
-                    <span>有效期：2019-10-21</span>
-                </div>
-                <a class="danpin-btn">立即领取</a>
-            </div>
-        </li>
-    </ul>
+        </p>
+    </div>
 </div>
 <!--底部导航-->
 <div style="height: 55px;"></div>
@@ -82,6 +68,17 @@
                 <span class="am-navbar-label">我的</span>
             </a>
         </li>
-    </ul>
+    <div style="width: 100px;height: 100px;">
+        已使用
+    </div>
 </div>
+<script>
+    $(function () {
+        $(".Quan_btn").click(function() {
+            $(".TiaoMa").css("display","block");
+            $(".Quan_btn").css("display","none");
+        });
+
+    });
+</script>
 {include file="common/footer"}
