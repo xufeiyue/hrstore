@@ -35,8 +35,8 @@
                 <span class="x-red">*</span>优惠类型
             </label>
             <div class="layui-input-inline">
-                <input type="radio" name="ticket_type" value="1" title="全平台通用" >
-                <input type="radio" name="ticket_type" value="2" title="普通优惠券" >
+                <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1"/>
+                <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2"/>
             </div>
         </div>
         <div class="layui-form-item">
@@ -45,7 +45,7 @@
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="reserve" name="reserve" required="" lay-verify="reserve"
-                       autocomplete="off" class="layui-input">
+                       autocomplete="off" class="layui-input" onclick="t1();">
             </div>
             <div class="layui-form-mid layui-word-aux">
 
@@ -195,6 +195,12 @@
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
 })();</script>
+<script>
+    $ = layui.jquery;
+    $("#q1").click(function () {
+        alert(1)
+    })
+</script>
 </body>
 
 </html>
