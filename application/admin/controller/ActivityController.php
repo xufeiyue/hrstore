@@ -352,6 +352,22 @@ class ActivityController extends AdminController
 			return json(['code' => 2 , 'msg' => '更新失败']);
 	}
 
+	//设置首页广告图
+	public function activity_bannerupdate(){
+
+		$id = input('post.id/d');
+
+		$banner = input('post.banner/d');
+
+		$Activity = (new Activity)->Common_Find(['id' => $id]);
+
+		(new Activity)->Common_Update(['banner' => 1],['store_id' => $Activity['store_id'], 'banner' => 0]); //一个店铺只设置一个广告图其他的全部取消
+
+		$edit = (new Activity)->Common_Update(['banner' => $banner],['id' => $id]); //设置
+
+		return json(['code' => 1 , 'msg' => '更新成功']);
+	}
+
 	//删除活动库
 	public function activity_library_del(){
 

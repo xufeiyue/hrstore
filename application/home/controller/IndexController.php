@@ -64,7 +64,7 @@ class IndexController extends CommonController
       session('store_id',$store['store_id']);
     }
 
-    $activity = (new Activity)->Common_Find(['banner' => 1]); //轮播活动
+    $activity = (new Activity)->Common_Find(['banner' => 0]); //轮播活动
 
     $AdvertisementType = (new AdvertisementType)->Common_Find(['store_id' => $store['store_id'], 'status' => 0, 'type_name' => '首页']);
 

@@ -78,7 +78,7 @@ class SmsDemo
         $request->setPhoneNumbers($mobilephone);
 
         // 必填，设置签名名称，应严格按"签名名称"填写，请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/sign
-        $request->setSignName("电子DM");
+        $request->setSignName("虎驰传媒");
 
         // 必填，设置模板CODE，应严格按"模板CODE"填写, 请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/template
         $request->setTemplateCode($template);
