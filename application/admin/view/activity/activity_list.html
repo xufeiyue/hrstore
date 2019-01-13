@@ -40,6 +40,12 @@
         <input type="checkbox" name="state" value="{{d.id}}" lay-skin="switch" lay-text="ON|OFF" lay-filter="stateDemo" {{ d.state == 0 ? 'checked' : '' }}>
 
       </script>
+      <script type="text/html" id="switchbanner">
+
+        <input type="checkbox" name="banner" value="{{d.id}}" lay-skin="switch" lay-text="ON|OFF" lay-filter="bannerDemo" {{ d.banner == 0 ? 'checked' : '' }}>
+
+
+      </script>
       <script type="text/html" id="portrait" >
 
           <a href="{{d.activity_url}}"><img src="{{d.activity_url}}"  style="width: 100%;height: 100%"></a>
@@ -82,6 +88,7 @@
           ,{field: 'activity_name', title: '活动名称',align: 'center'}
           ,{field: 'activity_url', title: '活动图片',align: 'center',templet: '#portrait'}
           ,{field: 'state', title: '开关状态', align: 'center',templet: '#switchTpl', unresize: true}
+          ,{field: 'banner', title: '首页广告状态', align: 'center',templet: '#switchbanner', unresize: true}
           ,{field: 'pid_name', title: '来自', align: 'center',unresize: true}
           ,{field: 'create_time', title: '创建时间',align: 'center'}
           ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
@@ -104,6 +111,27 @@
           // layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
           //发异步更新数据
           $.post('/Admin/Activity/activity_stateupdate', {id:this.value,state: state}, function(res){
+            if (res.code == 1) {
+              layer.msg(res.msg,{icon:1,time:1000});
+              // table.reload('idTest');
+            }else{
+
+              layer.msg(res.msg,{icon:1,time:1000});
+            }
+
+          })
+        });
+
+
+        form.on('switch(bannerDemo)', function(obj){
+          var banner;
+          if (obj.elem.checked) {
+            banner = 0;
+          }else{
+            banner = 1;
+          }
+          //发异步更新数据
+          $.post('/Admin/Activity/activity_bannerupdate', {id:this.value,banner: banner}, function(res){
             if (res.code == 1) {
               layer.msg(res.msg,{icon:1,time:1000});
               // table.reload('idTest');

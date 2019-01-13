@@ -1,17 +1,36 @@
 {include file="common/header"}
+ <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+<link async rel="stylesheet" href="https://cdn.materialdesignicons.com/1.8.36/css/materialdesignicons.min.css"/>
+<link async rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css"/>
+<link async rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.7/typicons.min.css"/>
+<link async rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"/>
+<link  href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="__CSS__/demo.css">
+<link rel="stylesheet" type="text/css" href="__CSS__/pretty.min.css">
 <style>
+    html{
+        font-size: 10px;
+    }
+    .pretty{
+        width:100%;
+    }
+    .pretty label{
+        padding-left:30px;
+    }
+    .pretty i{
+        position:absolute;
+        left:0;
+    }
     .DiaoYan{
         width: 90%;
         margin: 0 auto;
         overflow: hidden;
         padding-bottom: 30px;
     }
-    i{
-        font-style: normal;
-        float: left;
-        width: 20px;
-    }
-    h1{
+
+
+    h2{
         font-size: 16px;
         line-height: 24px;
         margin: 0;
@@ -86,30 +105,21 @@
             <i class="am-icon-chevron-left"></i>
         </a>
     </div>
-    <h1 class="am-header-title">
-        <a href="" class="">调研</a>
+    <h1 class="am-header-title" style="line-height: 49px;">
+        <a href="" class="">{$title}</a>
     </h1>
 </header>
 <div style="height: 49px;"></div>
-<input type="hidden" name="id" id="id" value="{$id}">
 <div class="DiaoYan">
     <div class="Ti_box">
-        <!-- <h1 class="Ti_name">我是问题调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一</h1>
-        <ul class="Ti_info">
-            <li class="Ti_list Ti_Color"><i>A</i><p>调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一调查答案一</p></li>
-            <li class="Ti_list"><i>B</i><p>调查答案一</p></li>
-            <li class="Ti_list"><i>C</i><p>调查答案一</p></li>
-            <li class="Ti_list"><i>D</i><p>调查答案一</p></li>
-        </ul>
-        <div class="turn_box">
-            <span class="turn_left">上一题</span>
-            <span class="turn_right">下一题</span>
-            <span class="submit_btn">提交</span>
-        </div> -->
+        
     </div>
+    <input type="hidden" name="id" id="id" value="{$id}">
 </div>
 
 <script type="text/javascript">
+
+        
     
     $(function(){
 
@@ -131,13 +141,31 @@
         function set_problem(data,num){
 
             var html = ''
+                html += '<div id="none_'+num+'">';
+                html += '<h2 class="Ti_name">第'+(num+1)+'题：'+data.problem+'</h2>';
 
-            html += '<h1 class="Ti_name">第'+(num+1)+'题：'+data.problem+'</h1>';
-            html += '<ul class="Ti_info">';
-            for (b in data.content) {
-                html +=    '<li class="Ti_list"><i>'+b+'.</i><p>'+data.content[b]+'</p></li>';
+            if (data.type == 1) {
+
+                html += '<div class="container container_duoxuan">';
+                for (b in data.content) {
+                    html +=    '<div class="pretty warning">';
+                    html +=         '<input type="checkbox" class="checkbox_'+num+'" name="answer[]" data-id="'+data.id+'" value="'+b+'"/>';
+                    html +=         '<label><i class="mdi mdi-check"></i>'+b+'. '+data.content[b]+'</label>';
+                    html +=     '</div>';
+                }
+                html +=  '</div>';
+            }else{
+
+                html += '<div class="container container_danxuan">';
+                for (b in data.content) {
+                    html +=     '<div class="pretty inline">';
+                    html +=         '<input class="checkbox checkbox_'+num+'" type="checkbox" name="answer[]" data-id="'+data.id+'" value="'+b+'">';
+                    html +=         '<label><i class="mdi mdi-check"></i>'+b+'. '+data.content[b]+'</label>';
+                    html +=     '</div>';
+                }
+                html += '</div>';
             }
-            html += '</ul>';
+
             html += '<div class="turn_box">';
             html +=     '<span class="turn_left">上一题</span>';
             if (num+1 < count) {
@@ -147,26 +175,57 @@
                 html +=     '<span class="submit_btn">提交</span>';
             }
             html += '</div>';
-            $(".Ti_box").html('')
+            html += '</div>';
+
+            // $(".Ti_box").html('')
             $(".Ti_box").append(html)
 
         }
 
-        $(document).on('click','.Ti_list',function(){
-            $(".Ti_list").siblings().removeClass('Ti_Color');  
-            $(this).addClass('Ti_Color')
+        $(document).on('click','.checkbox',function(){
+
+           $(".checkbox_"+num).prop('checked',false);  //取消当前题的全部选中
+
+           $(this).prop('checked',true);  //选中当前
+        })
+
+        $(document).on('click','.submit_btn',function(){
+
+            var ids = []
+
+            $.each($('input:checkbox:checked'),function(){
+                ids.push({'problem_id':$(this).data('id'),answer:$(this).val()})
+            });
+            $.post("{:url('Index/diaoyan_add')}",{data:ids, questionnaire_id:id},function(data){
+
+                alert(data.msg)
+                window.history.go(-1);
+            })
+           
         })
 
         $(document).on('click','.turn_right',function(){
+            if ($(".checkbox_"+num).is(":checked") == false) { //判断这道题选择没
+                alert('请答题')
+                return false
+            }
+
             console.log(data)
+            $("#none_"+num).css("display","none");
             num++;
-            set_problem(data[num],num);
+            if ($("#none_"+num).length == 0) {
+                set_problem(data[num],num);
+            }else{
+                $("#none_"+num).css("display","block");
+            }
         })
 
         $(document).on('click','.turn_left',function(){
             if (num > 0) {
+                $("#none_"+num).css("display","none");
                 num--;
-                set_problem(data[num],num);
+                $("#none_"+num).css("display","block");
+                // set_problem(data[num],num);
             }
         })
 

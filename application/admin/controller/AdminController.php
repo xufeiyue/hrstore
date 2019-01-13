@@ -40,6 +40,7 @@ class AdminController extends Controller
         // $menu = $this->getMenus();
 
 		$controller = request()->controller();
+        
 		$menu = $this->getMenus($controller);
 
         $is_jurisdiction = is_jurisdiction(); //判断是否是店铺

@@ -11,6 +11,18 @@ class NewdiscoveryController extends AdminController
 	//列表
 	public function newdiscovery_list(){
 
+		$goods_name_url = '商品跳转链接：'.Request()->domain().'/home/Index/detail/id/id的值';
+
+		$activity_name_url = '活动跳转链接：'.Request()->domain().'/home/Activity/lq_huodong/id/id的值';
+
+		$qu_name_url = '问卷跳转链接：'.Request()->domain().'/home/Index/diaoyan/id/id的值';
+
+		$this->assign('goods_name_url',$goods_name_url);
+
+		$this->assign('activity_name_url',$activity_name_url);
+
+		$this->assign('qu_name_url',$qu_name_url);
+
 		return view();
 	}
 
