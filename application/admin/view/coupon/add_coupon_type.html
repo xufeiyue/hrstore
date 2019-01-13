@@ -34,9 +34,9 @@
             <label for="ticket_type" class="layui-form-label">
                 <span class="x-red">*</span>优惠类型
             </label>
-            <div class="layui-input-inline">
-                <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1"/>
-                <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2"/>
+            <div class="layui-input-inline" id="q1">
+                <input type="radio" name="ticket_type" value="1" title="平台卡券"/>
+                <input type="radio" name="ticket_type" value="2" title="单品卡券"/>
             </div>
         </div>
         <div class="layui-form-item">
@@ -148,6 +148,11 @@
             }
         });
 
+       
+        $(document).on('click','#q1',function(){
+           alert($("input[type='radio']:checked").val())
+        })
+
         //监听指定开关
         form.on('switch(switchTest)', function(data){
             console.log(data.othis)
@@ -195,12 +200,7 @@
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
 })();</script>
-<script>
-    $ = layui.jquery;
-    $("#q1").click(function () {
-        alert(1)
-    })
-</script>
+
 </body>
 
 </html>
