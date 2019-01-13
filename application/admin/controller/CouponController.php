@@ -148,10 +148,10 @@ class CouponController extends Controller
                 // 全场券不用绑定goods_id
                 // 更新card_ticket_type表 goods_id
                 $data['goods_id'] = 0;
-
+                $this->coupon_type->Common_Update(array('is_use'=>2),array('card_type_id'=>$data['card_type_id']));
             }else if ($ticket_type['ticket_type'] == 2){
                 // 更新card_ticket_type表 goods_id
-                $this->coupon_type->Common_Update(array('goods_id'=>$data['goods_id']),array('card_type_id'=>$data['card_type_id']));
+                $this->coupon_type->Common_Update(array('goods_id'=>$data['goods_id'],'is_use'=>2),array('card_type_id'=>$data['card_type_id']));
 
             }else{
                 return json(['code' => 2, 'msg' => '添加失败']);
