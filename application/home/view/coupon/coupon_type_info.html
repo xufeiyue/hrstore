@@ -15,7 +15,7 @@
 </div>
 <div class="ZLY_XingQing">
     <div style=" padding: 20px 0;width:100%;">
-        <img class="TiaoMa" style="width: 70%;display: none; border: 0; margin: 0 auto;" src="images/ZLY_tiaoxing.jpg"/>
+        <img class="TiaoMa" style="width: 70%;display: none; border: 0; margin: 0 auto;" src="{:url('Coupon/barcode',['barcode' => $card_ticket_info['barcode']])}"/>
         <span class="Quan_btn" style="display: block; margin: 20px auto;width: 60%;padding: 10px 0;color:#fff;text-align: center;background:#ff4f5f; ">立即使用</span>
     </div>
     <div style="background: #ffffff; padding: 10px; border-radius: 5px; font-size: 1.3rem;">
@@ -75,6 +75,9 @@
 <script>
     $(function () {
         $(".Quan_btn").click(function() {
+            $.post("{:url('Coupon/use_coupon')}",{goods_id: goods_id},function(res){
+                alert(res.msg)
+            })
             $(".TiaoMa").css("display","block");
             $(".Quan_btn").css("display","none");
         });

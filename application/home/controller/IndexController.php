@@ -1,5 +1,6 @@
 <?php
 namespace app\home\controller;
+use app\home\model\CouponType;
 use think\Controller;
 use app\home\model\Store;
 use app\home\model\Goods;
@@ -156,6 +157,16 @@ class IndexController extends CommonController
 
       $collection = 1; //收藏
     }
+
+    // 获取商品优惠券
+
+      $coupon_type_model = new CouponType();
+
+    $coupon_type_info = $coupon_type_model->Common_Find(array('goods_id'=>$goods_id));
+
+      $goods_detail['face_value'] = $coupon_type_info['face_value'];
+
+      $goods_detail['card_type_id'] = $coupon_type_info['card_type_id'];
 
     $this->assign('collection',$collection);
 

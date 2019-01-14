@@ -226,6 +226,7 @@ class MemberController extends CommonController
 
 	}
 
+
 	//修改资料
 	public function edit_member(){
 
@@ -262,5 +263,6 @@ class MemberController extends CommonController
 			return json(['code' => 400, 'msg' => '更新失败']);
 
 	}
+
 
 }
