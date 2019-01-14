@@ -25,7 +25,7 @@
       <div class="ZLY_info" style="overflow: hidden;">
         <span style="float: left;">优惠价格：</span>
         <ul style="float: left;">
-          <li>优惠券￥{$goods_detail['goods_present_price']}</li>
+          <li>优惠券￥{$goods_detail['face_value']}</li>
           <!--<li>优惠券￥60</li>-->
           <!--<li>优惠券￥60</li>-->
         </ul>
@@ -33,7 +33,7 @@
       <span style="font-size: 1.3rem;">活动时间：{$goods_detail['start_time']}至{$goods_detail['end_time']}</span>
     </div>
 
-
+<input type="hidden" name="card_type_id" value="{$goods_detail['start_time']}" id="card_type_id"/>
         <div style="background: #eee; height: 10px;"></div>
         <div class="am-tabs detail-list" style="background: #ffffff;" data-am-tabs>
       <ul class="am-tabs-nav am-nav am-nav-tabs" style="border-bottom: 1px solid #ff4646;">
@@ -69,7 +69,7 @@
  <script type="text/javascript">
   var goods_id = $("#goods_id").val();
    $(".join").click(function(){
-    $.post("{:url('Index/collection_and_coupons_update')}",{goods_id: goods_id, type: 2},function(res){
+    $.post("{:url('Coupon/receive_coupon')}",{goods_id: goods_id},function(res){
         alert(res.msg)
     })
    })

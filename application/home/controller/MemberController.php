@@ -210,5 +210,5 @@ class MemberController extends CommonController
 		return json(['code' => 400 , 'msg' => '绑定失败']);
 
 	}
-
+	
 }

@@ -27,4 +27,14 @@ class CouponType extends Common
             ->field($field)
             ->select();
     }
+
+    // 获取单品卡券列表
+    public function get_coupon_type_dp_list($w,$field){
+        return $data = Db::name($this->table)
+            ->alias('t1')
+            ->join('goods g','g.id = t1.goods_id','LEFT')
+            ->where($w)
+            ->field($field)
+            ->select();
+    }
 }
