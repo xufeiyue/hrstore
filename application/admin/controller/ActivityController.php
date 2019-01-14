@@ -4,6 +4,7 @@ use think\Controller;
 use think\Request;
 use app\admin\model\Activity;
 use app\admin\model\ActivityLibrary;
+use think\Db;
 class ActivityController extends AdminController
 {	
 	/*
@@ -90,45 +91,102 @@ class ActivityController extends AdminController
 
 		if ($_POST) {
 
-			$state = input('post.state/s');
+			$store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
 
-			if ($state == 'on') {
-				
-				$data['state'] = 0;
-			
-			}else{
-
-				$data['state'] = 1;
-			}
-
-			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
-
-			if (!$data['store_id'])
+			if (!$store_id)
 				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
-			$data['link_state'] = input('post.link_state/d');
+			Db::startTrans();
 
-			$data['url'] = input('post.url/s');
+			try{
 
-			$data['activity_name'] = input('post.activity_name/s');
+				if (is_array($store_id)) {
+					
+					$arr = [];
 
-			$data['activity_url'] = input('post.activity_url/s');
+					foreach ($store_id as $key => $value) {
 
-			$data['activity_detail'] = input('post.activity_detail/s');
+						$data['store_id'] = $value;
 
-			$data['activity_start_time'] = strtotime(input('post.activity_start_time/s'));
+						$state = input('post.state/s');
 
-			$data['activity_end_time'] = strtotime(input('post.activity_end_time/s'));
+						if ($state == 'on') {
+							
+							$data['state'] = 0;
+						
+						}else{
 
-			$data['create_time'] = time();
+							$data['state'] = 1;
+						}
 
-			$data['update_time'] = time();
-			
-			$add = (new Activity)->Common_Insert($data);
+						$data['link_state'] = input('post.link_state/d');
 
-			if($add)
+						$data['url'] = input('post.url/s');
+
+						$data['activity_name'] = input('post.activity_name/s');
+
+						$data['activity_url'] = input('post.activity_url/s');
+
+						$data['activity_detail'] = input('post.activity_detail/s');
+
+						$data['activity_start_time'] = strtotime(input('post.activity_start_time/s'));
+
+						$data['activity_end_time'] = strtotime(input('post.activity_end_time/s'));
+
+						$data['create_time'] = time();
+
+						$data['update_time'] = time();
+						
+						$arr[] = $data;
+					}
+
+					$add = (new Activity)->Common_InsertAll($arr);
+
+				}else{
+
+					$data['store_id'] = $store_id;
+
+					$state = input('post.state/s');
+
+					if ($state == 'on') {
+						
+						$data['state'] = 0;
+					
+					}else{
+
+						$data['state'] = 1;
+					}
+
+					$data['link_state'] = input('post.link_state/d');
+
+					$data['url'] = input('post.url/s');
+
+					$data['activity_name'] = input('post.activity_name/s');
+
+					$data['activity_url'] = input('post.activity_url/s');
+
+					$data['activity_detail'] = input('post.activity_detail/s');
+
+					$data['activity_start_time'] = strtotime(input('post.activity_start_time/s'));
+
+					$data['activity_end_time'] = strtotime(input('post.activity_end_time/s'));
+
+					$data['create_time'] = time();
+
+					$data['update_time'] = time();
+					
+					$add = (new Activity)->Common_Insert($data);
+				}
+
+				//  提交事务
+            	Db::commit();
 				return json(['code' => 200 , 'msg' => '新增成功']);
+			}catch (\Exception $e) {
+	            // 回滚事务
+	            Db::rollback();
 				return json(['code' => 400 , 'msg' => '新增失败']);
+	        }
+
 		}else{
 
 			return view();

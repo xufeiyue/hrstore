@@ -6,6 +6,7 @@ use app\admin\model\Problem;
 use app\admin\model\Questionnaire;
 use app\admin\model\ItemBank;
 use app\admin\model\Goods;
+use think\Db;
 class StatisticalController extends AdminController
 {
 	/*
@@ -75,32 +76,74 @@ class StatisticalController extends AdminController
 
 		if ($_POST) {
 		
-			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
+			$store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
 
-			if (!$data['store_id'])
+			if (!$store_id)
 				return json(['code' => 400 , 'msg' => '请选择店铺']);
+			Db::startTrans();
 
-			$data['problem'] = input('post.problem/s');
+			try{
+				if (is_array($store_id)) {
 
-			$answer = input('post.answer/a');
+					$arr = [];
+					
+					foreach ($store_id as $key => $value) {
+						
+						$data['store_id'] = $value;
 
-			$data['answer'] = json_encode($answer);
+						$data['problem'] = input('post.problem/s');
 
-			$data['type'] = input('post.type/d');
+						$answer = input('post.answer/a');
 
-			$content = input('content/a');
+						$data['answer'] = json_encode($answer);
 
-			$data['content'] = json_encode($content);
+						$data['type'] = input('post.type/d');
 
-			$data['create_time'] = time();
+						$content = input('content/a');
 
-			$data['update_time'] = time();
+						$data['content'] = json_encode($content);
 
-			$add = (new Problem)->Common_Insert($data);
+						$data['create_time'] = time();
 
-			if ($add)
+						$data['update_time'] = time();
+
+						$arr[] = $data;
+					}
+
+					$add = (new Problem)->Common_InsertAll($arr);
+
+				}else{
+
+					$data['store_id'] = $store_id;
+
+					$data['problem'] = input('post.problem/s');
+
+					$answer = input('post.answer/a');
+
+					$data['answer'] = json_encode($answer);
+
+					$data['type'] = input('post.type/d');
+
+					$content = input('content/a');
+
+					$data['content'] = json_encode($content);
+
+					$data['create_time'] = time();
+
+					$data['update_time'] = time();
+
+					$add = (new Problem)->Common_Insert($data);
+				}
+				
+				//  提交事务
+            	Db::commit();
 				return json(['code' => 200 , 'msg' => '新增成功']);
+			}catch (\Exception $e) {
+	            // 回滚事务
+	            Db::rollback();
 				return json(['code' => 400 , 'msg' => '新增失败']);
+	        }
+
 
 		}else{
 

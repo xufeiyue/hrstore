@@ -7,12 +7,19 @@
               <span class="x-red">*</span>选择店铺
             </label>
             <div class="layui-input-block">
-              <select name="store_id" lay-filter="store_id">
+              <!-- <select name="store_id" lay-filter="store_id">
                 <option value="0">请选择</option>
                 {volist name="store" id="vo"}
                     <option value="{$vo.id}">{$vo.name}</option>
                 {/volist}
-              </select>
+              </select> -->
+               <dl class="checkmod">
+              
+                <input type="checkbox" lay-filter="filter" title="全选">
+                {volist name="store" id="vo"}
+                     <input type="checkbox" name="store_id[]" value="{$vo['id']}" title="{$vo.name}">
+                {/volist}
+                </dl>
             </div>
           </div>
         {/if}
@@ -172,6 +179,13 @@
             // });
             // layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
           });
+
+          form.on('checkbox(filter)', function(data){ //全选
+
+              $(this).closest('dl').find('input').prop('checked',this.checked);
+             
+              form.render('checkbox');//渲染
+          });  
 
           //监听提交
           form.on('submit(add)', function(data){

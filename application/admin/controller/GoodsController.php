@@ -229,120 +229,251 @@ class GoodsController extends AdminController
 
 			$whether = ['on','off'];
 
-			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
+			$store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
 
-			if (!$data['store_id'])
+			if (!$store_id)
 				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
-			$state = input('post.state/s');
+			Db::startTrans();
+        	try{
 
-			$sell_well = input('post.sell_well/s');
+				if (is_array($store_id)) {
 
-			$characteristic = input('post.characteristic/s');
+					$arr = [];
+					
+					foreach ($store_id as $key => $value) {
 
-			$popularity = input('post.popularity/s');
+						$data['store_id'] = $value;
+						
+						$state = input('post.state/s');
 
-			$relation = input('post.relation/s');
+						$sell_well = input('post.sell_well/s');
 
-			if($state == $whether[0]){
+						$characteristic = input('post.characteristic/s');
 
-				$data['state'] = 0;
+						$popularity = input('post.popularity/s');
 
-			}else{
+						$relation = input('post.relation/s');
+
+						if($state == $whether[0]){
+
+							$data['state'] = 0;
+
+						}else{
+							
+							$data['state'] = 1;
+						}
+
+						if($sell_well == $whether[0]){
+
+							$data['sell_well'] = 0;
+
+						}else{
+							
+							$data['sell_well'] = 1;
+						}
+
+						if($characteristic == $whether[0]){
+
+							$data['characteristic'] = 0;
+
+						}else{
+							
+							$data['characteristic'] = 1;
+						}
+
+						if($popularity == $whether[0]){
+
+							$data['popularity'] = 0;
+
+						}else{
+							
+							$data['popularity'] = 1;
+						}
+
+						if($relation == $whether[0]){
+
+							$data['relation'] = 0;
+
+						}else{
+							
+							$data['relation'] = 1;
+						}
+
+						$data['start_time'] = strtotime(input('post.start_time/s'));
+
+						$data['end_time'] = strtotime(input('post.end_time/s'));
+
+						$data['type_id'] = input('post.type_id/d');
+
+						$data['activity_id'] = input('post.activity_id/d');
+
+						$data['goods_name'] = input('post.goods_name/s');		
+
+						$images = input('post.file/a');
+
+						$data['goods_images'] = json_encode($images);
+
+						$images_detail = input('post.file_detail/a');
+
+						if (empty($images_detail)) {
+							return json(['code' => 400 , 'msg' => '请上传图片']);
+						}
+
+						$images_detail1 = [];
+
+						foreach ($images_detail as $key => $value) {
+							
+							$images_detail1[] = urldecode($value);
+						}
+
+						$data['images_detail'] = json_encode($images_detail1);
+
+						$data['goods_original_price'] = input('post.goods_original_price/f');		
+
+						$data['goods_present_price'] = input('post.goods_present_price/f');		
+
+						$data['goods_stock'] = input('post.goods_stock/d');		
+
+						$goods_specifications = input('post.goods_specifications/a');		
+
+						$data['goods_specifications'] = json_encode($goods_specifications);
+
+						$goods_attribute = input('post.goods_attribute/a');		
+
+						$data['goods_attribute'] = json_encode($goods_attribute);
+
+						$data['goods_detail'] = input('post.goods_detail/s');
+
+						$data['create_time'] = time();
+
+						$data['update_time'] = time();
+						
+						$arr[] = $data;
+					}
+	
+					$add = (new Goods)->Common_InsertAll($arr);
+
+				}else{
+
+					$data['store_id'] = $store_id;
+
+					$state = input('post.state/s');
+
+					$sell_well = input('post.sell_well/s');
+
+					$characteristic = input('post.characteristic/s');
+
+					$popularity = input('post.popularity/s');
+
+					$relation = input('post.relation/s');
+
+					if($state == $whether[0]){
+
+						$data['state'] = 0;
+
+					}else{
+						
+						$data['state'] = 1;
+					}
+
+					if($sell_well == $whether[0]){
+
+						$data['sell_well'] = 0;
+
+					}else{
+						
+						$data['sell_well'] = 1;
+					}
+
+					if($characteristic == $whether[0]){
+
+						$data['characteristic'] = 0;
+
+					}else{
+						
+						$data['characteristic'] = 1;
+					}
+
+					if($popularity == $whether[0]){
+
+						$data['popularity'] = 0;
+
+					}else{
+						
+						$data['popularity'] = 1;
+					}
+
+					if($relation == $whether[0]){
+
+						$data['relation'] = 0;
+
+					}else{
+						
+						$data['relation'] = 1;
+					}
+
+					$data['start_time'] = strtotime(input('post.start_time/s'));
+
+					$data['end_time'] = strtotime(input('post.end_time/s'));
+
+					$data['type_id'] = input('post.type_id/d');
+
+					$data['activity_id'] = input('post.activity_id/d');
+
+					$data['goods_name'] = input('post.goods_name/s');		
+
+					$images = input('post.file/a');
+
+					$data['goods_images'] = json_encode($images);
+
+					$images_detail = input('post.file_detail/a');
+
+					if (empty($images_detail)) {
+						return json(['code' => 400 , 'msg' => '请上传图片']);
+					}
+
+					$images_detail1 = [];
+
+					foreach ($images_detail as $key => $value) {
+						
+						$images_detail1[] = urldecode($value);
+					}
+
+					$data['images_detail'] = json_encode($images_detail1);
+
+					$data['goods_original_price'] = input('post.goods_original_price/f');		
+
+					$data['goods_present_price'] = input('post.goods_present_price/f');		
+
+					$data['goods_stock'] = input('post.goods_stock/d');		
+
+					$goods_specifications = input('post.goods_specifications/a');		
+
+					$data['goods_specifications'] = json_encode($goods_specifications);
+
+					$goods_attribute = input('post.goods_attribute/a');		
+
+					$data['goods_attribute'] = json_encode($goods_attribute);
+
+					$data['goods_detail'] = input('post.goods_detail/s');
+
+					$data['create_time'] = time();
+
+					$data['update_time'] = time();
+
+					$add = (new Goods)->Common_Insert($data);
+				}
 				
-				$data['state'] = 1;
-			}
+				//  提交事务
+            	Db::commit();
+            	return json(['code' => 200 , 'msg' => '新增成功']);
+			} catch (\Exception $e) {
+	            // 回滚事务
+	            Db::rollback();
+	            return json(['code' => 400 , 'msg' => '新增失败']);
+	        }
 
-			if($sell_well == $whether[0]){
-
-				$data['sell_well'] = 0;
-
-			}else{
-				
-				$data['sell_well'] = 1;
-			}
-
-			if($characteristic == $whether[0]){
-
-				$data['characteristic'] = 0;
-
-			}else{
-				
-				$data['characteristic'] = 1;
-			}
-
-			if($popularity == $whether[0]){
-
-				$data['popularity'] = 0;
-
-			}else{
-				
-				$data['popularity'] = 1;
-			}
-
-			if($relation == $whether[0]){
-
-				$data['relation'] = 0;
-
-			}else{
-				
-				$data['relation'] = 1;
-			}
-
-			$data['start_time'] = strtotime(input('post.start_time/s'));
-
-			$data['end_time'] = strtotime(input('post.end_time/s'));
-
-			$data['type_id'] = input('post.type_id/d');
-
-			$data['activity_id'] = input('post.activity_id/d');
-
-			$data['goods_name'] = input('post.goods_name/s');		
-
-			$images = input('post.file/a');
-
-			$data['goods_images'] = json_encode($images);
-
-			$images_detail = input('post.file_detail/a');
-
-			if (empty($images_detail)) {
-				return json(['code' => 400 , 'msg' => '请上传图片']);
-			}
-
-			$images_detail1 = [];
-
-			foreach ($images_detail as $key => $value) {
-				
-				$images_detail1[] = urldecode($value);
-			}
-
-			$data['images_detail'] = json_encode($images_detail1);
-
-			$data['goods_original_price'] = input('post.goods_original_price/f');		
-
-			$data['goods_present_price'] = input('post.goods_present_price/f');		
-
-			$data['goods_stock'] = input('post.goods_stock/d');		
-
-			$goods_specifications = input('post.goods_specifications/a');		
-
-			$data['goods_specifications'] = json_encode($goods_specifications);
-
-			$goods_attribute = input('post.goods_attribute/a');		
-
-			$data['goods_attribute'] = json_encode($goods_attribute);
-
-			$data['goods_detail'] = input('post.goods_detail/s');
-
-			$data['create_time'] = time();
-
-			$data['update_time'] = time();
-
-			$add = (new Goods)->Common_Insert($data);
-
-			if($add)
-				return json(['code' => 200 , 'msg' => '新增成功']);
-				return json(['code' => 400 , 'msg' => '新增失败']);
 
 		}else{
 

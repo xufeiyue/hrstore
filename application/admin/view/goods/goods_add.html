@@ -7,17 +7,20 @@
               <span class="x-red">*</span>选择店铺
             </label>
             <div class="layui-input-block">
-              <select name="store_id" lay-filter="store_id">
-                <option value="0">请选择</option>
+              <!-- <select name="store_id" lay-filter="store_id"> -->
+                <dl class="checkmod">
+              
+                <input type="checkbox" lay-filter="filter" title="全选">
                 {volist name="store" id="vo"}
-                    <option value="{$vo.id}">{$vo.name}</option>
+                     <input type="checkbox" name="store_id[]" value="{$vo['id']}" title="{$vo.name}">
                 {/volist}
-              </select>
+                </dl>
+              <!-- </select> -->
             </div>
           </div>
         {/if}
         <div class="layui-form-item">
-          <label  for="store_id" class="layui-form-label">
+          <label  for="type_id" class="layui-form-label">
             <span class="x-red">*</span>选择商品类型
           </label>
           <div class="layui-input-block">
@@ -349,6 +352,13 @@
               form.render('select');
             })
           })
+
+          form.on('checkbox(filter)', function(data){ //全选
+
+              $(this).closest('dl').find('input').prop('checked',this.checked);
+             
+              form.render('checkbox');//渲染
+          });  
 
           //自定义验证规则
           form.verify({
