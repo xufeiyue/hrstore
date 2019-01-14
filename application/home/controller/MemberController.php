@@ -1,5 +1,6 @@
 <?php
 namespace app\home\controller;
+use app\home\model\Coupon;
 use think\Controller;
 use think\Db;
 use app\home\model\Goods;
@@ -173,9 +174,38 @@ class MemberController extends CommonController
 			return json(['code' => 400 , 'msg' => '清除失败']);
 	}
 
-	//我的卡卷
+	// 我的卡卷
 	public function yhq(){
+        $member_id = $this->userId;
+        $coupon_model = new Coupon();
+        // 我的优惠券且未过期的未使用的平台券
+        $list1 = $coupon_model->get_my_coupon_pt($member_id);
+        // 我的优惠券且未过期的未使用的单品券
+        $list2 = $coupon_model->get_my_coupon_dp($member_id);
+        foreach($list2 as $key=>$val){
+            $list2[$key]['goods_img'] = json_decode($val['goods_images'],true)[0];
+        }
 
+        // 我的已使用的优惠券且未过期的平台券
+        $list3 = $coupon_model->get_my_coupon_is_use_pt($member_id);
+        // 我的已使用的优惠券且未过期的单品券
+        $list4 = $coupon_model->get_my_coupon_is_use_dp($member_id);
+        foreach($list4 as $key=>$val){
+            $list4[$key]['goods_img'] = json_decode($val['goods_images'],true)[0];
+        }
+        // 我的过期优惠券的平台券
+        $list5 = $coupon_model->get_my_coupon_guoqi_pt($member_id);
+        // 我的过期优惠券的单品券
+        $list6 = $coupon_model->get_my_coupon_guoqi_dp($member_id);
+        foreach($list6 as $key=>$val){
+            $list6[$key]['goods_img'] = json_decode($val['goods_images'],true)[0];
+        }
+        $this->assign('list1',$list1);
+        $this->assign('list2',$list2);
+        $this->assign('list3',$list3);
+        $this->assign('list4',$list4);
+        $this->assign('list5',$list5);
+        $this->assign('list6',$list6);
 		return view();
 	}
 
@@ -263,6 +293,5 @@ class MemberController extends CommonController
 			return json(['code' => 400, 'msg' => '更新失败']);
 
 	}
-
 
 }

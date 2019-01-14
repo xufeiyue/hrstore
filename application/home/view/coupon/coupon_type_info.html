@@ -15,8 +15,16 @@
 </div>
 <div class="ZLY_XingQing">
     <div style=" padding: 20px 0;width:100%;">
+        {if condition="$check_status eq 1"}
         <img class="TiaoMa" style="width: 70%;display: none; border: 0; margin: 0 auto;" src="{:url('Coupon/barcode',['barcode' => $card_ticket_info['barcode']])}"/>
         <span class="Quan_btn" style="display: block; margin: 20px auto;width: 60%;padding: 10px 0;color:#fff;text-align: center;background:#ff4f5f; ">立即使用</span>
+        {elseif condition="$check_status eq '2'"/}
+        <img class="TiaoMa" style="width: 70%;display: block; border: 0; margin: 0 auto;" src="{:url('Coupon/barcode',['barcode' => $card_ticket_info['barcode']])}"/>
+        {else /}
+        暂时不能使用
+        {/if}
+
+
     </div>
     <div style="background: #ffffff; padding: 10px; border-radius: 5px; font-size: 1.3rem;">
         <p>
@@ -35,6 +43,7 @@
     </div>
 </div>
 <!--底部导航-->
+<input type="hidden" name="card_ticket_id" id="card_ticket_id" value="{$card_ticket_id}" />
 <div style="height: 55px;"></div>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
@@ -68,18 +77,21 @@
                 <span class="am-navbar-label">我的</span>
             </a>
         </li>
-    <div style="width: 100px;height: 100px;">
-        已使用
-    </div>
+
 </div>
 <script>
     $(function () {
+        var card_ticket_id = $("#card_ticket_id").val();
         $(".Quan_btn").click(function() {
-            $.post("{:url('Coupon/use_coupon')}",{goods_id: goods_id},function(res){
-                alert(res.msg)
+            $.post("{:url('Coupon/use_coupon')}",{card_ticket_id: card_ticket_id},function(res){
+                if(res.code == 200){
+                    $(".TiaoMa").css("display","block");
+                    $(".Quan_btn").css("display","none");
+                }else{
+                    alert(res.msg)
+                }
             })
-            $(".TiaoMa").css("display","block");
-            $(".Quan_btn").css("display","none");
+
         });
 
     });

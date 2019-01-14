@@ -55,14 +55,19 @@ class CouponController extends CommonController
 
     public function coupon_type_info(){
         $card_type_id = input('card_type_id/d');
+        $card_ticket_id = input('card_ticket_id/d');
         $coupon_type_model = new CouponType();
         $w['a_l.card_type_id'] = $card_type_id;
         $field = ['a_l.*'];
         $info = $coupon_type_model->getInfo($w,$field);
         $this->assign('info',$info);
+        $this->assign('card_ticket_id',$card_ticket_id);
+        // 获取此条码是否被使用
         $card_ticket_model = new Coupon();
-        $card_ticket = $card_ticket_model->Common_Find(array('card_type_id'=>$card_type_id,'status'=>2));
-        $this->assign('card_ticket_info',$card_ticket);
+        $card_ticket_info = $card_ticket_model->Common_Find(array('card_ticket_id'=>$card_ticket_id));
+        $check_status = $card_ticket_model->get_member_card_ticket_relation_info(array('card_ticket_id'=>$card_ticket_id));
+        $this->assign('check_status',$check_status['status']);
+        $this->assign('card_ticket_info',$card_ticket_info);
         return view();
     }
     // 条形码接口
@@ -147,6 +152,20 @@ class CouponController extends CommonController
             return json(['code' => 200 , 'msg' => '领取成功']);
         }else{
             return json(['code' => 100 , 'msg' => '领取失败']);
+        }
+    }
+
+    public function use_coupon(){
+        $w['card_ticket_id'] = input('card_ticket_id/d');
+        $w['member_id'] = $this->userId;
+        $data['status'] = 2;
+        $data['use_time'] = time();
+        $coupon_model = new Coupon();
+        $res = $coupon_model->use_coupon($w,$data);
+        if($res){
+            return json(['code' => 200 , 'msg' => '使用成功']);
+        }else{
+            return json(['code' => 100 , 'msg' => '使用失败']);
         }
     }
 }

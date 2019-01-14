@@ -23,198 +23,121 @@
 		</div>
 		<div class="quan-box quan-box1">
 			<ul class="pingtai">
+				{volist name="list1" id="vo"}
 				<li class="pingtai-list">
 					<div class="jinE pingtai-jinE">
-						<h1><i>￥</i>1000</h1>
+						<h1><i>￥</i>{$vo.face_value}</h1>
 						<p>平台卡券</p>
 					</div>
 					<div class="pingtai-info">
-						<p>适用于单笔满1000美金跟投使用</p>
+						<p>{$vo.ticket_name}</p>
 						<div class="pingtai-function">
-							<span>有效期：2019-10-21</span>
-							<a class="pingtai-btn" href="KQ_XiangQing.html">立即查看</a>
+							<span>有效期：{$vo.end_time_desc}</span>
+							<a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">立即查看</a>
 						</div>
 					</div>
 				</li>
-				<li class="pingtai-list">
-					<div class="jinE pingtai-jinE">
-						<h1><i>￥</i>1000</h1>
-						<p>平台卡券</p>
-					</div>
-					<div class="pingtai-info">
-						<p>适用于单笔满1000美金跟投使用</p>
-						<div class="pingtai-function">
-							<span>有效期：2019-10-21</span>
-							<a class="pingtai-btn" href="KQ_XiangQing.html">立即查看</a>
-						</div>
-					</div>
-				</li>
+				{/volist}
 			</ul>
 			<ul class="danpin">
+				{volist name="list2" id="vo"}
 				<li class="danpin-list">
 					<div class="jinE danpin-jinE">
-						<h1><i>￥</i>1000</h1>
+						<h1><i>￥</i>{$vo.face_value}</h1>
 						<p>单品卡券</p>
 					</div>
 					<div class="danpin-info">
 						<div class="danpin-product">
-							<img src="__IMAGES__/tele.png">
+							<img src="{$vo.goods_img}">
 						</div>
 						<div class="danpin-function">
-							<p>适用于单笔满1000美金跟投使用</p>
-							<span>有效期：2019-10-21</span>
+							<p>{$vo.ticket_name}</p>
+							<span>有效期：{$vo.end_time_desc}</span>
 						</div>
-						<a class="danpin-btn" href="KQ_XiangQing.html">立即查看</a>
+						<a class="danpin-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">立即查看</a>
 					</div>
 				</li>
-				<li class="danpin-list">
-					<div class="jinE danpin-jinE">
-						<h1><i>￥</i>1000</h1>
-						<p>单品卡券</p>
-					</div>
-					<div class="danpin-info">
-						<div class="danpin-product">
-							<img src="__IMAGES__/tele.png">
-						</div>
-						<div class="danpin-function">
-							<p>适用于单笔满1000美金跟投使用</p>
-							<span>有效期：2019-10-21</span>
-						</div>
-						<a class="danpin-btn" href="KQ_XiangQing.html">立即查看</a>
-					</div>
-				</li>
+				{/volist}
 			</ul>
 		</div>
 		<div class="quan-box quan-box2">
 			<ul class="pingtai">
+				{volist name="list3" id="vo"}
 				<li class="pingtai-list" style="position: relative;">
 					<div class="jinE pingtai-jinE">
-						<h1><i>￥</i>1000</h1>
+						<h1><i>￥</i>{$vo.face_value}</h1>
 						<p>平台卡券</p>
 					</div>
 					<div class="pingtai-info">
-						<p>适用于单笔满1000美金跟投使用</p>
+						<p>{$vo.ticket_name}</p>
 						<div class="pingtai-function">
-							<span>有效期：2019-10-21</span>
-							<a class="pingtai-btn">已使用</a>
+							<span>有效期：{$vo.end_time_desc}</span>
+							<a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">查看</a>
 						</div>
 					</div>
 				</li>
-				<li class="pingtai-list" style="position: relative;">
-					<div class="jinE pingtai-jinE">
-						<h1><i>￥</i>1000</h1>
-						<p>平台卡券</p>
-					</div>
-					<div class="pingtai-info">
-						<p>适用于单笔满1000美金跟投使用</p>
-						<div class="pingtai-function">
-							<span>有效期：2019-10-21</span>
-							<a class="pingtai-btn">已使用</a>
-						</div>
-					</div>
-				</li>
+				{/volist}
 			</ul>
 			<ul class="danpin">
+				{volist name="list4" id="vo"}
 				<li class="danpin-list" style="position: relative;">
 					<div class="jinE danpin-jinE">
-						<h1><i>￥</i>1000</h1>
+						<h1><i>￥</i>{$vo.face_value}</h1>
 						<p>单品卡券</p>
 					</div>
 					<div class="danpin-info">
 						<div class="danpin-product">
-							<img src="__IMAGES__/tele.png">
+							<img src="{$vo.goods_img}">
 						</div>
 						<div class="danpin-function">
-							<p>适用于单笔满1000美金跟投使用</p>
-							<span>有效期：2019-10-21</span>
+							<p>{$vo.ticket_name}</p>
+							<span>有效期：{$vo.end_time_desc}</span>
 						</div>
-						<a class="danpin-btn">已使用</a>
+						<a class="danpin-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">查看</a>
 					</div>
 				</li>
-				<li class="danpin-list" style="position: relative;">
-					<div class="jinE danpin-jinE">
-						<h1><i>￥</i>1000</h1>
-						<p>单品卡券</p>
-					</div>
-					<div class="danpin-info">
-						<div class="danpin-product">
-							<img src="__IMAGES__/tele.png">
-						</div>
-						<div class="danpin-function">
-							<p>适用于单笔满1000美金跟投使用</p>
-							<span>有效期：2019-10-21</span>
-						</div>
-						<a class="danpin-btn">已使用</a>
-					</div>
-				</li>
+				{/volist}
 			</ul>
 		</div>
 		<div class="quan-box quan-box3">
 			<ul class="pingtai">
+				{volist name="list5" id="vo"}
 				<li class="pingtai-list" style="position: relative;">
 					<div class="jinE pingtai-jinE">
-						<h1><i>￥</i>1000</h1>
+						<h1><i>￥</i>{$vo.face_value}</h1>
 						<p>平台卡券</p>
 					</div>
 					<div class="pingtai-info">
-						<p>适用于单笔满1000美金跟投使用</p>
+						<p>{$vo.ticket_name}</p>
 						<div class="pingtai-function">
-							<span>有效期：2019-10-21</span>
+							<span>有效期：{$vo.end_time_desc}</span>
 							<a class="pingtai-btn">立即使用</a>
 						</div>
 					</div>
 					<div class="gy-pic"><img src="__IMAGES__/guoqi.png"/></div>
 				</li>
-				<li class="pingtai-list" style="position: relative;">
-					<div class="jinE pingtai-jinE">
-						<h1><i>￥</i>1000</h1>
-						<p>平台卡券</p>
-					</div>
-					<div class="pingtai-info">
-						<p>适用于单笔满1000美金跟投使用</p>
-						<div class="pingtai-function">
-							<span>有效期：2019-10-21</span>
-							<a class="pingtai-btn">立即使用</a>
-						</div>
-					</div>
-					<div class="gy-pic"><img src="__IMAGES__/guoqi.png"/></div>
-				</li>
+				{/volist}
 			</ul>
 			<ul class="danpin">
+				{volist name="list6" id="vo"}
 				<li class="danpin-list" style="position: relative;">
 					<div class="jinE danpin-jinE">
-						<h1><i>￥</i>1000</h1>
+						<h1><i>￥</i>{$vo.face_value}</h1>
 						<p>单品卡券</p>
 					</div>
 					<div class="danpin-info">
 						<div class="danpin-product">
-							<img src="__IMAGES__/tele.png">
+							<img src="{$vo.goods_img}">
 						</div>
 						<div class="danpin-function">
-							<p>适用于单笔满1000美金跟投使用</p>
-							<span>有效期：2019-10-21</span>
+							<p>{$vo.ticket_name}</p>
+							<span>有效期：{$vo.end_time_desc}</span>
 						</div>
 						<a class="danpin-btn">立即使用</a>
 					</div>
 					<div class="gy-pic"><img src="__IMAGES__/guoqi.png"/></div>
 				</li>
-				<li class="danpin-list" style="position: relative;">
-					<div class="jinE danpin-jinE">
-						<h1><i>￥</i>1000</h1>
-						<p>单品卡券</p>
-					</div>
-					<div class="danpin-info">
-						<div class="danpin-product">
-							<img src="__IMAGES__/tele.png">
-						</div>
-						<div class="danpin-function">
-							<p>适用于单笔满1000美金跟投使用</p>
-							<span>有效期：2019-10-21</span>
-						</div>
-						<a class="danpin-btn">立即使用</a>
-					</div>
-					<div class="gy-pic"><img src="__IMAGES__/guoqi.png"/></div>
-				</li>
+				{/volist}
 			</ul>
 		</div>
 		<!--底部导航-->
