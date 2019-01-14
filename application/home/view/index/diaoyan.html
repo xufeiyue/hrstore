@@ -121,7 +121,7 @@
 
         
     
-    $(function(){
+    // $(function(){
 
         var num = 0;//初始数量
 
@@ -167,12 +167,12 @@
             }
 
             html += '<div class="turn_box">';
-            html +=     '<span class="turn_left">上一题</span>';
+            html +=     '<span class="turn_left" onclick="turn_left()">上一题</span>';
             if (num+1 < count) {
-                html +=     '<span class="turn_right">下一题</span>';
+                html +=     '<span class="turn_right" onclick="turn_right()">下一题</span>';
             }
             if (num+1 == count) {
-                html +=     '<span class="submit_btn">提交</span>';
+                html +=     '<span class="submit_btn" onclick="submit_btn()">提交</span>';
             }
             html += '</div>';
             html += '</div>';
@@ -189,7 +189,8 @@
            $(this).prop('checked',true);  //选中当前
         })
 
-        $(document).on('click','.submit_btn',function(){
+        // $(document).on('click','.submit_btn',function(){
+        function submit_btn(){
 
             var ids = []
 
@@ -202,9 +203,11 @@
                 window.history.go(-1);
             })
            
-        })
+        }
 
-        $(document).on('click','.turn_right',function(){
+        // $(document).on('click','.turn_right',function(){
+        function turn_right(){
+
             if ($(".checkbox_"+num).is(":checked") == false) { //判断这道题选择没
                 alert('请答题')
                 return false
@@ -218,18 +221,19 @@
             }else{
                 $("#none_"+num).css("display","block");
             }
-        })
+        }
 
-        $(document).on('click','.turn_left',function(){
+        // $(document).on('click','.turn_left',function(){
+        function turn_left(){
             if (num > 0) {
                 $("#none_"+num).css("display","none");
                 num--;
                 $("#none_"+num).css("display","block");
                 // set_problem(data[num],num);
             }
-        })
+        }
 
-    })
+    // })
 
 </script>
 
