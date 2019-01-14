@@ -103,7 +103,7 @@ class IndexController extends CommonController
     //产品分类
     $goods_type_list = (new GoodsType)->Common_Select($offset,$limit-1,$where,$order,$goods_type_field);
 
-    return json(['code' => 200, 'msg' => '请求成功', 'data' => ['store' => $store, 'goods_top_list' => $goods_top_list, 'activity' => $activity, 'Advertisement' => $Advertisement, 'goods_list' => $goods_list, 'goods_type_list' => $goods_type_list]]);
+    return json(['code' => 200, 'msg' => '请求成功', 'data' => ['store' => $store, 'goods_top_list' => $goods_top_list, 'activity' => $activity, 'advertisement' => $Advertisement, 'goods_list' => $goods_list, 'goods_type_list' => $goods_type_list]]);
 
   }
 

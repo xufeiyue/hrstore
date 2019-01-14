@@ -147,7 +147,7 @@ getinfo()
         $.post("{:url('Index/ajax_index')}",{latitude: latitude, longitude: longitude,store_id: store_id},function(res){
 
             var store = res.data.store
-            var Advertisement = res.data.Advertisement
+            var advertisement = res.data.advertisement
             var goods_list = res.data.goods_list
             var goods_type_list = res.data.goods_type_list
             var goods_top_list = res.data.goods_top_list
@@ -166,13 +166,13 @@ getinfo()
             $("#mendian").html('')
             $("#mendian").append(mendian_html)
 
-            var Advertisement_html = '';
-            for (i in Advertisement) {
-                Advertisement_html += '<li> <a href="'+Advertisement[i].url+'" ><img src="'+Advertisement[i].image+'" /></a></li>';
+            var advertisement_html = '';
+            for (i in advertisement) {
+                advertisement_html += '<li> <a href="'+advertisement[i].url+'" ><img src="'+advertisement[i].image+'" /></a></li>';
             }
-            console.log(Advertisement_html)
-            $("#Advertisement").html('');
-            $("#Advertisement").append(Advertisement_html);
+            console.log(advertisement_html)
+            // $("#Advertisement").html('');
+            $("#Advertisement").append(advertisement_html);
 
             var goods_list_html = '';
                 goods_list_html +='<div class="List-head">';
@@ -230,12 +230,16 @@ getinfo()
             $("#goods_top_list").append(goods_top_list_html)
 
             var activity_html = ''
-            activity_html += '<a href="{:url("Activity/lq_huodong")}?id='+activity.id+'">';
-            activity_html +=    '<img src="'+activity.activity_url+'" width="24"/>';
-            activity_html += '</a>';
+            if (activity) {
 
-            $("#activity").html('')
-            $("#activity").append(activity_html)
+                activity_html += '<a href="{:url("Activity/lq_huodong")}?id='+activity.id+'">';
+                activity_html +=    '<img src="'+activity.activity_url+'" width="24"/>';
+                activity_html += '</a>';
+
+                $("#activity").html('')
+                $("#activity").append(activity_html)
+            }
+            
         })
     }
 </script>

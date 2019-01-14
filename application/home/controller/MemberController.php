@@ -38,6 +38,21 @@ class MemberController extends CommonController
 	      }
 	    }
 
+	    if ($member['age'] && $member['family'] && $member['mobilephone']) {
+	    	
+	    	$Integrity = 100;
+
+	    }elseif ($member['age'] || $member['family'] || $member['mobilephone']) {
+
+	    	$Integrity = 80;
+
+	    }else{
+
+	    	$Integrity = 50;
+	    }
+
+	    $this->assign('Integrity',$Integrity);
+
 	    $this->assign('member',$member);
 
 		$this->assign('goods_list',$goods_list);
@@ -208,6 +223,43 @@ class MemberController extends CommonController
 		    Db::rollback();
 		}
 		return json(['code' => 400 , 'msg' => '绑定失败']);
+
+	}
+
+	//修改资料
+	public function edit_member(){
+
+		$mobilephone = input('post.mobilephone/s');
+
+		$code = input('post.code/s');
+
+		if ($mobilephone) {
+			
+			$sms = (new SmsLog)->Common_Find(['phone' => $mobilephone, 'code' => $code , 'create_time' => ['>',time() - 300], 'status' => 0]);
+
+			if (!$sms)
+				return json(['code' => 400 , 'msg' => '验证码不正确']);
+
+
+			(new SmsLog)->Common_Update(['status' => 1],['id' => $sms['id']]);
+
+			$data['mobilephone'] = $mobilephone;
+
+		}
+
+		$data['nickname'] = input('post.nickname/s');
+
+		$data['sex'] = input('post.sex/d');
+
+		$data['age'] = input('post.age/d');
+
+		$data['family'] = input('post.family/d');
+
+		$edit = (new Member)->Common_Update($data,['id' => $this->userId]);
+
+		if ($edit)
+			return json(['code' => 200, 'msg' => '更新成功']);
+			return json(['code' => 400, 'msg' => '更新失败']);
 
 	}
 

@@ -39,9 +39,9 @@
 				<div class="jindutiao">
 					<i>资料完整度</i>
 					<div class="tiao-box">
-						<span></span>
+						<span style="width: {$Integrity}%"></span>
 					</div>
-					<i>55%</i>
+					<i>{$Integrity}%</i>
 				</div>
 			</div>
 	    </div>
@@ -182,7 +182,7 @@
 				return false
 			}
 
-			$.post("{:url('Member/update_member')}",{mobilephone: mobilephone, code: code},function(data){
+			$.post("{:url('Member/edit_member')}",{mobilephone: mobilephone, code: code},function(data){
 
 				if (data.code == 200) {
 					$(".XinXi_box").css("display","none");
