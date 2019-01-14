@@ -1,4 +1,5 @@
 {include file="common/header"}
+<script src="__JS__/scrollAd.js"></script>
 <!--图片轮换-->
 <div>
     <header data-am-widget="header" class="am-header am-header-default tm1-head" id="shortbar" >
@@ -13,8 +14,8 @@
         </h1>
     </header>
 </div>
-<div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0" style="position: relative;">
-	<header data-am-widget="header" class="am-header am-header-default tm-head" id="shortbar" >
+<div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0" style="position: relative;height: 30%;">
+	<header data-am-widget="header" class="am-header am-header-default tm-head" id="shortbar" style="height: 24px;line-height: 22px;">
         <div class="am-header-left am-header-nav" id="store_name">
 
         </div>
@@ -22,9 +23,12 @@
             
         </div>
     </header>
-  <ul class="am-slides" id="Advertisement">
-  <!-- <li> <a href="" ><img src="/uploads/member/20190113\63281744935b39e778f23caf040880b8.png" /></a></li> -->
-  </ul>
+    <div class="box">
+        <ol></ol>
+        <ul id="ulList">
+        </ul>
+    </div>
+
 </div>
 <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  id="goods_list">
     
@@ -141,7 +145,7 @@
         });
     });
     var store_id = $("#store_id").val()
-getinfo()
+// getinfo()
     function getinfo(latitude,longitude){
 
         $.post("{:url('Index/ajax_index')}",{latitude: latitude, longitude: longitude,store_id: store_id},function(res){
@@ -167,12 +171,18 @@ getinfo()
             $("#mendian").append(mendian_html)
 
             var advertisement_html = '';
+
             for (i in advertisement) {
-                advertisement_html += '<li> <a href="'+advertisement[i].url+'" ><img src="'+advertisement[i].image+'" /></a></li>';
+                // alert(i)
+                if (i == 0) {
+                    advertisement_html += '<li class="active" style="left:0;z-index:11;"> <a href="'+advertisement[i].url+'" ><img src="'+advertisement[i].image+'" /></a></li>';
+                }else{
+                    advertisement_html += '<li> <a href="'+advertisement[i].url+'" ><img src="'+advertisement[i].image+'" /></a></li>';
+                }
             }
             console.log(advertisement_html)
-            // $("#Advertisement").html('');
-            $("#Advertisement").append(advertisement_html);
+            $("#ulList").append(advertisement_html);
+            scrollAd(".box")
 
             var goods_list_html = '';
                 goods_list_html +='<div class="List-head">';

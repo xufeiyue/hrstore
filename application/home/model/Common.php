@@ -51,7 +51,7 @@ class Common
 	//公共新增
 	public function Common_Insert($data=[]){
 
-		return Db::name($this->table)->insert($data);
+		return Db::name($this->table)->insertGetId($data);
 
 	}
 

@@ -59,7 +59,8 @@ class WxController extends Controller
     	   $data['update_time'] = time();
 
     	   //创建新用户
-    	   $member = (new Member)->Common_Insert($data);
+    	   $userId = (new Member)->Common_Insert($data);
+           $member = (new Member)->Common_Find(['id' => $userId]); //用户信息
         }
       
        session('wechat_user',$member);
