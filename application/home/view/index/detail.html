@@ -21,9 +21,9 @@
     <div class="detal-info" style=" margin-top: 10px;">
       <span style="padding: 5px 10px; background: #ff4646; color: #ffffff;">产品名称</span>
       <p>{$goods_detail['goods_name']}</p>
-      <h2>商城价：<span>￥{$goods_detail['goods_original_price']}</span></h2>
+      <!--<h2>商城价：<span>￥{$goods_detail['goods_original_price']}</span></h2>-->
       <div class="ZLY_info" style="overflow: hidden;">
-        <span style="float: left;">优惠价格：</span>
+        <span style="float: left;">优惠价格：{$goods_detail['goods_present_price']}</span><br />
         <ul style="float: left;">
           <li>优惠券￥{$goods_detail['face_value']}</li>
           <!--<li>优惠券￥60</li>-->

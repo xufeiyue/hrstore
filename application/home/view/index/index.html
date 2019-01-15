@@ -1,7 +1,7 @@
 {include file="common/header"}
 <script src="__JS__/scrollAd.js"></script>
 <!--图片轮换-->
-<div>
+<!--<div>
     <header data-am-widget="header" class="am-header am-header-default tm1-head" id="shortbar" >
         <div class="am-header-left am-header-nav">
             <a href="{:url('Index/city')}" class="">
@@ -13,7 +13,7 @@
            {$title}
         </h1>
     </header>
-</div>
+</div>-->
 <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0" style="position: relative;height: 30%;">
 	<header data-am-widget="header" class="am-header am-header-default tm-head" id="shortbar" style="height: 24px;line-height: 22px;">
         <div class="am-header-left am-header-nav" id="store_name">
@@ -195,8 +195,7 @@ getinfo()
                 goods_list_html +=        '<a href="{:url("Index/detail")}?id='+goods_list[i].id+'" class="">';
                 goods_list_html +=            '<img src="'+goods_list[i].goods_images+'" />';
                 goods_list_html +=            '<h3 class="am-gallery-title">'+goods_list[i].goods_name+'</h3>';
-                goods_list_html +=            '<div class="am-gallery-desc am-gallery-yuan">原价￥'+goods_list[i].goods_original_price+'</div>';
-                goods_list_html +=            '<div class="am-gallery-desc">折扣价￥'+goods_list[i].goods_present_price+'</div>';
+                goods_list_html +=            '<div class="am-gallery-desc">优惠价￥'+goods_list[i].goods_present_price+'</div>';
                 goods_list_html +=        '</a>';
                 goods_list_html +=    '</div>';
                 goods_list_html += '</li>';
