@@ -1,10 +1,14 @@
 {include file="common/header"}
 	{if condition="$member['mobilephone'] eq ''"}
-	<div class="XinXi_box" style="position: fixed;top:0;left: 0; z-index: 1000;background: rgba(0,0,0,0.6); width: 100%; height: 100%;">
-		<div style="display: block; margin: 45% auto 0; width: 80%; background: #f5f5f5; border-radius: 10px; position: relative;">
-			<span class="fa fa-remove fa-lg Cha_btn" style="right: 1px;top:1px; font-weight: 200; display: block;position: absolute; color: #999999;"></span>
+	<div class="XinXi_box">
+		<div class="XinXi">
+			<span class="iconfont icon-cha Cha_btn"></span>
+			<div class="ytafg">
+				<i class="iconfont icon-shouji1"></i>
 			<input type="text" name="mobilephone" id="mobilephone" value="" placeholder="请输入手机号" class="login-password">
+			</div>
 			<div class="yzm">
+				<i class="iconfont icon-mima1"></i>
 				<input type="text" name="code" id="code" value="" class="reg-yzm" placeholder="输入验证码" />
 				<input type="button" class="yzm-hq" value="获取验证码" />
 			</div>
@@ -31,8 +35,8 @@
 		    	<div class="mem-pic-bg" style="background-image: url({$member['wx_url']});"></div>
 	    	</div>
 			<div class="mem-tit">
-				<span>{$member['nickname']}</span>
-				<a href="infor.html" style="display: block; float: right; padding: 0 5px; text-align: center;">
+				<span style="max-width: 70%;font-size: 1.6rem; display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;float: left;">{$member['nickname']}</span>
+				<a href="infor.html" style="display: block; float: left; padding: 0 5px; text-align: center;">
 					<i class="fa fa-id-card-o fa-1x"></i>
 					<p style="font-size: .725rem;">完善资料</p>
 				</a>
@@ -43,6 +47,7 @@
 					</div>
 					<i>{$Integrity}%</i>
 				</div>
+				<span style="font-size: 1.5rem;">手机号：<i style="font-style: normal;">{$member['mobilephone']}</i></span>
 			</div>
 	    </div>
 		<ul class="member-menu">
