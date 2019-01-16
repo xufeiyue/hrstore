@@ -60,14 +60,14 @@
                   <textarea type="text" id="opinion_completion" name="opinion_completion" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>
               </div>
           </div>
-
-          <div class="layui-form-item">
-              <label class="layui-form-label">
-                  <span class="x-red">*</span>选择问题
-              </label>
-              <table class="layui-table" id="demo" lay-filter="useruv">
-                </table>
+          
+          <div id="question">
+            
           </div>
+
+          <div class="layui-btn layui-btn-xs radio_d">单选题</div>
+          <div class="layui-btn layui-btn-xs checkbox_d">多选题</div>
+          <div class="layui-btn layui-btn-xs text_d">文本题</div>
 
           <div class="layui-form-item">
               <label for="L_repass" class="layui-form-label">
@@ -167,19 +167,113 @@
             form.render('checkbox');//渲染
           });
 
+          var num = 0;
+
+          $(".radio_d").click(function(){
+            var html = '';
+              
+              html += '<div class="layui-form-item">';
+              html +=  '<label for="activity_name" class="layui-form-label">';
+              html +=      '<span class="x-red">*</span>'+(num+1)+'.问题';
+              html +=  '</label>';
+              html +=  '<div class="layui-input-block">';
+              html +=      '<input type="text" id="problem" name="problem['+num+']" lay-verify="required" autocomplete="off" class="layui-input">';
+              html +=  '</div>';
+              html += '</div>';
+
+              var arr = ['A','B','C','D'];
+
+              for (i in arr){
+                html +='<div class="layui-form-item">';
+                html +=  '<label for="activity_name" class="layui-form-label">';
+                html +=      '<span class="x-red">*</span>'+arr[i]+'';
+                html +=  '</label>';
+                html +=  '<div class="layui-input-block">';
+                html +=     '<textarea type="text" name="content['+num+']['+arr[i]+']" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>';
+                html +=     '<input data-id="'+num+'" class="checkbox_'+num+'" type="checkbox" lay-filter="dx" name="answer['+num+']" value="'+arr[i]+'" title="'+arr[i]+'" lay-skin="primary">';
+                html +=     '<input type="hidden" name="type['+num+']" value="0">';
+                html +=  '</div>';
+                html +='</div>';
+              }
+
+              $("#question").append(html);
+              form.render('checkbox');//渲染
+              num++;
+          })
+
+          form.on('checkbox(dx)', function (data) {   //单选题控制
+
+            var id = $(this).data('id');
+
+            $(".checkbox_"+id).prop('checked',false);  //取消当前题的全部选中
+
+            $(this).prop('checked',true);  //选中当前   
+
+            form.render('checkbox');
+          });
+
+          $(".checkbox_d").click(function(){
+            var html = '';
+              
+            html += '<div class="layui-form-item">';
+            html +=  '<label for="activity_name" class="layui-form-label">';
+            html +=      '<span class="x-red">*</span>'+(num+1)+'.问题';
+            html +=  '</label>';
+            html +=  '<div class="layui-input-block">';
+            html +=      '<input type="text" id="problem" name="problem['+num+']" lay-verify="required" autocomplete="off" class="layui-input">';
+            html +=  '</div>';
+            html += '</div>';
+
+            var arr = ['A','B','C','D'];
+
+            for (i in arr){
+              html +='<div class="layui-form-item">';
+              html +=  '<label for="activity_name" class="layui-form-label">';
+              html +=      '<span class="x-red">*</span>'+arr[i]+'';
+              html +=  '</label>';
+              html +=  '<div class="layui-input-block">';
+              html +=      '<textarea type="text" name="content['+num+']['+arr[i]+']" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>';
+              html +=        '<input type="checkbox" name="answer['+num+']" value="'+arr[i]+'" lay-skin="primary" title="'+arr[i]+'">';
+              html +=     '<input type="hidden" name="type['+num+']" value="1">';
+              html +=  '</div>';
+              html +='</div>';
+            }
+
+            $("#question").append(html);
+            form.render('checkbox');//渲染
+            num++;
+          })
+
+          $(".text_d").click(function(){
+            var html = '';
+            html += '<div class="layui-form-item">';
+            html +=  '<label for="activity_name" class="layui-form-label">';
+            html +=      '<span class="x-red">*</span>'+(num+1)+'.问题';
+            html +=  '</label>';
+            html +=  '<div class="layui-input-block">';
+            html +=      '<input type="text" id="problem" name="problem['+num+']" lay-verify="required" autocomplete="off" class="layui-input">';
+             html +=     '<input type="hidden" name="type['+num+']" value="2">';
+            html +=  '</div>';
+            html += '</div>';
+            $("#question").append(html);
+            num++;
+          })
+
           //监听提交
           form.on('submit(add)', function(data){
-            var checkStatus = table.checkStatus('idTest')
-            ,data1 = checkStatus.data;
-            if(data1 == ''){
-              layer.msg('请添加问题', {icon: 1});
-              return false;
-            }
-            var problem_id = [];
-            for (var i = 0; i < data1.length; i++) {
-              problem_id.push(data1[i].id)
-            }
-            data.field.problem_id = problem_id
+            // console.log(data.field)
+            // return false
+            // var checkStatus = table.checkStatus('idTest')
+            // ,data1 = checkStatus.data;
+            // if(data1 == ''){
+            //   layer.msg('请添加问题', {icon: 1});
+            //   return false;
+            // }
+            // var problem_id = [];
+            // for (var i = 0; i < data1.length; i++) {
+            //   problem_id.push(data1[i].id)
+            // }
+            // data.field.problem_id = problem_id
             //发异步，把数据提交给php
             $.post('/Admin/Statistical/questionnaire_add', data.field, function(res){
 

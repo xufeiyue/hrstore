@@ -283,7 +283,33 @@ class StatisticalController extends AdminController
 	public function questionnaire_add(){
 
 		if ($_POST) {
-			
+			$data = input('post.');
+			echo '<pre>';print_r($data);exit;
+				
+			$problem = input('post.problem/a'); //问题
+
+			$type = input('post.type/a'); //问题类型
+
+			$content = input('post.content/a');
+
+			$answer = input('post.answer/a');
+
+			foreach ($problem as $key => $value) {
+
+				if ($type[$key] == 1) { //多选
+					
+				}elseif ($type[$key] == 2) { //文本
+					
+				}else{ //单选
+
+					$info['content'] = $content[$key];
+					
+				}
+				
+				$info['problem'] = $value;
+
+			}
+
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
 			if (!$data['store_id'])

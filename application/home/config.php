@@ -10,6 +10,7 @@ return [
         '__CSS__'    =>  '/static/home/css',
         '__IMG__'    =>  '/static/home/img',
         '__IMAGES__'    =>  '/static/home/images',
+        '__ICON__'    =>  '/static/home/icon',
     ],
 	  // 控制器类后缀
     'controller_suffix'      => true,
