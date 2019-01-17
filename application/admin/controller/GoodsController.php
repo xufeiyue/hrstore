@@ -7,6 +7,7 @@ use app\admin\model\GoodsType;
 use app\admin\model\Goods;
 use app\admin\model\CommodityBank;
 use app\admin\model\Activity;
+use app\admin\model\GoodsBrand;
 class GoodsController extends AdminController
 {
 	/*
@@ -56,7 +57,7 @@ class GoodsController extends AdminController
 
 		if ($_POST) {
 				
-			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
+			$store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
 
 			$data['goods_type_name'] = input('post.goods_type_name/s');
 
@@ -68,11 +69,39 @@ class GoodsController extends AdminController
 
 			$data['update_time'] = time();
 
-			$add = (new GoodsType)->Common_Insert($data);
+			Db::startTrans();
+        	try{
 
-			if ($add)
+				if (is_array($store_id)) {
+
+					$arr = [];
+					
+					foreach ($store_id as $key => $value) {
+						
+						$data['store_id'] = $value;
+
+						$arr[] = $data;
+					}
+
+					(new GoodsType)->Common_InsertAll($arr);
+
+				}else{
+
+					$data['store_id'] = $store_id;
+
+					(new GoodsType)->Common_Insert($data);
+				}
+
+
+				//提交事务
+				Db::commit();
 				return json(['code' => 200 , 'msg' => '新增成功']);
-				return json(['code' => 400 , 'msg' => '新增失败']);
+			}catch (\Exception $e) {
+	            // 回滚事务
+	            Db::rollback();
+	            return json(['code' => 400 , 'msg' => '新增失败']);
+	        }
+
 
 		}else{
 
@@ -234,6 +263,112 @@ class GoodsController extends AdminController
 			if (!$store_id)
 				return json(['code' => 400 , 'msg' => '请选择店铺']);
 
+			$state = input('post.state/s');
+
+			$sell_well = input('post.sell_well/s');
+
+			$characteristic = input('post.characteristic/s');
+
+			$popularity = input('post.popularity/s');
+
+			$relation = input('post.relation/s');
+
+			if($state == $whether[0]){
+
+				$data['state'] = 0;
+
+			}else{
+				
+				$data['state'] = 1;
+			}
+
+			if($sell_well == $whether[0]){
+
+				$data['sell_well'] = 0;
+
+			}else{
+				
+				$data['sell_well'] = 1;
+			}
+
+			if($characteristic == $whether[0]){
+
+				$data['characteristic'] = 0;
+
+			}else{
+				
+				$data['characteristic'] = 1;
+			}
+
+			if($popularity == $whether[0]){
+
+				$data['popularity'] = 0;
+
+			}else{
+				
+				$data['popularity'] = 1;
+			}
+
+			if($relation == $whether[0]){
+
+				$data['relation'] = 0;
+
+			}else{
+				
+				$data['relation'] = 1;
+			}
+
+			$data['brand_id'] = input('post.brand_id/d');
+
+			$data['start_time'] = strtotime(input('post.start_time/s'));
+
+			$data['end_time'] = strtotime(input('post.end_time/s'));
+
+			$data['type_id'] = input('post.type_id/d');
+
+			$data['activity_id'] = input('post.activity_id/d');
+
+			$data['goods_name'] = input('post.goods_name/s');		
+
+			$images = input('post.file/a');
+
+			$data['goods_images'] = json_encode($images);
+
+			$images_detail = input('post.file_detail/a');
+
+			if (empty($images_detail)) {
+				return json(['code' => 400 , 'msg' => '请上传图片']);
+			}
+
+			$images_detail1 = [];
+
+			foreach ($images_detail as $key => $value) {
+				
+				$images_detail1[] = urldecode($value);
+			}
+
+			$data['images_detail'] = json_encode($images_detail1);
+
+			$data['goods_original_price'] = input('post.goods_original_price/f');		
+
+			$data['goods_present_price'] = input('post.goods_present_price/f');		
+
+			$data['goods_stock'] = input('post.goods_stock/d');		
+
+			$goods_specifications = input('post.goods_specifications/a');		
+
+			$data['goods_specifications'] = json_encode($goods_specifications);
+
+			$goods_attribute = input('post.goods_attribute/a');		
+
+			$data['goods_attribute'] = json_encode($goods_attribute);
+
+			$data['goods_detail'] = input('post.goods_detail/s');
+
+			$data['create_time'] = time();
+
+			$data['update_time'] = time();
+
 			Db::startTrans();
         	try{
 
@@ -245,224 +380,16 @@ class GoodsController extends AdminController
 
 						$data['store_id'] = $value;
 						
-						$state = input('post.state/s');
-
-						$sell_well = input('post.sell_well/s');
-
-						$characteristic = input('post.characteristic/s');
-
-						$popularity = input('post.popularity/s');
-
-						$relation = input('post.relation/s');
-
-						if($state == $whether[0]){
-
-							$data['state'] = 0;
-
-						}else{
-							
-							$data['state'] = 1;
-						}
-
-						if($sell_well == $whether[0]){
-
-							$data['sell_well'] = 0;
-
-						}else{
-							
-							$data['sell_well'] = 1;
-						}
-
-						if($characteristic == $whether[0]){
-
-							$data['characteristic'] = 0;
-
-						}else{
-							
-							$data['characteristic'] = 1;
-						}
-
-						if($popularity == $whether[0]){
-
-							$data['popularity'] = 0;
-
-						}else{
-							
-							$data['popularity'] = 1;
-						}
-
-						if($relation == $whether[0]){
-
-							$data['relation'] = 0;
-
-						}else{
-							
-							$data['relation'] = 1;
-						}
-
-						$data['start_time'] = strtotime(input('post.start_time/s'));
-
-						$data['end_time'] = strtotime(input('post.end_time/s'));
-
-						$data['type_id'] = input('post.type_id/d');
-
-						$data['activity_id'] = input('post.activity_id/d');
-
-						$data['goods_name'] = input('post.goods_name/s');		
-
-						$images = input('post.file/a');
-
-						$data['goods_images'] = json_encode($images);
-
-						$images_detail = input('post.file_detail/a');
-
-						if (empty($images_detail)) {
-							return json(['code' => 400 , 'msg' => '请上传图片']);
-						}
-
-						$images_detail1 = [];
-
-						foreach ($images_detail as $key => $value) {
-							
-							$images_detail1[] = urldecode($value);
-						}
-
-						$data['images_detail'] = json_encode($images_detail1);
-
-						$data['goods_original_price'] = input('post.goods_original_price/f');		
-
-						$data['goods_present_price'] = input('post.goods_present_price/f');		
-
-						$data['goods_stock'] = input('post.goods_stock/d');		
-
-						$goods_specifications = input('post.goods_specifications/a');		
-
-						$data['goods_specifications'] = json_encode($goods_specifications);
-
-						$goods_attribute = input('post.goods_attribute/a');		
-
-						$data['goods_attribute'] = json_encode($goods_attribute);
-
-						$data['goods_detail'] = input('post.goods_detail/s');
-
-						$data['create_time'] = time();
-
-						$data['update_time'] = time();
-						
 						$arr[] = $data;
 					}
 	
-					$add = (new Goods)->Common_InsertAll($arr);
+					(new Goods)->Common_InsertAll($arr);
 
 				}else{
 
 					$data['store_id'] = $store_id;
 
-					$state = input('post.state/s');
-
-					$sell_well = input('post.sell_well/s');
-
-					$characteristic = input('post.characteristic/s');
-
-					$popularity = input('post.popularity/s');
-
-					$relation = input('post.relation/s');
-
-					if($state == $whether[0]){
-
-						$data['state'] = 0;
-
-					}else{
-						
-						$data['state'] = 1;
-					}
-
-					if($sell_well == $whether[0]){
-
-						$data['sell_well'] = 0;
-
-					}else{
-						
-						$data['sell_well'] = 1;
-					}
-
-					if($characteristic == $whether[0]){
-
-						$data['characteristic'] = 0;
-
-					}else{
-						
-						$data['characteristic'] = 1;
-					}
-
-					if($popularity == $whether[0]){
-
-						$data['popularity'] = 0;
-
-					}else{
-						
-						$data['popularity'] = 1;
-					}
-
-					if($relation == $whether[0]){
-
-						$data['relation'] = 0;
-
-					}else{
-						
-						$data['relation'] = 1;
-					}
-
-					$data['start_time'] = strtotime(input('post.start_time/s'));
-
-					$data['end_time'] = strtotime(input('post.end_time/s'));
-
-					$data['type_id'] = input('post.type_id/d');
-
-					$data['activity_id'] = input('post.activity_id/d');
-
-					$data['goods_name'] = input('post.goods_name/s');		
-
-					$images = input('post.file/a');
-
-					$data['goods_images'] = json_encode($images);
-
-					$images_detail = input('post.file_detail/a');
-
-					if (empty($images_detail)) {
-						return json(['code' => 400 , 'msg' => '请上传图片']);
-					}
-
-					$images_detail1 = [];
-
-					foreach ($images_detail as $key => $value) {
-						
-						$images_detail1[] = urldecode($value);
-					}
-
-					$data['images_detail'] = json_encode($images_detail1);
-
-					$data['goods_original_price'] = input('post.goods_original_price/f');		
-
-					$data['goods_present_price'] = input('post.goods_present_price/f');		
-
-					$data['goods_stock'] = input('post.goods_stock/d');		
-
-					$goods_specifications = input('post.goods_specifications/a');		
-
-					$data['goods_specifications'] = json_encode($goods_specifications);
-
-					$goods_attribute = input('post.goods_attribute/a');		
-
-					$data['goods_attribute'] = json_encode($goods_attribute);
-
-					$data['goods_detail'] = input('post.goods_detail/s');
-
-					$data['create_time'] = time();
-
-					$data['update_time'] = time();
-
-					$add = (new Goods)->Common_Insert($data);
+					(new Goods)->Common_Insert($data);
 				}
 				
 				//  提交事务
@@ -485,9 +412,13 @@ class GoodsController extends AdminController
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 
+			$goods_brand = (new GoodsBrand)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
+
 			$activity = (new Activity)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_name']);
 
 			$this->assign('activity',$activity);
+
+			$this->assign('goods_brand',$goods_brand);
 
 			$this->assign('goods_type',$goods_type);
 
@@ -564,6 +495,8 @@ class GoodsController extends AdminController
 				$data['relation'] = 1;
 			}
 
+			$data['brand_id'] = input('post.brand_id/d');
+
 			$data['start_time'] = strtotime(input('post.start_time/s'));
 
 			$data['end_time'] = strtotime(input('post.end_time/s'));
@@ -627,8 +560,31 @@ class GoodsController extends AdminController
 
 			$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
 
-			$activity = (new Activity)->Common_All_Select(['store_id' => $list['store_id'] , 'status' => 0],['id' => 'desc'],['id','activity_name']);
+			$goods_platform_type = (new GoodsType)->type(['store_id' => 0 , 'status' => 0],$order); //平台类型
 
+			if ($goods_platform_type && $goods_type) {
+				
+				$goods_type = array_merge($goods_platform_type,$goods_type);
+
+			}elseif ($goods_platform_type && empty($goods_type)) {
+
+				$goods_type = $goods_platform_type;
+			}
+
+			$goods_brand = (new GoodsBrand)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
+
+			$goods_platform_brand = (new GoodsBrand)->type(['store_id' => 0 , 'status' => 0],$order);
+
+			if ($goods_platform_brand && $goods_brand) {
+				
+				$goods_brand = array_merge($goods_platform_brand,$goods_brand);
+			
+			}elseif ($goods_platform_brand && empty($goods_brand)) {
+
+				$goods_brand = $goods_platform_brand;
+			}
+
+			$activity = (new Activity)->Common_All_Select(['store_id' => $list['store_id'] , 'status' => 0],['id' => 'desc'],['id','activity_name']);
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 
@@ -662,6 +618,8 @@ class GoodsController extends AdminController
 			$this->assign('list',$list);
 
 			$this->assign('activity',$activity);
+
+			$this->assign('goods_brand',$goods_brand);
 
 			$this->assign('goods_type',$goods_type);
 
@@ -714,6 +672,17 @@ class GoodsController extends AdminController
 		$order = ['id' => 'desc'];
 
 		$data = (new GoodsType)->type(['store_id' => $store_id , 'status' => 0],$order);
+
+		$data_platform = (new GoodsType)->type(['store_id' => 0 , 'status' => 0],$order);
+
+		if ($data_platform && $data) {
+			
+			$data = array_merge($data_platform,$data);
+
+		}elseif ($data_platform && empty($data)) {
+
+			$data = $data_platform;
+		}
 
 		$data = Model('Common/Tree')->toFormatTree($data,'goods_type_name');
 
@@ -1159,5 +1128,150 @@ class GoodsController extends AdminController
 		$this->assign('goods_type',$goods_type);
 
 		return view();
+	}
+
+	//商品品牌列表
+	public function goods_brand_list(){
+
+		return view();
+	}
+
+	//ajax获取品牌数据
+	public function ajax_goods_brand_list(){
+
+		$goods_brand_name = input('post.goods_brand_name/s');
+
+		if($goods_brand_name){
+
+			$where['goods_brand_name']  = ['like',"%{$goods_brand_name}%"];
+		}
+
+		if ($this->is_jurisdiction) { //判断是管理员还是商家
+			
+			$where['store_id'] = $this->is_jurisdiction;
+		}
+
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+		$limit = input('post.limit/d') ? : 10;
+
+		$order = ['id' => 'desc'];
+
+		$where['status'] = 0;
+
+		$data = (new GoodsBrand)->Common_Select($offset,$limit,$where,$order);
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
+
+	}
+
+	//新增品牌
+	public function goods_brand_add(){
+
+		if ($_POST) {
+
+			$store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
+
+			$data['goods_brand_name'] = input('post.goods_brand_name/s');
+
+			$data['url'] = input('post.url/s');
+
+			$data['create_time'] = time();
+
+			$data['update_time'] = time();
+
+			Db::startTrans();
+        	try{
+
+				if (is_array($store_id)) {
+
+					$arr = [];
+					
+					foreach ($store_id as $key => $value) {
+						
+						$data['store_id'] = $value;
+
+						$arr[] = $data;
+					}
+
+					(new GoodsBrand)->Common_InsertAll($arr);
+
+				}else{
+
+					$data['store_id'] = $store_id;
+
+					(new GoodsBrand)->Common_Insert($data);
+				}
+
+
+				//提交事务
+				Db::commit();
+				return json(['code' => 200 , 'msg' => '新增成功']);
+			}catch (\Exception $e) {
+	            // 回滚事务
+	            Db::rollback();
+	            return json(['code' => 400 , 'msg' => '新增失败']);
+	        }
+ 
+
+		}else{
+
+			return view();
+		}
+	}
+
+	//编辑品牌
+	public function goods_brand_edit(){
+
+		$id = input('id/d');
+
+		if ($_POST) {
+
+			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
+
+			$data['goods_brand_name'] = input('post.goods_brand_name/s');
+
+			$data['url'] = input('post.url/s');
+
+			$data['update_time'] = time();
+ 
+			$edit = (new GoodsBrand)->Common_Update($data,['id' => $id]);
+
+			if($edit)
+				return json(['code' => 200, 'msg' => '更新成功']);
+				return json(['code' => 400, 'msg' => '更新失败']);
+
+		}else{
+
+			$list = (new GoodsBrand)->Common_Find(['id' => $id]);
+
+			$this->assign('list',$list);
+
+			return view();
+		}
+	}
+
+	//删除品牌
+	public function goods_brand_del(){
+
+		$id = input('post.id/d');
+
+		$del = (new GoodsBrand)->Common_Update(['status' => 1],['id' => $id]);
+
+		if($del)
+			return json(['code' => 200, 'msg' => '删除成功']);
+			return json(['code' => 400, 'msg' => '删除失败']);
+	}
+
+	//批量删除品牌
+	public function goods_brand_delAll(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$del = (new GoodsBrand)->Common_Update(['status' => 1],['id' => ['in',$id]]);
+
+		if($del)
+			return json(['code' => 200, 'msg' => '删除成功']);
+			return json(['code' => 400, 'msg' => '删除失败']);
 	}
 }
