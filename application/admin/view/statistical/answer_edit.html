@@ -1,0 +1,147 @@
+{include file="public/header"}
+    <div class="x-body">
+        <form class="layui-form">
+          <input type="hidden" id="id" name="id" lay-verify="required" value="{$list['id']}" autocomplete="off" class="layui-input">
+        
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>标题
+              </label>
+              <div class="layui-input-block">
+                  <input type="text" id="title" name="title" lay-verify="required" readonly="" value="{$list['title']}" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+
+          {foreach name="problem" item="vo2" key="k2" }
+          <div id="del_{$k2}">
+            <div class="layui-form-item">
+                <label for="activity_name" class="layui-form-label">
+                    <span class="x-red">*</span>{$k2+1}.问题
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" name="problem[]" value="{$vo2['problem']}" readonly="" lay-verify="required" autocomplete="off" class="layui-input">
+                    <input type="hidden" name="problem_id[{$k2}]" value="{$vo2['id']}">
+                </div>
+            </div>
+              {foreach name="vo2['content']" item="vo" key="k" }
+              <div class="layui-form-item">
+                  <label for="activity_name" class="layui-form-label">
+                      <span class="x-red">*</span>{$k}
+                  </label>
+                  <div class="layui-input-block">
+                      <textarea type="text" name="content[{$k2}][{$k}]" disabled="" lay-verify="required" autocomplete="off" class="layui-textarea">{$vo}</textarea>
+                      {if condition="$vo2['type'] == 0"}
+                       <input type="checkbox" name="answer[{$k2}][]" disabled="" data-id="{$k2}" class="checkbox_{$k2}" lay-filter="dx" value="{$k}" lay-skin="primary" title="{$k}"  {foreach name="vo2['answer']" item="vo1" key="k1" } {$vo}{if condition="$vo1 eq $k"} checked="checked"{/if}{/foreach}>
+                      {/if}
+                      {if condition="$vo2['type'] == 1"}
+                       <input type="checkbox" name="answer[{$k2}][]" disabled="" value="{$k}" lay-skin="primary" title="{$k}"  {foreach name="vo2['answer']" item="vo1" key="k1" } {$vo}{if condition="$vo1 eq $k"} checked="checked"{/if}{/foreach}>
+                      {/if}
+                      
+                  </div>
+              </div>
+              {/foreach}
+              {if condition="$vo2['type'] == 2"}
+              <div class="layui-form-item">
+                  <label for="activity_name" class="layui-form-label">
+                      <span class="x-red"></span><font style="color: red">答案</font>
+                  </label>
+                  <div class="layui-input-block">
+                    <textarea type="text" disabled="" lay-verify="required" autocomplete="off" class="layui-textarea">{$vo2['answer']}</textarea>
+                  </div>
+              </div>
+              {/if}
+            </div>
+          {/foreach}
+
+          <!-- <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="edit" lay-submit="">
+                  更新
+              </button>
+          </div> -->
+      </form>
+    </div>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-mini" lay-event="edit">查看</a>
+      </script>
+    <script>
+        layui.use(['form','layer','laydate','table'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer
+          ,table = layui.table
+          ,laydate = layui.laydate;
+
+          //执行一个laydate实例
+        laydate.render({
+          elem: '#start_time' //指定元素
+          ,type: 'datetime'
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end_time' //指定元素
+          ,type: 'datetime'
+        });
+
+          form.on('checkbox(dx)', function (data) {   //单选题控制
+
+            var id = $(this).data('id');
+
+            $(".checkbox_"+id).prop('checked',false);  //取消当前题的全部选中
+
+            $(this).prop('checked',true);  //选中当前   
+
+            form.render('checkbox');
+          });
+
+
+          //监听提交
+          form.on('submit(edit)', function(data){
+            // var checkStatus = table.checkStatus('idTest')
+            // ,data1 = checkStatus.data;
+            // if(data1 == ''){
+            //   layer.msg('请添加问题', {icon: 1});
+            //   return false;
+            // }
+            // var problem_id = [];
+            // for (var i = 0; i < data1.length; i++) {
+            //   problem_id.push(data1[i].id)
+            // }
+            // data.field.problem_id = problem_id
+            
+            //发异步，把数据提交给php
+            $.post('/Admin/Statistical/questionnaire_edit', data.field, function(res){
+
+                if(res.code == 200){
+                    layer.alert(res.msg, {icon: 1},function () {
+                      // 获得frame索引
+                      var index = parent.layer.getFrameIndex(window.name);
+
+                      //关闭当前frame
+                      parent.layer.close(index);
+                     
+                      window.parent.location.reload();
+
+                  });
+                }else{
+                  layer.msg(res.msg,{time: 1000});
+                }
+            })
+            
+            return false;
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

@@ -558,31 +558,9 @@ class GoodsController extends AdminController
 
 			$list = (new Goods)->Common_Find(['id' => $id]);
 
-			$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
+			$goods_type = (new GoodsType)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
 
-			$goods_platform_type = (new GoodsType)->type(['store_id' => 0 , 'status' => 0],$order); //平台类型
-
-			if ($goods_platform_type && $goods_type) {
-				
-				$goods_type = array_merge($goods_platform_type,$goods_type);
-
-			}elseif ($goods_platform_type && empty($goods_type)) {
-
-				$goods_type = $goods_platform_type;
-			}
-
-			$goods_brand = (new GoodsBrand)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
-
-			$goods_platform_brand = (new GoodsBrand)->type(['store_id' => 0 , 'status' => 0],$order);
-
-			if ($goods_platform_brand && $goods_brand) {
-				
-				$goods_brand = array_merge($goods_platform_brand,$goods_brand);
-			
-			}elseif ($goods_platform_brand && empty($goods_brand)) {
-
-				$goods_brand = $goods_platform_brand;
-			}
+			$goods_brand = (new GoodsBrand)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
 
 			$activity = (new Activity)->Common_All_Select(['store_id' => $list['store_id'] , 'status' => 0],['id' => 'desc'],['id','activity_name']);
 
@@ -671,18 +649,7 @@ class GoodsController extends AdminController
 
 		$order = ['id' => 'desc'];
 
-		$data = (new GoodsType)->type(['store_id' => $store_id , 'status' => 0],$order);
-
-		$data_platform = (new GoodsType)->type(['store_id' => 0 , 'status' => 0],$order);
-
-		if ($data_platform && $data) {
-			
-			$data = array_merge($data_platform,$data);
-
-		}elseif ($data_platform && empty($data)) {
-
-			$data = $data_platform;
-		}
+		$data = (new GoodsType)->type(['store_id' => ['in',"0,{$store_id}"] , 'status' => 0],$order);
 
 		$data = Model('Common/Tree')->toFormatTree($data,'goods_type_name');
 

@@ -7,6 +7,7 @@ use app\admin\model\Questionnaire;
 use app\admin\model\ItemBank;
 use app\admin\model\Goods;
 use app\admin\model\CouponType;
+use app\admin\model\MemberAndQuestionnaire;
 use think\Db;
 class StatisticalController extends AdminController
 {
@@ -977,4 +978,94 @@ class StatisticalController extends AdminController
 			return view();
 		}
 	}
+
+	//调研问卷答题列表
+	public function answer_list(){
+
+		return view();
+	}
+
+	//ajax获取调研问卷答题数据
+	public function ajax_answer_list(){
+
+		$where['m_a_q.status'] = 0;
+
+		if ($this->is_jurisdiction) { //判断是管理员还是商家
+			
+			$where['m_a_q.store_id'] = $this->is_jurisdiction;
+		}
+
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+		$limit = input('post.limit/d') ? : 10;
+
+		$order = ['m_a_q.id' => 'desc'];
+
+		$field = ['m_a_q.id','q.title','m_a_q.questionnaire_id','m.nickname','FROM_UNIXTIME(m_a_q.create_time)create_time'];
+
+		$data = (new MemberAndQuestionnaire)->lists($offset,$limit,$where,$order,$field);
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
+
+	}
+
+	//查看答题情况
+	public function answer_edit(){
+
+		$id = input('id/d');//自增id
+
+		$questionnaire_id = input('questionnaire_id/d'); //问卷id
+
+		$MemberAndQuestionnaire = (new MemberAndQuestionnaire)->Common_Find(['id' => $id]); //用户答题试卷
+
+		$data = json_decode($MemberAndQuestionnaire['content'],true); //试卷问题答案
+
+		$list = (new Questionnaire)->Common_Find(['id' => $questionnaire_id]);
+
+		$problem = (new Problem)->Common_All_Select(['id' => ['in',$list['problem_id']]],['id' => 'asc'],['id','type','problem','answer','content']);
+
+		foreach ($problem as $key => $value) {
+
+			foreach ($data as $k => $v) {
+				
+				if ($value['id'] == $v['problem_id']) {
+
+					$problem[$key]['answer'] = $v['answer']; //用户所选答案
+				}
+			}
+			
+			$problem[$key]['content'] = json_decode($value['content'],true);
+		}
+
+		$this->assign('list',$list);
+
+		$this->assign('problem',$problem);
+
+		return view();
+	}
+
+	//删除
+	public function answer_del(){
+
+		$id = input('post.id/d');
+
+		$del = (new MemberAndQuestionnaire)->Common_Update(['status' => 1],['id' => $id]);
+
+		if($del)
+			return json(['code' => 200, 'msg' => '删除成功']);
+			return json(['code' => 400, 'msg' => '删除失败']);
+	}
+
+	//批量删除
+	public function answer_delAll(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$del = (new MemberAndQuestionnaire)->Common_Update(['status' => 1],['id' => ['in',$id]]);
+
+		if($del)
+			return json(['code' => 200, 'msg' => '删除成功']);
+			return json(['code' => 400, 'msg' => '删除失败']);
+	}
+
 }
