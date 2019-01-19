@@ -1068,4 +1068,53 @@ class StatisticalController extends AdminController
 			return json(['code' => 400, 'msg' => '删除失败']);
 	}
 
+	//问题统计
+	public function problem_statistical_list(){
+
+		return view();
+	}
+
+	//ajax获取问题数据
+	public function ajax_problem_statistical_list(){
+
+		$where = [];
+
+		if ($this->is_jurisdiction) { //判断是管理员还是商家
+			
+			$where['store_id'] = $this->is_jurisdiction;
+		}
+
+		$type_id = input('post.type_id');
+
+		if (isset($type_id)) {
+
+			$where['type'] = $type_id;
+		}
+
+		$where['status'] = 0;
+
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+		$limit = input('post.limit/d') ? : 10;
+
+		$order = ['id' => 'desc'];
+
+		$data = (new Problem)->Common_Select($offset,$limit,$where,$order);
+
+		foreach ($data['data'] as $key => $value) {
+			
+			if ($value['type']) {
+				
+				$data['data'][$key]['type_name'] = '多选题';
+
+			}else{
+
+				$data['data'][$key]['type_name'] = '单选题';
+			}
+
+		}
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
+	}
+
 }

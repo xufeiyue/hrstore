@@ -281,7 +281,7 @@ class IndexController extends CommonController
 
     if ($type_id) {
 
-      $Goods = (new Goods)->Common_All_Select(['type_id' => $type_id, 'state' => 0, 'status' => 0],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
+      $Goods = (new Goods)->Common_All_Select(['type_id' => $type_id, 'state' => 0, 'status' => 0, 'store_id' => $this->store_id],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
     
     }else{
 
@@ -289,7 +289,7 @@ class IndexController extends CommonController
         
         $type_id = $GoodsType['0']['id'];
 
-        $Goods = (new Goods)->Common_All_Select(['type_id' => $GoodsType['0']['id'], 'state' => 0, 'status' => 0],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
+        $Goods = (new Goods)->Common_All_Select(['type_id' => $GoodsType['0']['id'], 'state' => 0, 'status' => 0, 'store_id' => $this->store_id],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
 
       }
     }
