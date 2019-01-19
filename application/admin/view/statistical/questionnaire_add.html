@@ -7,15 +7,44 @@
               <span class="x-red">*</span>选择店铺
             </label>
             <div class="layui-input-block">
-              <select name="store_id" lay-filter="store_id">
+              <!-- <select name="store_id" lay-filter="store_id">
                 <option value="0">请选择</option>
                 {volist name="store" id="vo"}
                     <option value="{$vo.id}">{$vo.name}</option>
                 {/volist}
-              </select>
+              </select> -->
+              <dl class="checkmod">
+              
+                <input type="checkbox" lay-filter="filter" title="全选">
+                {volist name="store" id="vo"}
+                     <input type="checkbox" name="store_id[]" value="{$vo['id']}" title="{$vo.name}">
+                {/volist}
+              </dl>
             </div>
           </div>
         {/if}
+
+          <div class="layui-form-item">
+            <label  for="card_type_id" class="layui-form-label">
+              <span class="x-red">*</span>选择优惠券
+            </label>
+            <div class="layui-input-block">
+              <select name="card_type_id">
+                <option value="0">请选择</option>
+                {volist name="CouponType" id="vo"}
+                    <option value="{$vo.card_type_id}">{$vo.ticket_name}</option>
+                {/volist}
+              </select>
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">优惠券状态：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="coupon_state" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+
           <div class="layui-form-item">
               <label for="activity_name" class="layui-form-label">
                   <span class="x-red">*</span>标题
@@ -64,11 +93,11 @@
           <div id="question">
             
           </div>
-
-          <div class="layui-btn layui-btn-xs radio_d">单选题</div>
-          <div class="layui-btn layui-btn-xs checkbox_d">多选题</div>
-          <div class="layui-btn layui-btn-xs text_d">文本题</div>
-
+          <div class="layui-form-item">
+            <div class="layui-btn layui-btn-xs radio_d">单选题</div>
+            <div class="layui-btn layui-btn-xs checkbox_d">多选题</div>
+            <div class="layui-btn layui-btn-xs text_d">文本题</div>
+          </div>
           <div class="layui-form-item">
               <label for="L_repass" class="layui-form-label">
               </label>
@@ -89,7 +118,6 @@
           ,table = layui.table
           ,laydate = layui.laydate;
 
-        var store_id;
           //执行一个laydate实例
         laydate.render({
           elem: '#start_time' //指定元素
@@ -102,30 +130,6 @@
           ,type: 'datetime'
         });
 
-        //第一个实例
-      var tableIns = table.render({
-        elem: '#demo'
-        ,method: 'post'
-        ,defaultToolbar: ['filter', 'print', 'exports']
-        // ,toolbar: 'default'
-        // ,url: '/Admin/Statistical/ajax_item_bank_list' //数据接口
-        // ,page: true //开启分页
-        ,cellMinWidth : 95
-        ,height : 300
-        ,limit: 20
-        ,id: 'idTest'
-        ,cols: [[ //表头
-           {checkbox: true, fixed: true,style:'height:100px;'}
-          ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
-          ,{field: 'type_name', title: '类型',align: 'center'}
-          ,{field: 'problem', title: '问题',align: 'center'}
-          ,{field: 'pid_name', title: '来自',align: 'center'}
-          ,{field: 'create_time', title: '创建时间',align: 'center'}
-          ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
-        ]]
-        ,data: {$list}
-      });
-
       //监听工具条
         table.on('tool(useruv)', function(obj){
           var data = obj.data;
@@ -133,47 +137,23 @@
              x_admin_show('查看','subject_see.html?id='+data.id,600,300);
           }
         });
-         
-         //监听选择店铺
-         form.on('select(store_id)',function(data){
-          store_id = data.value
-          var tableIns = table.render({
-            elem: '#demo'
-            ,method: 'post'
-            ,defaultToolbar: ['filter', 'print', 'exports']
-            // ,toolbar: 'default'
-            ,url: '/Admin/Statistical/problem_list?store_id='+data.value //数据接口
-            // ,page: true //开启分页
-            ,cellMinWidth : 95
-            ,height : 300
-            ,limit: 20
-            ,id: 'idTest'
-            ,cols: [[ //表头
-               {checkbox: true, fixed: true,style:'height:100px;'}
-              ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
-              ,{field: 'type_name', title: '类型',align: 'center'}
-              ,{field: 'problem', title: '问题',align: 'center'}
-              ,{field: 'pid_name', title: '来自',align: 'center'}
-              ,{field: 'create_time', title: '创建时间',align: 'center'}
-              ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
-            ]]
-          });
-         })
 
-          form.on('checkbox(filter)', function(data){
+        form.on('checkbox(filter)', function(data){ //全选
 
-            $(this).closest('tr').find('td').find('input').prop('checked',this.checked);
+            $(this).closest('dl').find('input').prop('checked',this.checked);
            
             form.render('checkbox');//渲染
-          });
+        });  
+         
 
           var num = 0;
 
           $(".radio_d").click(function(){
             var html = '';
-              
+              html += '<div id="del1_'+num+'">';
               html += '<div class="layui-form-item">';
               html +=  '<label for="activity_name" class="layui-form-label">';
+              html +=  '<div class="layui-btn layui-btn-danger layui-btn-xs del1" data-del="'+num+'">删除</div>';
               html +=      '<span class="x-red">*</span>'+(num+1)+'.问题';
               html +=  '</label>';
               html +=  '<div class="layui-input-block">';
@@ -190,12 +170,12 @@
                 html +=  '</label>';
                 html +=  '<div class="layui-input-block">';
                 html +=     '<textarea type="text" name="content['+num+']['+arr[i]+']" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>';
-                html +=     '<input data-id="'+num+'" class="checkbox_'+num+'" type="checkbox" lay-filter="dx" name="answer['+num+']" value="'+arr[i]+'" title="'+arr[i]+'" lay-skin="primary">';
+                html +=     '<input data-id="'+num+'" class="checkbox_'+num+'" type="checkbox" lay-filter="dx" name="answer['+num+'][]" value="'+arr[i]+'" title="'+arr[i]+'" lay-skin="primary">';
                 html +=     '<input type="hidden" name="type['+num+']" value="0">';
                 html +=  '</div>';
                 html +='</div>';
               }
-
+              html += '</div>';
               $("#question").append(html);
               form.render('checkbox');//渲染
               num++;
@@ -214,9 +194,10 @@
 
           $(".checkbox_d").click(function(){
             var html = '';
-              
+            html += '<div id="del1_'+num+'">';  
             html += '<div class="layui-form-item">';
             html +=  '<label for="activity_name" class="layui-form-label">';
+            html +=  '<div class="layui-btn layui-btn-danger layui-btn-xs del1" data-del="'+num+'">删除</div>';
             html +=      '<span class="x-red">*</span>'+(num+1)+'.问题';
             html +=  '</label>';
             html +=  '<div class="layui-input-block">';
@@ -233,12 +214,12 @@
               html +=  '</label>';
               html +=  '<div class="layui-input-block">';
               html +=      '<textarea type="text" name="content['+num+']['+arr[i]+']" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>';
-              html +=        '<input type="checkbox" name="answer['+num+']" value="'+arr[i]+'" lay-skin="primary" title="'+arr[i]+'">';
+              html +=        '<input type="checkbox" name="answer['+num+'][]" value="'+arr[i]+'" lay-skin="primary" title="'+arr[i]+'">';
               html +=     '<input type="hidden" name="type['+num+']" value="1">';
               html +=  '</div>';
               html +='</div>';
             }
-
+            html += '</div>';
             $("#question").append(html);
             form.render('checkbox');//渲染
             num++;
@@ -246,8 +227,10 @@
 
           $(".text_d").click(function(){
             var html = '';
+            html += '<div id="del1_'+num+'">';  
             html += '<div class="layui-form-item">';
             html +=  '<label for="activity_name" class="layui-form-label">';
+            html +=  '<div class="layui-btn layui-btn-danger layui-btn-xs del1" data-del="'+num+'">删除</div>';
             html +=      '<span class="x-red">*</span>'+(num+1)+'.问题';
             html +=  '</label>';
             html +=  '<div class="layui-input-block">';
@@ -255,8 +238,17 @@
              html +=     '<input type="hidden" name="type['+num+']" value="2">';
             html +=  '</div>';
             html += '</div>';
+            html += '</div>';
             $("#question").append(html);
             num++;
+          })
+
+          $(document).on('click','.del1',function(){
+
+            var del_id = $(this).data('del');
+
+            $("#del1_"+del_id).remove();
+
           })
 
           //监听提交

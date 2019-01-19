@@ -98,7 +98,7 @@ class IndexController extends CommonController
     //底部商品列表
     $goods_top_list = (new Goods)->Common_Select(8,17,$where,$order,$goods_field); //商品列表
 
-    $where = ['store_id' => $store['store_id'], 'status' => 0, 'pid' => 0];
+    $where = ['store_id' => ['in',"0,{$store['store_id']}"], 'status' => 0, 'pid' => 0];
 
     $goods_type_field = ['id','goods_type_name','url'];
     //产品分类
@@ -273,7 +273,7 @@ class IndexController extends CommonController
 
     $type_id = input('type_id/d') ? : 0;
 
-    $where = ['store_id' => $this->store_id, 'status' => 0, 'pid' => 0];
+    $where = ['store_id' => ['in',"0,{$this->store_id}"], 'status' => 0, 'pid' => 0];
 
     $GoodsType = (new GoodsType)->Common_All_Select($where, ['id' => 'desc'],['id','goods_type_name','url']); //全部分类
 
@@ -471,19 +471,66 @@ class IndexController extends CommonController
   //提交答卷
   public function diaoyan_add(){
 
-    $content = input('post.data/a');
+   $content = input('post.data/a'); //问题数组
 
-    if (empty($content)) {
+   $arr = [];
+
+   $arr1 = [];
+
+   $c = ['A' => 0,'B' => 1,'C' => 2,'D' => 3];
+
+   foreach ($content as $key => $value) {
+      
+     $arr[$value['problem_id']][] = $value; //按问题id分组
+   }
+
+   foreach ($arr as $key => $value) {
+      
+     foreach ($value as $key1 => $value1) {
+
+       $arr1[$key]['problem_id'] = $value1['problem_id']; //问题id
+
+       if ($value1['type'] == 2) {
+
+         $arr1[$key]['answer'] = $value1['answer'];
+       
+       }else{
+          
+         if ($value1['answer']) {
+
+            $arr1[$key]['answer'][$c[$value1['answer']]] = $value1['answer']; //答案格式要与后台录入一致 好解
+            
+            (new Problem)->Common_SetInc($value1['answer'],['id' => $value1['problem_id']]); //选择这个答案的次数+1
+          } 
+       
+       }
+        
+     }
+   }
+
+   $problem = [];
+   //重组数组
+   foreach ($arr1 as $key => $value) {
+      
+     $problem[] = $value;
+   
+    }
+
+    if (empty($problem)) {
       return json(['code' => 400, 'msg' => '请答题']);
     }
 
-    $data['content'] = json_encode($content);
+    $data['content'] = json_encode($problem);
 
     $data['questionnaire_id'] = input('post.questionnaire_id/d');
 
     $data['create_time'] = time();
 
     $data['update_time'] = time();
+
+    $data['userId'] = $this->userId;
+
+    $data['store_id'] = $this->store_id;
 
     $add = (new MemberAndQuestionnaire)->Common_Insert($data);
 

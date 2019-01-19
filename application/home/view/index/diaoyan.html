@@ -149,20 +149,27 @@
                 html += '<div class="container container_duoxuan">';
                 for (b in data.content) {
                     html +=    '<div class="pretty warning">';
-                    html +=         '<input type="checkbox" class="checkbox_'+num+'" name="answer[]" data-id="'+data.id+'" value="'+b+'"/>';
+                    html +=         '<input type="checkbox" class="checkbox_'+num+'" name="answer[]" data-id="'+data.id+'" data-type="'+data.type+'" value="'+b+'"/>';
                     html +=         '<label><i class="mdi mdi-check"></i>'+b+'. '+data.content[b]+'</label>';
                     html +=     '</div>';
                 }
                 html +=  '</div>';
-            }else{
+            }else if(data.type == 0){
 
                 html += '<div class="container container_danxuan">';
                 for (b in data.content) {
                     html +=     '<div class="pretty inline">';
-                    html +=         '<input class="checkbox checkbox_'+num+'" type="checkbox" name="answer[]" data-id="'+data.id+'" value="'+b+'">';
+                    html +=         '<input class="checkbox checkbox_'+num+'" type="checkbox" name="answer[]" data-id="'+data.id+'" data-type="'+data.type+'" value="'+b+'">';
                     html +=         '<label><i class="mdi mdi-check"></i>'+b+'. '+data.content[b]+'</label>';
                     html +=     '</div>';
                 }
+                html += '</div>';
+            }else{
+
+                html += '<div class="container container_danxuan">';
+                html +=     '<div class="pretty inline">';
+                html +=         '<textarea type="text" class="checkbox_'+num+'" name="answer[]" data-id="'+data.id+'" data-type="'+data.type+'" placeholder="请输入内容" rows="10" cols="40"></textarea>';
+                html +=     '</div>';
                 html += '</div>';
             }
 
@@ -194,8 +201,12 @@
 
             var ids = []
 
+            $.each($('textarea'),function(){ //文本
+                ids.push({'problem_id':$(this).data('id'),answer:$(this).val(),'type':$(this).data('type')})
+            });
+
             $.each($('input:checkbox:checked'),function(){
-                ids.push({'problem_id':$(this).data('id'),answer:$(this).val()})
+                ids.push({'problem_id':$(this).data('id'),answer:$(this).val(),'type':$(this).data('type')})
             });
             $.post("{:url('Index/diaoyan_add')}",{data:ids, questionnaire_id:id},function(data){
 
@@ -208,7 +219,7 @@
         // $(document).on('click','.turn_right',function(){
         function turn_right(){
 
-            if ($(".checkbox_"+num).is(":checked") == false) { //判断这道题选择没
+            if ($(".checkbox_"+num).is(":checked") == false && $(".checkbox_"+num).val() == '') { //判断这道题选择没
                 alert('请答题')
                 return false
             }
