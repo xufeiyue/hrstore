@@ -1,15 +1,15 @@
 {include file="common/header"}
-		<header data-am-widget="header" class="am-header am-header-default sq-head ">
-			<div class="am-header-left am-header-nav">
-				<a href="javascript:history.back()" class="">
-					<i class="am-icon-chevron-left"></i>
-				</a>
-			</div>
-			<h1 class="am-header-title">
-  	            <a href="" class="">商品分类</a>
-            </h1>
-	    </header>
-	    <div style="height: 49px;"></div>
+		<!--<header data-am-widget="header" class="am-header am-header-default sq-head ">-->
+			<!--<div class="am-header-left am-header-nav">-->
+				<!--<a href="javascript:history.back()" class="">-->
+					<!--<i class="am-icon-chevron-left"></i>-->
+				<!--</a>-->
+			<!--</div>-->
+			<!--<h1 class="am-header-title">-->
+  	            <!--<a href="" class=""></a>-->
+            <!--</h1>-->
+	    <!--</header>-->
+	    <div style="height: 42px;" class="title_name">商品分类</div>
 	    <div class="cate-search">
 	    	<input type="text" name="goods_name" id="goods_name" value="" class="cate-input" placeholder="请输入您要的搜索的产品关键词" />
 	    	<input type="button" class="cate-btn" onclick="sousuo()" />
@@ -33,8 +33,8 @@
 							<a href="{:url('Index/detail',['id' => $vo['id']])}" class="">
 								<img src="{$vo['goods_images']}" />
 								<h3 class="am-gallery-title">{$vo['goods_name']}</h3>
-								<div class="am-gallery-desc am-gallery-yuan">原价￥{$vo['goods_original_price']}</div>
-								<div class="am-gallery-desc">折扣价￥{$vo['goods_present_price']}</div>
+								<!--<div class="am-gallery-desc am-gallery-yuan">原价￥{$vo['goods_original_price']}</div>-->
+								<div class="am-gallery-desc">￥{$vo['goods_present_price']}</div>
 							</a>
 						</div>
 					</li>

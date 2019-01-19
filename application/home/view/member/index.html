@@ -35,10 +35,10 @@
 		    	<div class="mem-pic-bg" style="background-image: url({$member['wx_url']});"></div>
 	    	</div>
 			<div class="mem-tit">
-				<span style="max-width: 70%;font-size: 1.6rem; display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;float: left;">{$member['nickname']}</span>
-				<a href="infor.html" style="display: block; float: left; padding: 0 5px; text-align: center;">
-					<i class="fa fa-id-card-o fa-1x"></i>
-					<p style="font-size: .725rem;">完善资料</p>
+				<span class="WX_Name">{$member['nickname']}</span>
+				<a href="infor.html" class="WS_btn">
+					<i class="iconfont icon-shezhi"></i>
+					<p class="icon_name">完善资料</p>
 				</a>
 				<div class="jindutiao">
 					<i>资料完整度</i>
@@ -53,25 +53,25 @@
 		<ul class="member-menu">
 			<li>
 				<a href="{:url('Member/collect')}">
-					<p class="yellow fa fa-2x fa-heart-o"></p>
+					<p class="yellow iconfont icon-shoucang"></p>
 					<p class="black">收藏 </p>
 				</a>
 			</li>
 			<li>
 				<a href="{:url('Member/yhq')}">
-					<p class="yellow fa fa-2x fa-money"></p>
+					<p class="yellow iconfont icon-qiaquan"></p>
 					<p class="black">卡劵 </p>
 				</a>
 			</li>
 			<li>
 				<a href="{:url('Activity/huodong')}">
-					<p class="yellow fa fa-2x fa-gift"></p>
+					<p class="yellow iconfont icon-huodong"></p>
 					<p class="black">活动 </p>
 				</a>
 			</li>
 			<li>
 				<a href="{:url('Member/zuji')}">
-					<p class="yellow fa fa-flag-o fa-2x"></p>
+					<p class="yellow iconfont icon-zuji"></p>
 					<p class="black">足迹 </p>
 				</a>
 			</li>
@@ -88,9 +88,9 @@
 					<div class="am-gallery-item">
 						<a href="{:url('Index/detail',['id' => $vo['id']])}" class="">
 							<img src="{$vo['goods_images']}" />
-							<!--<h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>-->
-							<div class="am-gallery-desc am-gallery-yuan">原价￥{$vo['goods_original_price']}</div>
-							<div class="am-gallery-desc am-gallery-color">{$vo['goods_name']}</div>
+							<h3 class="am-gallery-title">{$vo['goods_name']}</h3>
+							<!--<div class="am-gallery-desc am-gallery-yuan"></div>-->
+							<div class="am-gallery-desc am-gallery-color">￥{$vo['goods_original_price']}</div>
 						</a>
 					</div>
 				</li>

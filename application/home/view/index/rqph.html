@@ -1,16 +1,16 @@
 {include file="common/header"}
 <!--图片轮换-->
-<header data-am-widget="header" class="am-header am-header-default sq-head ">
-    <div class="am-header-left am-header-nav">
-        <a href="javascript:history.back()" class="">
-            <i class="am-icon-chevron-left"></i>
-        </a>
-    </div>
-    <h1 class="am-header-title">
-        <a href="" class="">{$title}</a>
-    </h1>
-</header>
-<div style="height: 49px;"></div>
+<!--<header data-am-widget="header" class="am-header am-header-default sq-head ">-->
+    <!--<div class="am-header-left am-header-nav">-->
+        <!--<a href="javascript:history.back()" class="">-->
+            <!--<i class="am-icon-chevron-left"></i>-->
+        <!--</a>-->
+    <!--</div>-->
+    <!--<h1 class="am-header-title">-->
+        <!--<a href="" class=""></a>-->
+    <!--</h1>-->
+<!--</header>-->
+<div style="height: 42px;" class="title_name">{$title}</div>
 <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0" style="position: relative;">
     <ul class="am-slides">
         {foreach name="Advertisement" item="vo"}
@@ -28,8 +28,9 @@
             <div class="am-gallery-item">
                 <a href="{:url('Index/detail',['id' => $vo['id']])}" class="">
                     <img src="{$vo['goods_images']}" />
-                    <div class="am-gallery-desc am-gallery-yuan">原价￥{$vo['goods_original_price']}</div>
-                    <div class="am-gallery-desc am-gallery-color">{$vo['goods_name']}</div>
+                    <h3 class="am-gallery-title">{$vo['goods_name']}</h3>
+                    <!--<div class="am-gallery-desc am-gallery-yuan"></div>-->
+                    <div class="am-gallery-desc am-gallery-color">￥{$vo['goods_original_price']}</div>
                 </a>
             </div>
         </li>
