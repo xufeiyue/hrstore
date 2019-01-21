@@ -9,7 +9,7 @@
                 <a href="" class="">{$title}</a>
             </h1>
       </header>
-      <div style="height: 49px;"></div>
+      <div style="height: 42px;"></div>
       <!--图片轮换-->
     <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
       <ul class="am-slides">
@@ -19,11 +19,12 @@
       </ul>
     </div>
     <div class="detal-info" style=" margin-top: 10px;">
-      <span style="padding: 5px 10px; background: #ff4646; color: #ffffff;">产品名称</span>
-      <p>{$goods_detail['goods_name']}</p>
+      <!--<span style="padding: 5px 10px; background: #ff4646; color: #ffffff;">产品名称</span>-->
+        <span style="float: left; color: #ff4646; font-size: 1.8rem;line-height: 2rem; width: 100%;display: block;">￥{$goods_detail['goods_present_price']}</span>
+        <p>{$goods_detail['goods_name']}</p>
       <!--<h2>商城价：<span>￥{$goods_detail['goods_original_price']}</span></h2>-->
       <div class="ZLY_info" style="overflow: hidden;">
-        <span style="float: left;">优惠价格：{$goods_detail['goods_present_price']}</span><br />
+
         <ul style="float: left;">
           <li>优惠券￥{$goods_detail['face_value']}</li>
           <!--<li>优惠券￥60</li>-->
