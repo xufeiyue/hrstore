@@ -26,6 +26,7 @@
 	      .am-slider-default .am-control-nav li a{ border: 0; width: 10px; height: 10px;}
 	    </style>
 	    <script type="text/javascript">
+	    	var domain = document.domain; //当前域名
 	    	$.post("{:url('Jssdk/getSignPackage')}",{'url': location.href.split('#')[0]},function(data){
 	    		console.log(data);
 	    		  	wx.config({
@@ -34,8 +35,34 @@
 					    timestamp: data.data.timestamp, // 必填，生成签名的时间戳
 					    nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
 					    signature: data.data.signature,// 必填，签名
-					    jsApiList: ['getLocation'] // 必填，需要使用的JS接口列表
+					    jsApiList: ['getLocation','onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表
 					});
+
+					wx.ready(function(){
+
+						wx.onMenuShareTimeline({
+					        title: '电子DM', // 分享标题
+					        link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					        imgUrl: 'http://'+domain+'/uploads/fenxiang.jpg', // 分享图标
+					        success: function () {
+					          // 设置成功
+					        }
+						});
+					   	
+						wx.onMenuShareAppMessage({
+							title: '电子DM', // 分享标题
+							desc: '领劵购物更优惠', // 分享描述
+							link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: 'http://'+domain+'/uploads/fenxiang.jpg', // 分享图标
+							type: '', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function () {
+							// 用户点击了分享后执行的回调函数
+							}
+						});
+
+					});
+
 	    	})
 	  //   	wx.config({
 			//     debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
