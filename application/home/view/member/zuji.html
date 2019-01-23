@@ -9,7 +9,7 @@
   	            <a href="" class="">{$title}</a>
             </h1>
 	    </header>
-	    <div style="height: 49px;"></div>
+	    <div style="height: 42px;"></div>
 	    <ul class="all-select">
 	    	<li>
 	    		<label class="am-checkbox am-warning">
@@ -23,7 +23,7 @@
 	    </ul>
         <div class="">
             <div class="List-head" style="padding: 0 10px; margin-top: 10px;">
-                <h1 class="List-head-name">以为你自动清除过期商品</h1>
+                <h1 class="List-head-name">已为您自动清除过期商品</h1>
             </div>
             <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  >
                 {foreach name="browsinglog" item="vo" key="k"}
@@ -34,8 +34,8 @@
                     <div class="am-gallery-item">
                         <a href="{:url('Index/detail',['id' => $vo['pid']])}" class="">
                             <img src="{$vo['goods_images']}" />
-                            <div class="am-gallery-desc am-gallery-yuan">原价￥{$vo['goods_original_price']}</div>
-                            <div class="am-gallery-desc am-gallery-color c-am-gallery-color">{$vo['goods_name']}</div>
+                            <div class="am-gallery-desc am-gallery-yuan">{$vo['goods_name']}</div>
+                            <div class="am-gallery-desc am-gallery-color c-am-gallery-color">￥{$vo['goods_original_price']}</div>
                         </a>
                     </div>
                 </li>
@@ -45,34 +45,34 @@
         <!--底部导航-->
         <div style="height: 55px;"></div>
         <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
-            <ul class="am-navbar-nav am-cf am-avg-sm-4">
+            <ul class="am-navbar-nav am-cf am-avg-sm-4 Icon-Name">
                 <li>
-                    <a href="index.html">
-                        <span class="am-icon-home fa fa-credit-card fa-lg"></span>
+                    <a href="{:url('Index/index')}">
+                        <span class="iconfont icon-bank-card-type"></span>
                         <span class="am-navbar-label">聚优惠</span>
                     </a>
                 </li>
                 <li>
-                    <a href="XFX.html">
-                        <span class="am-icon-th-large fa fa-heart-o fa-lg"></span>
+                    <a href="{:url('Index/xfx')}">
+                        <span class="iconfont icon-xin-1"></span>
                         <span class="am-navbar-label">新发现</span>
                     </a>
                 </li>
                 <li>
-                    <a href="RQPH.html">
-                        <span class="am-icon-shopping-cart fa fa-cubes fa-lg"></span>
+                    <a href="{:url('Index/rqph')}">
+                        <span class="iconfont icon-paihangbang"></span>
                         <span class="am-navbar-label">人气榜</span>
                     </a>
                 </li>
                 <li>
                     <a href="{:url('Coupon/coupon_list')}" class="">
-                        <span class="am-icon-shopping-cart fa fa-ticket fa-lg"></span>
+                        <span class="iconfont icon-qiaquan1"></span>
                         <span class="am-navbar-label">卡券</span>
                     </a>
                 </li>
                 <li>
-                    <a href="login.html"  class="curr">
-                        <span class="am-icon-user fa fa-user-o fa-lg"></span>
+                    <a href="{:url('Member/index')}"  class="curr">
+                        <span class="iconfont icon-Personalcenter"></span>
                         <span class="am-navbar-label">我的</span>
                     </a>
                 </li>

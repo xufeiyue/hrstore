@@ -38,7 +38,7 @@
         <div style="background: #eee; height: 10px;"></div>
         <div class="am-tabs detail-list" style="background: #ffffff;" data-am-tabs>
       <ul class="am-tabs-nav am-nav am-nav-tabs" style="border-bottom: 1px solid #ff4646;">
-        <li class="am-active"><img src="__IMAGES__/ZLY_chanpinxiangqing.jpg" </li>
+        <li class="am-active"><img src="__IMAGES__/ZLY_chanpinxiangqing.jpg"> </li>
         <!--<li><a href="#tab2">商品评论</a></li>-->
       </ul>
     
@@ -53,17 +53,64 @@
 
       </div>
     </div>
-    
+<style>
+    .shoucang_box{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+        display: none;
+    }
+    .shoucang_info{
+        width: 60%;
+        height: 16rem;
+        position: absolute;
+        left: 20%;
+        top:50%;
+        margin-top: -10rem;
+        z-index: 10;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.7);
+        overflow: hidden;
+        background: #fff;
+    }
+    .shoucang_info img{
+        display: block;
+        margin: 0 auto;height: 12rem;
+    }
+    .shoucang_info p{
+        width: 100%;
+        height: 4rem;
+        text-align: center;
+        line-height: 4rem;
+        font-size: 2rem;
+        background: #ff5500;
+        color: #fff;
+        text-indent: 10px;
+    }
+</style>
+
+<!--收藏成功弹出层-->
+    <div class="shoucang_box">
+        <div class="shoucang_info">
+            <img src="http://huaruncard.redh5.cn/static/home/images/Collection_img.jpg">
+            <p id="close">确定</p>
+        </div>
+    </div>
+<!--收藏成功弹出层-->
     <input type="hidden" id="goods_id" value="{$goods_detail['id']}">
     <!--底部-->
  <div style=" height: 55px;"></div>
  <ul class="fix-shopping">
-  <li style="background: #ffba35;"><a class="join">领取优惠券</a></li>
+  <li style="background: #ffba35;"><a class="join"><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>
   {if condition="$collection eq 0"}
-  <li style="width: 35%;"><a class="imm-buy">加入收藏</a></li>
+  <li style="width: 35%;"><a class="imm-buy"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>加入收藏</a></li>
   {/if}
   {if condition="$collection eq 1"}
-  <li style="width: 35%;"><a class="imm-buy" style="background: darkgray;">已收藏</a></li>
+  <li style="width: 35%;"><a class="imm-buy" style="background: darkgray;"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>已收藏</a></li>
   {/if}
  </ul>
  
@@ -80,11 +127,15 @@
           $(".imm-buy").css("background","#ff5500");
           $(".imm-buy").text("加入收藏");
         }else{
+          $(".shoucang_box").show()
           $(".imm-buy").css("background","darkgray");
           $(".imm-buy").text("已收藏");
         }
-        alert(res.msg)
+        // alert(res.msg)
     })
+   })
+   $("#close").click(function(){
+      $(".shoucang_box").hide()
    })
  </script>
  
