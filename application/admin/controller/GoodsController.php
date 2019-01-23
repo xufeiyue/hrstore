@@ -29,21 +29,21 @@ class GoodsController extends AdminController
 
 		if($goods_type_name){
 
-			$where['goods_type_name']  = ['like',"%{$goods_type_name}%"];
+			$where['a.goods_type_name']  = ['like',"%{$goods_type_name}%"];
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$data = (new GoodsType)->Common_Select($offset,$limit,$where,$order);
 
@@ -218,21 +218,28 @@ class GoodsController extends AdminController
 
 		if($goods_name){
 
-			$where['goods_name']  = ['like',"%{$goods_name}%"];
+			$where['a.goods_name']  = ['like',"%{$goods_name}%"];
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
+		}
+
+		$store_id = input('post.store_id/d');
+
+		if ($store_id || $store_id == -1) {
+
+			$where['a.store_id'] = $store_id > 0 ? $store_id : 0;
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$data = (new Goods)->Common_Select($offset,$limit,$where,$order);
 
@@ -687,21 +694,21 @@ class GoodsController extends AdminController
 
 		if($goods_name){
 
-			$where['goods_name']  = ['like',"%{$goods_name}%"];
+			$where['a.goods_name']  = ['like',"%{$goods_name}%"];
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
-		$where['status'] = 1;
+		$where['a.status'] = 1;
 
 		$data = (new Goods)->Common_Select($offset,$limit,$where,$order);
 
@@ -749,21 +756,21 @@ class GoodsController extends AdminController
 
 		if($goods_name){
 
-			$where['goods_name']  = ['like',"%{$goods_name}%"];
+			$where['a.goods_name']  = ['like',"%{$goods_name}%"];
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$data = (new CommodityBank)->Common_Select($offset,$limit,$where,$order);
 
@@ -1110,21 +1117,21 @@ class GoodsController extends AdminController
 
 		if($goods_brand_name){
 
-			$where['goods_brand_name']  = ['like',"%{$goods_brand_name}%"];
+			$where['a.goods_brand_name']  = ['like',"%{$goods_brand_name}%"];
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$data = (new GoodsBrand)->Common_Select($offset,$limit,$where,$order);
 

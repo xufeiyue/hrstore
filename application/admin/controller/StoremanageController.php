@@ -38,16 +38,16 @@ class StoremanageController extends Controller
 
         if($store_name){
 
-            $where['store_name']  = ['like',"%{$store_name}%"];
+            $where['a.store_name']  = ['like',"%{$store_name}%"];
         }
 
-        $where['status'] = array('<>',3);
+        $where['a.status'] = array('<>',3);
 
         $offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
         $limit = input('post.limit/d') ? : 10;
 
-        $order = ['store_id' => 'desc'];
+        $order = ['a.store_id' => 'desc'];
 
         $store_model = new Store();
 

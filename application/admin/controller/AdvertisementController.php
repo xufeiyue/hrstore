@@ -25,21 +25,21 @@ class AdvertisementController extends AdminController
 
 		if ($type_name) {
 			
-			$where['type_name'] = ['like',"%{$type_name}%"];
+			$where['a.type_name'] = ['like',"%{$type_name}%"];
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
 		$data = (new AdvertisementType)->Common_Select($offset,$limit,$where,$order);
 

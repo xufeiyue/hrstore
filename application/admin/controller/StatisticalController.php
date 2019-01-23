@@ -27,23 +27,23 @@ class StatisticalController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
 		$type_id = input('post.type_id');
 
 		if (isset($type_id)) {
 
-			$where['type'] = $type_id;
+			$where['a.type'] = $type_id;
 		}
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
 		$data = (new Problem)->Common_Select($offset,$limit,$where,$order);
 
@@ -257,16 +257,16 @@ class StatisticalController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
 		$data = (new Questionnaire)->Common_Select($offset,$limit,$where,$order);
 
@@ -778,16 +778,16 @@ class StatisticalController extends AdminController
 
 		if (isset($type_id)) {
 
-			$where['type'] = $type_id;
+			$where['a.type'] = $type_id;
 		}
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
 		$data = (new ItemBank)->Common_Select($offset,$limit,$where,$order);
 
@@ -932,13 +932,13 @@ class StatisticalController extends AdminController
 			$where['store_id'] = $this->is_jurisdiction;
 		}
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['collection_number' => 'desc','id' => 'desc'];
+		$order = ['a.collection_number' => 'desc','a.id' => 'desc'];
 
 		$data = (new Goods)->Common_Select($offset,$limit,$where,$order);
 
@@ -1081,23 +1081,23 @@ class StatisticalController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
 		$type_id = input('post.type_id');
 
 		if (isset($type_id)) {
 
-			$where['type'] = $type_id;
+			$where['a.type'] = $type_id;
 		}
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
 		$data = (new Problem)->Common_Select($offset,$limit,$where,$order);
 

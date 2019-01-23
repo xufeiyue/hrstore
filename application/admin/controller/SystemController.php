@@ -87,14 +87,14 @@ class SystemController extends AdminController
 
 		if ($user_name) {
 			
-			$where['user_name'] = ['like',"%{$user_name}%"];
+			$where['a.user_name'] = ['like',"%{$user_name}%"];
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
 		$data = (new AdminLog)->Common_Select($offset,$limit,$where,$order);
 

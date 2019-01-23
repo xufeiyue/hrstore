@@ -25,21 +25,21 @@ class ActivityController extends AdminController
 
 		if($activity_name){
 
-			$where['activity_name']  = ['like',"%{$activity_name}%"];
+			$where['a.activity_name']  = ['like',"%{$activity_name}%"];
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$data = (new Activity)->Common_Select($offset,$limit,$where,$order);
 
@@ -306,16 +306,16 @@ class ActivityController extends AdminController
 
 		if($activity_name){
 
-			$where['activity_name']  = ['like',"%{$activity_name}%"];
+			$where['a.activity_name']  = ['like',"%{$activity_name}%"];
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
 
-		$order = ['id' => 'desc'];
+		$order = ['a.id' => 'desc'];
 
-		$where['status'] = 0;
+		$where['a.status'] = 0;
 
 		$data = (new ActivityLibrary)->Common_Select($offset,$limit,$where,$order);
 
