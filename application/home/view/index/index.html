@@ -146,7 +146,7 @@
         });
     });
     var store_id = $("#store_id").val()
-getinfo()
+
     function getinfo(latitude,longitude){
 
         $.post("{:url('Index/ajax_index')}",{latitude: latitude, longitude: longitude,store_id: store_id},function(res){
@@ -183,6 +183,9 @@ getinfo()
             }
             console.log(advertisement_html)
             $("#ulList").append(advertisement_html);
+
+
+
             scrollAd(".box")
 
             var goods_list_html = '';
