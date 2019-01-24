@@ -127,32 +127,32 @@
             </div> 
           </div>
           
-          <div class="layui-form-item">
-            <label for="activity_name" class="layui-form-label">
-                <span class="x-red">*</span>商品原价
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="goods_original_price" value="{$list['goods_original_price']}" name="goods_original_price" lay-verify="required" autocomplete="off" class="layui-input">
-            </div>
-          </div>
+          <!--<div class="layui-form-item">-->
+            <!--<label for="activity_name" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>商品原价-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="goods_original_price" value="{$list['goods_original_price']}" name="goods_original_price" lay-verify="required" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+          <!--</div>-->
 
           <div class="layui-form-item">
             <label for="activity_name" class="layui-form-label">
-                <span class="x-red">*</span>商品现价
+                <span class="x-red">*</span>商品优惠价
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="goods_present_price" value="{$list['goods_present_price']}" name="goods_present_price" lay-verify="required" autocomplete="off" class="layui-input">
             </div>
           </div>
 
-          <div class="layui-form-item">
-            <label for="activity_name" class="layui-form-label">
-                <span class="x-red">*</span>商品库存
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="goods_stock" value="{$list['goods_stock']}" name="goods_stock" lay-verify="required" autocomplete="off" class="layui-input">
-            </div>
-          </div>
+          <!--<div class="layui-form-item">-->
+            <!--<label for="activity_name" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>商品库存-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="goods_stock" value="{$list['goods_stock']}" name="goods_stock" lay-verify="required" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+          <!--</div>-->
 
           {foreach name="list['goods_specifications']" item="vo" key="k" }
           <div class="layui-form-item {if condition="$k eq 0"}guige{/if}" {if condition="$k neq 0"}id="guige_del_{$k}" {/if}>
@@ -190,9 +190,7 @@
           </div>
           {/foreach}
 
-          <input type="hidden" name="guige_num" id="guige_num" value="{$list['goods_specifications_num']}">
 
-          <input type="hidden" name="shuxing_num" id="shuxing_num" value="{$list['goods_attribute_num']}">
   
           <div class="layui-form-item">
               <label class="layui-form-label">
@@ -211,7 +209,7 @@
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">爆款：</label>
+            <label class="layui-form-label">推荐爆款：</label>
             <div class="layui-input-block">
               <input type="checkbox"  {if condition="$list['sell_well'] eq 0"} checked="" {/if} name="sell_well" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
             </div>
@@ -231,12 +229,12 @@
             </div>
           </div>
 
-          <div class="layui-form-item">
-            <label class="layui-form-label">关联：</label>
-            <div class="layui-input-block">
-              <input type="checkbox"  {if condition="$list['relation'] eq 0"} checked="" {/if} name="relation" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
-            </div>
-          </div>
+          <!--<div class="layui-form-item">-->
+            <!--<label class="layui-form-label">关联：</label>-->
+            <!--<div class="layui-input-block">-->
+              <!--<input type="checkbox"  {if condition="$list['relation'] eq 0"} checked="" {/if} name="relation" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">-->
+            <!--</div>-->
+          <!--</div>-->
 
           <div class="layui-form-item">
               <label for="L_repass" class="layui-form-label">

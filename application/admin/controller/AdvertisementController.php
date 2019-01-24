@@ -296,7 +296,7 @@ class AdvertisementController extends AdminController
 
 	}
 
-	// 广告样式管理
+	// 首页底部广告样式管理
     public function advertisement_style(){
 	    return view();
     }

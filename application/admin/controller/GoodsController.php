@@ -278,7 +278,7 @@ class GoodsController extends AdminController
 
 			$popularity = input('post.popularity/s');
 
-			$relation = input('post.relation/s');
+//			$relation = input('post.relation/s');
 
 			if($state == $whether[0]){
 
@@ -316,14 +316,14 @@ class GoodsController extends AdminController
 				$data['popularity'] = 1;
 			}
 
-			if($relation == $whether[0]){
-
-				$data['relation'] = 0;
-
-			}else{
-				
-				$data['relation'] = 1;
-			}
+//			if($relation == $whether[0]){
+//
+//				$data['relation'] = 0;
+//
+//			}else{
+//
+//				$data['relation'] = 1;
+//			}
 
 			$data['brand_id'] = input('post.brand_id/d');
 
@@ -356,19 +356,19 @@ class GoodsController extends AdminController
 
 			$data['images_detail'] = json_encode($images_detail1);
 
-			$data['goods_original_price'] = input('post.goods_original_price/f');		
+			//$data['goods_original_price'] = input('post.goods_original_price/f');
 
 			$data['goods_present_price'] = input('post.goods_present_price/f');		
 
-			$data['goods_stock'] = input('post.goods_stock/d');		
+//			$data['goods_stock'] = input('post.goods_stock/d');
 
-			$goods_specifications = input('post.goods_specifications/a');		
+			//$goods_specifications = input('post.goods_specifications/a');
 
-			$data['goods_specifications'] = json_encode($goods_specifications);
+			//$data['goods_specifications'] = json_encode($goods_specifications);
 
-			$goods_attribute = input('post.goods_attribute/a');		
+//			$goods_attribute = input('post.goods_attribute/a');
 
-			$data['goods_attribute'] = json_encode($goods_attribute);
+//			$data['goods_attribute'] = json_encode($goods_attribute);
 
 			$data['goods_detail'] = input('post.goods_detail/s');
 
@@ -455,7 +455,7 @@ class GoodsController extends AdminController
 
 			$popularity = input('post.popularity/s');
 
-			$relation = input('post.relation/s');
+//			$relation = input('post.relation/s');
 
 			if($state == $whether[0]){
 
@@ -493,14 +493,14 @@ class GoodsController extends AdminController
 				$data['popularity'] = 1;
 			}
 
-			if($relation == $whether[0]){
-
-				$data['relation'] = 0;
-
-			}else{
-				
-				$data['relation'] = 1;
-			}
+//			if($relation == $whether[0]){
+//
+//				$data['relation'] = 0;
+//
+//			}else{
+//
+//				$data['relation'] = 1;
+//			}
 
 			$data['brand_id'] = input('post.brand_id/d');
 
@@ -533,19 +533,19 @@ class GoodsController extends AdminController
 
 			$data['images_detail'] = json_encode($images_detail1);
 
-			$data['goods_original_price'] = input('post.goods_original_price/f');		
+			//$data['goods_original_price'] = input('post.goods_original_price/f');
 
 			$data['goods_present_price'] = input('post.goods_present_price/f');		
 
-			$data['goods_stock'] = input('post.goods_stock/d');		
+//			$data['goods_stock'] = input('post.goods_stock/d');
 
-			$goods_specifications = input('post.goods_specifications/a');		
+			//$goods_specifications = input('post.goods_specifications/a');
 
-			$data['goods_specifications'] = json_encode($goods_specifications);
+			//$data['goods_specifications'] = json_encode($goods_specifications);
 
-			$goods_attribute = input('post.goods_attribute/a');		
+//			$goods_attribute = input('post.goods_attribute/a');
 
-			$data['goods_attribute'] = json_encode($goods_attribute);
+//			$data['goods_attribute'] = json_encode($goods_attribute);
 
 			$data['goods_detail'] = input('post.goods_detail/s');
 
@@ -579,13 +579,13 @@ class GoodsController extends AdminController
 
 			$list['goods_images'] = json_decode($list['goods_images'],true);
 
-			$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
+//			$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
 
-			$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
+//			$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
 
-			$list['goods_specifications_num'] = count($list['goods_specifications']);
+//			$list['goods_specifications_num'] = count($list['goods_specifications']);
 
-			$list['goods_attribute_num'] = count($list['goods_attribute']);
+//			$list['goods_attribute_num'] = count($list['goods_attribute']);
 
 			$images_detail = json_decode($list['images_detail'],true);
 
@@ -809,19 +809,19 @@ class GoodsController extends AdminController
 
 			$data['images_detail'] = json_encode($images_detail1);
 
-			$data['goods_original_price'] = input('post.goods_original_price/f');		
+			//$data['goods_original_price'] = input('post.goods_original_price/f');
 
 			$data['goods_present_price'] = input('post.goods_present_price/f');		
 
-			$data['goods_stock'] = input('post.goods_stock/d');		
+//			$data['goods_stock'] = input('post.goods_stock/d');
 
-			$goods_specifications = input('post.goods_specifications/a');		
+//			$goods_specifications = input('post.goods_specifications/a');
 
-			$data['goods_specifications'] = json_encode($goods_specifications);
+//			$data['goods_specifications'] = json_encode($goods_specifications);
 
-			$goods_attribute = input('post.goods_attribute/a');		
+//			$goods_attribute = input('post.goods_attribute/a');
 
-			$data['goods_attribute'] = json_encode($goods_attribute);
+//			$data['goods_attribute'] = json_encode($goods_attribute);
 
 			$data['goods_detail'] = input('post.goods_detail/s');
 
@@ -884,19 +884,19 @@ class GoodsController extends AdminController
 
 			$data['images_detail'] = json_encode($images_detail1);
 
-			$data['goods_original_price'] = input('post.goods_original_price/f');		
+			//$data['goods_original_price'] = input('post.goods_original_price/f');
 
 			$data['goods_present_price'] = input('post.goods_present_price/f');		
 
-			$data['goods_stock'] = input('post.goods_stock/d');		
+//			$data['goods_stock'] = input('post.goods_stock/d');
 
-			$goods_specifications = input('post.goods_specifications/a');		
+//			$goods_specifications = input('post.goods_specifications/a');
 
-			$data['goods_specifications'] = json_encode($goods_specifications);
+//			$data['goods_specifications'] = json_encode($goods_specifications);
 
-			$goods_attribute = input('post.goods_attribute/a');		
+//			$goods_attribute = input('post.goods_attribute/a');
 
-			$data['goods_attribute'] = json_encode($goods_attribute);
+//			$data['goods_attribute'] = json_encode($goods_attribute);
 
 			$data['goods_detail'] = input('post.goods_detail/s');
 
@@ -922,13 +922,13 @@ class GoodsController extends AdminController
 
 			$list['goods_images'] = json_decode($list['goods_images'],true);
 
-			$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
+//			$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
 
-			$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
+//			$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
 
-			$list['goods_specifications_num'] = count($list['goods_specifications']);
+			//$list['goods_specifications_num'] = count($list['goods_specifications']);
 
-			$list['goods_attribute_num'] = count($list['goods_attribute']);
+//			$list['goods_attribute_num'] = count($list['goods_attribute']);
 
 			$images_detail = json_decode($list['images_detail'],true);
 
@@ -1025,7 +1025,7 @@ class GoodsController extends AdminController
 
 			$arr[$key]['goods_images'] = $value['goods_images'];
 
-			$arr[$key]['goods_original_price'] = $value['goods_original_price'];
+			//$arr[$key]['goods_original_price'] = $value['goods_original_price'];
 
 			$arr[$key]['goods_present_price'] = $value['goods_present_price'];
 
@@ -1033,11 +1033,11 @@ class GoodsController extends AdminController
 
 			$arr[$key]['state'] = 1;
 
-			$arr[$key]['goods_specifications'] = $value['goods_specifications'];
+//			$arr[$key]['goods_specifications'] = $value['goods_specifications'];
 
-			$arr[$key]['goods_attribute'] = $value['goods_attribute'];
+//			$arr[$key]['goods_attribute'] = $value['goods_attribute'];
 
-			$arr[$key]['goods_stock'] = $value['goods_stock'];
+//			$arr[$key]['goods_stock'] = $value['goods_stock'];
 
 			$arr[$key]['type_id'] = $value['type_id'];
 
@@ -1076,13 +1076,13 @@ class GoodsController extends AdminController
 
 		$list['goods_images'] = json_decode($list['goods_images'],true);
 
-		$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
+		//$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
 
-		$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
+//		$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
 
-		$list['goods_specifications_num'] = count($list['goods_specifications']);
+		//$list['goods_specifications_num'] = count($list['goods_specifications']);
 
-		$list['goods_attribute_num'] = count($list['goods_attribute']);
+//		$list['goods_attribute_num'] = count($list['goods_attribute']);
 
 		$images_detail = json_decode($list['images_detail'],true);
 
