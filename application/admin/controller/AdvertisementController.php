@@ -1,5 +1,7 @@
 <?php
 namespace app\admin\controller;
+use app\admin\model\ad_style;
+use app\admin\model\Store;
 use think\Controller;
 use think\Request;
 use app\admin\model\AdvertisementType;
@@ -300,5 +302,33 @@ class AdvertisementController extends AdminController
     public function advertisement_style(){
 	    return view();
     }
+    // 新增广告样式
+    public function advertisement_style_add(){
 
+        if ($_POST) {
+
+            $data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
+
+            if (!$data['store_id'])
+                return json(['code' => 400 , 'msg' => '请选择店铺']);
+
+            $data['image_url'] = input('post.image_url/s');
+
+            $data['url'] = input('post.url/s');
+
+            $data['create_time'] = time();
+
+            $style_model = new ad_style();
+
+            $res = $style_model->Common_Insert($data);
+
+            if ($res)
+                return json(['code' => 200 , 'msg' => '添加成功']);
+            return json(['code' => 400 , 'msg' => '添加失败']);
+
+        }else{
+
+            return view();
+        }
+    }
 }

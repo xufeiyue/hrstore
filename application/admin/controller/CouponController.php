@@ -206,4 +206,31 @@ class CouponController extends Controller
         }
         return $data;
     }
+
+
+    public function download()
+    {
+        //$famlePath = $_GET['resum'];
+        $file_dir = ROOT_PATH . 'public' . DS . 'uploads' . '/' . "卡券模板.xlsx";    // 下载文件存放目录
+
+        // 检查文件是否存在
+        if (!file_exists($file_dir)) {
+            $this->error('文件未找到');
+        } else {
+            // 打开文件
+            $file1 = fopen($file_dir, "r");
+            // 输入文件标签
+            Header("Content-type: application/octet-stream");
+            Header("Accept-Ranges: bytes");
+            Header("Accept-Length:" . filesize($file_dir));
+            Header("Content-Disposition: attachment;filename=卡券模板.xlsx");
+            ob_clean();     // 重点！！！
+            flush();        // 重点！！！！可以清除文件中多余的路径名以及解决乱码的问题：
+            //输出文件内容
+            //读取文件内容并直接输出到浏览器
+            echo fread($file1, filesize($file_dir));
+            fclose($file1);
+            exit();
+        }
+    }
 }

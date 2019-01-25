@@ -1,0 +1,130 @@
+{include file="public/header"}
+<div class="x-body">
+    <form class="layui-form">
+
+        <div class="layui-form-item">
+            <label  for="store_id" class="layui-form-label">
+                <span class="x-red">*</span>选择店铺
+            </label>
+            <div class="layui-input-block">
+                <select name="store_id" lay-filter="store_id">
+                    <option value="0">请选择</option>
+                    {volist name="store" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="touxiang" class="layui-form-label">
+                <span class="x-red">*</span>图片
+            </label>
+            <input type="hidden" lay-verify="required" name="image_url" id="image" value="">
+            <div class="layui-upload-drag" id="test10" style="width: 40%;height: 40%">
+                <i class="layui-icon"></i>
+                <p>点击上传，或将文件拖拽到此处</p>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="activity_name" class="layui-form-label">
+                <span class="x-red"></span>跳转路径
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="url" name="url" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red"></span>(不填不跳转)
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="activity_name" class="layui-form-label">
+                <span class="x-red"></span>排序
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="sort" name="sort" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red"></span>(不填不跳转)
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button  class="layui-btn" lay-filter="add" lay-submit="">
+                增加
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form','layer','upload'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer
+            ,upload = layui.upload;
+
+        //拖拽上传
+        upload.render({
+            elem: '#test10'
+            ,url: '/Admin/Upload/upload'
+            ,accept: 'images'
+            ,exts: 'jpg|png' //允许上传类型
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#test10').html('');
+                    $('#test10').append('<img src="'+ result +'" alt="'+ file.name +'" style="width: 30%;height: 30%" class="layui-upload-img">')
+                });
+            }
+            ,done: function(res){ //上传成功 赋值
+                $('#image').val(res.data);
+                layer.msg('上传成功', {icon: 1});
+            }
+        });
+
+
+
+        //监听提交
+        form.on('submit(add)', function(data){
+            console.log(data);
+
+            if (data.field.type_id == 0) {
+                layer.msg('请选择类型',{time: 1000});
+                return false
+            }
+
+            //发异步，把数据提交给php
+            $.post('/Admin/Advertisement/advertisement_style_add', data.field, function(res){
+
+                if(res.code == 200){
+                    layer.alert(res.msg, {icon: 1},function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+
+                        //关闭当前frame
+                        parent.layer.close(index);
+
+                        window.parent.location.reload();
+
+                    });
+                }else{
+                    layer.msg(res.msg,{time: 1000});
+                }
+            })
+
+            return false;
+        });
+
+
+    });
+</script>
+<script>var _hmt = _hmt || []; (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script>
+</body>
+
+</html>
