@@ -1,4 +1,5 @@
 {include file="common/header"}
+<title>电子DM单</title>
 <script src="__JS__/scrollAd.js"></script>
 <!--图片轮换-->
 <!--<div>
@@ -39,7 +40,7 @@
      <div class="List-head" style="padding: 0 3px;">
          <h1 class="List-head-name">产品分类</h1>
          <a href="{:url('Index/category')}" class="List-head-more">更多分类
-             <!--<i class="iconfont icon-gengduo"></i>-->
+             <i class="iconfont icon-gengduo"></i>
          </a>
      </div>
 
@@ -56,10 +57,9 @@
      </ul>
   </div>
  <!--活动图片-->
-    <!--<div class="sq-title" id="activity">-->
-       <!---->
-    <!--</div>-->
-
+    <div class="sq-title" id="activity">
+       
+    </div>
     <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  id="goods_top_list">
         
     </ul>
@@ -100,36 +100,85 @@
     </ul>
 </div>
  <input type="hidden" id="store_id" value="{$store_id}">
- <!--<div style="height: 55px;"></div>
- <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
-      <ul class="am-navbar-nav am-cf am-avg-sm-4">
-          <li>
-            <a href="index.html" class="curr">
-                <span class="am-icon-home"></span>
-                <span class="am-navbar-label">首页</span>
-            </a>
-          </li>
-          <li>
-            <a href="category.html" class="">
-                <span class="am-icon-th-large"></span>
-                <span class="am-navbar-label">分类</span>
-            </a>
-          </li>
 
-          <li>
-            <a href="shopcart.html" class="">
-                <span class="am-icon-shopping-cart"></span>
-                <span class="am-navbar-label">购物车</span>
-            </a>
-          </li>
-          <li>
-            <a href="login.html" class="">
-                <span class="am-icon-user"></span>
-                <span class="am-navbar-label">我的55</span>
-            </a>
-          </li>
-      </ul>
-</div>-->
+<style>
+    .shouCi_box,.WanShan_box{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+    }
+    .WanShan_box{
+        display: none;
+    }
+    .shouCi_box img,.WanShan_box img{
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top:0;
+        left: 0;
+    }
+    .shouCi_box span{
+        width: 70%;
+        height: 3rem;
+        position: fixed;
+        top: 64%;
+        left: 15%;
+        text-align: center;
+
+    }
+    .WanShan_box a{
+        width: 70%;
+        height: 3rem;
+        position: fixed;
+        top: 64%;
+        left: 15%;
+        text-align: center;
+        display: block;
+    }
+    .shouCi_box .shouCi_Close,.WanShan_box .WanShan_Close{
+        width: 20%;
+        height: 3rem;
+        position: fixed;
+        top: 77%;
+        left: 40%;
+        text-align: center;
+    }
+</style>
+<!--首次一元红包弹出层-->
+<div class="shouCi_box TCC_Box">
+    <img src="http://huaruncard.redh5.cn/static/home/images/lijilingbao.png">
+    <span class="shouCi_Open"></span>
+    <span class="shouCi_Close"></span>
+</div>
+<!--首次一元红包弹出层-->
+<!--完善信息弹出层-->
+<div class="WanShan_box">
+    <img src="http://huaruncard.redh5.cn/static/home/images/wanshanxinxibao.png">
+    <a class="WanShan_Open" href="http://huaruncard.redh5.cn/home/member/infor.html"></a>
+    <span class="WanShan_Close"></span>
+</div>
+<!--完善信息弹出层-->
+<script>
+    $(function () {
+        $(".shouCi_Open").click(function() {
+            $(".WanShan_box").css("display","block");
+            $(".shouCi_box").css("display","none");
+        });
+        $(".shouCi_Close").click(function() {
+            $(".shouCi_box").css("display","none");
+        });
+
+        $(".WanShan_Close").click(function() {
+            $(".WanShan_box").css("display","none");
+        });
+    });
+</script>
 <script type="text/javascript">
     wx.ready(function(){
         // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
@@ -194,7 +243,7 @@
             var goods_list_html = '';
                 goods_list_html +='<div class="List-head">';
                 goods_list_html +=    '<h1 class="List-head-name">推荐爆款</h1>';
-                goods_list_html +=    '<a href="{:url("Index/tuijian")}"  class="List-head-more">更多爆款<i class="fa fa-chevron-circle-right fa-lg"></i></a>';
+                goods_list_html +=    '<a href="{:url("Index/tuijian")}"  class="List-head-more">更多爆款<i class="iconfont icon-gengduo"></i></a>';
                 goods_list_html +='</div>';
             for (i in goods_list) {
                 goods_list_html += '<li>';
@@ -202,7 +251,8 @@
                 goods_list_html +=        '<a href="{:url("Index/detail")}?id='+goods_list[i].id+'" class="">';
                 goods_list_html +=            '<img src="'+goods_list[i].goods_images+'" />';
                 goods_list_html +=            '<h3 class="am-gallery-title">'+goods_list[i].goods_name+'</h3>';
-                goods_list_html +=            '<div class="am-gallery-desc Y_hui"><p>优惠价</p><p>￥'+goods_list[i].goods_present_price+'</p></div>';
+//                goods_list_html +=            '<div class="am-gallery-desc Y_hui"><p>优惠价</p><p>￥'+goods_list[i].goods_present_price+'</p></div>';
+                goods_list_html +=            '<div class="am-gallery-desc Y_hui"><p>优惠价</p><p><em>￥</em>'+goods_list[i].goods_present_price+'</p></div>';
                 goods_list_html +=        '</a>';
                 goods_list_html +=    '</div>';
                 goods_list_html += '</li>';
