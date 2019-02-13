@@ -1,4 +1,5 @@
 {include file="common/header"}
+<title>我的</title>
 <header data-am-widget="header" class="am-header am-header-default sq-head ">
     <div class="am-header-left am-header-nav">
         <a href="javascript:history.back()" class="">
@@ -26,7 +27,13 @@
 
 
     </div>
-    <div style="background: #ffffff; padding: 10px; border-radius: 5px; font-size: 1.3rem;">
+    <style>
+        .asdflasj p{
+            padding: 5px;
+            font-size: 1.5rem;
+        }
+    </style>
+    <div class="asdflasj" style="background: #ffffff; padding: 10px; border-radius: 5px; font-size: 1.3rem;">
         <p>
             卡券名称：{$info[0]['ticket_name']}
         </p>
@@ -46,34 +53,34 @@
 <input type="hidden" name="card_ticket_id" id="card_ticket_id" value="{$card_ticket_id}" />
 <div style="height: 55px;"></div>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
-    <ul class="am-navbar-nav am-cf am-avg-sm-4">
+    <ul class="am-navbar-nav am-cf am-avg-sm-4 Icon-Name">
         <li>
             <a href="{:url('Index/index')}">
-                <span class="am-icon-home fa fa-credit-card fa-lg"></span>
+                <span class="iconfont icon-bank-card-type"></span>
                 <span class="am-navbar-label">聚优惠</span>
             </a>
         </li>
         <li>
             <a href="{:url('Index/xfx')}">
-                <span class="am-icon-th-large fa fa-heart-o fa-lg"></span>
+                <span class="iconfont icon-xin-1"></span>
                 <span class="am-navbar-label">新发现</span>
             </a>
         </li>
         <li>
             <a href="{:url('Index/rqph')}">
-                <span class="am-icon-shopping-cart fa fa-cubes fa-lg"></span>
+                <span class="iconfont icon-paihangbang"></span>
                 <span class="am-navbar-label">人气榜</span>
             </a>
         </li>
         <li>
             <a href="{:url('Coupon/coupon_list')}" class="curr">
-                <span class="am-icon-shopping-cart fa fa-ticket fa-lg"></span>
+                <span class="iconfont icon-qiaquan1"></span>
                 <span class="am-navbar-label">卡券</span>
             </a>
         </li>
         <li>
             <a href="{:url('Member/index')}" class="">
-                <span class="am-icon-user fa fa-user-o fa-lg"></span>
+                <span class="iconfont icon-Personalcenter"></span>
                 <span class="am-navbar-label">我的</span>
             </a>
         </li>

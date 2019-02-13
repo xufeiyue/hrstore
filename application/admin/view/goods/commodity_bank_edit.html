@@ -38,7 +38,8 @@
                 <span class="x-red">*</span>商品图片
             </label>
             <div class="layui-upload" id="upload">
-              <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button> 
+              <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                <span style="display: inline-block;font-size: 14px;color: red">(图片建议尺寸：750 * 750)</span>
               <div class="layui-upload-list">
                 <table class="layui-table">
                   <thead>
@@ -94,41 +95,41 @@
             <!--</div>-->
           <!--</div>-->
 
-          {foreach name="list['goods_specifications']" item="vo" key="k" }
-          <div class="layui-form-item {if condition="$k eq 0"}guige{/if}" {if condition="$k neq 0"}id="guige_del_{$k}" {/if}>
-            <label for="activity_name" class="layui-form-label">
-                {if condition="$k eq 0"}
-                  <span class="x-red">*</span>商品规格
-                {/if}
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="goods_specifications" name="goods_specifications[]" value="{$vo}" lay-verify="required" autocomplete="off" class="layui-input">
-            </div>
-            {if condition="$k eq 0"}
-              <div class="layui-btn" id="guige_add">增加</div>
-            {else if/}
-              <div class="layui-btn guige_del" data-id="{$k}" style="background-color: #FF5722;">删除</div>
-            {/if}
-          </div>
-          {/foreach}
+          <!--{foreach name="list['goods_specifications']" item="vo" key="k" }-->
+          <!--<div class="layui-form-item {if condition="$k eq 0"}guige{/if}" {if condition="$k neq 0"}id="guige_del_{$k}" {/if}>-->
+            <!--<label for="activity_name" class="layui-form-label">-->
+                <!--{if condition="$k eq 0"}-->
+                  <!--<span class="x-red">*</span>商品规格-->
+                <!--{/if}-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="goods_specifications" name="goods_specifications[]" value="{$vo}" lay-verify="required" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+            <!--{if condition="$k eq 0"}-->
+              <!--<div class="layui-btn" id="guige_add">增加</div>-->
+            <!--{else if/}-->
+              <!--<div class="layui-btn guige_del" data-id="{$k}" style="background-color: #FF5722;">删除</div>-->
+            <!--{/if}-->
+          <!--</div>-->
+          <!--{/foreach}-->
 
-          {foreach name="list['goods_attribute']" item="vo" key="k" }
-          <div class="layui-form-item {if condition="$k eq 0"}shuxing{/if}" {if condition="$k neq 0"} id="shuxing_del_{$k}" {/if}>
-            <label for="activity_name" class="layui-form-label">
-                {if condition="$k eq 0"}
-                  <span class="x-red">*</span>商品属性
-                {/if}
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="goods_attribute" name="goods_attribute[]" value="{$vo}" lay-verify="required" autocomplete="off" class="layui-input">
-            </div>
-            {if condition="$k eq 0"}
-              <div class="layui-btn" id="shuxing_add">增加</div>
-            {else if/}
-              <div class="layui-btn shuxing_del" data-id="{$k}" style="background-color: #FF5722;">删除</div>
-            {/if}
-          </div>
-          {/foreach}
+          <!--{foreach name="list['goods_attribute']" item="vo" key="k" }-->
+          <!--<div class="layui-form-item {if condition="$k eq 0"}shuxing{/if}" {if condition="$k neq 0"} id="shuxing_del_{$k}" {/if}>-->
+            <!--<label for="activity_name" class="layui-form-label">-->
+                <!--{if condition="$k eq 0"}-->
+                  <!--<span class="x-red">*</span>商品属性-->
+                <!--{/if}-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="goods_attribute" name="goods_attribute[]" value="{$vo}" lay-verify="required" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+            <!--{if condition="$k eq 0"}-->
+              <!--<div class="layui-btn" id="shuxing_add">增加</div>-->
+            <!--{else if/}-->
+              <!--<div class="layui-btn shuxing_del" data-id="{$k}" style="background-color: #FF5722;">删除</div>-->
+            <!--{/if}-->
+          <!--</div>-->
+          <!--{/foreach}-->
 
 
 
@@ -136,7 +137,7 @@
   
           <div class="layui-form-item">
               <label class="layui-form-label">
-                  <span class="x-red">*</span>商品详情
+                  <span class="x-red"></span>商品详情
               </label>
                <div class="layui-input-inline"  style="width: 550px">
                   <textarea id="goods_detail" lay-verify="goods_detail" name="goods_detail" style="display: none;">{$list['goods_detail']}</textarea>

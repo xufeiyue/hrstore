@@ -5,7 +5,7 @@ use think\Controller;
 class Wechat extends Controller
 {
 	protected $appid='wx1e2fca3922c8c930';
-    protected $appsecret = '65f33b417ca42075b9a575a0e5bdad22';
+    protected $appsecret = 'f40795355ffb9cb9f8925667bf9f1546';
 
     //授权
 	public function accredit($redirect_url='',$state=''){

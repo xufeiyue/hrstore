@@ -92,8 +92,9 @@
                 <span class="x-red">*</span>商品图片
             </label>
             <div class="layui-upload" id="upload">
-              <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button> 
-              <div class="layui-upload-list">
+              <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                <span style="display: inline-block;font-size: 14px;color: red">(图片建议尺寸：750 * 750)</span>
+                <div class="layui-upload-list">
                 <table class="layui-table">
                   <thead>
                     <tr>
@@ -160,7 +161,7 @@
   
           <div class="layui-form-item">
               <label class="layui-form-label">
-                  <span class="x-red">*</span>商品详情
+                  <span class="x-red"></span>商品详情
               </label>
                <div class="layui-input-inline"  style="width: 550px">
                   <textarea id="goods_detail" lay-verify="goods_detail" name="goods_detail" style="display: none;"></textarea>

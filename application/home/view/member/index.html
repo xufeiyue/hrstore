@@ -1,7 +1,9 @@
 {include file="common/header"}
+<title>个人中心</title>
 	{if condition="$member['mobilephone'] eq ''"}
 	<div class="XinXi_box">
 		<div class="XinXi">
+			<h1 class="name_title">绑定手机</h1>
 			<span class="iconfont icon-cha Cha_btn"></span>
 			<div class="ytafg">
 				<i class="iconfont icon-shouji1"></i>
@@ -28,7 +30,7 @@
 				<!--<a href="" class="">个人中心</a>-->
 			<!--</h1>-->
 		<!--</header>-->
-	    <div style="height: 42px;" class="title_name">个人中心</div>
+	    <!--<div style="height: 42px;" class="title_name">个人中心</div>-->
 	    <div class="member">
 
 	    	<div class="mem-pic">
@@ -90,7 +92,7 @@
 							<img src="{$vo['goods_images']}" />
 							<h3 class="am-gallery-title">{$vo['goods_name']}</h3>
 							<!--<div class="am-gallery-desc am-gallery-yuan"></div>-->
-							<div class="am-gallery-desc am-gallery-color">￥{$vo['goods_original_price']}</div>
+							<div class="am-gallery-desc am-gallery-color"><em>￥</em>{$vo['goods_original_price']}<!-- <em>.00</em> --></div>
 						</a>
 					</div>
 				</li>

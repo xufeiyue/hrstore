@@ -15,6 +15,8 @@ class WxController extends Controller
         $state = $_GET['state']; //跳转url
         
         $access_token = $wechat->getAccessToken($code); //根据code获取token
+
+        
         // 验证是否为新用户
         $member = (new Member)->Common_Find(['openid' => $access_token['openid']]);
 
