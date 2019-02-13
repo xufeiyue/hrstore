@@ -8,6 +8,8 @@ use app\admin\model\Goods;
 use app\admin\model\CommodityBank;
 use app\admin\model\Activity;
 use app\admin\model\GoodsBrand;
+use app\admin\model\StoreTypeRecommend;
+use app\admin\model\Store;
 class GoodsController extends AdminController
 {
 	/*
@@ -34,7 +36,7 @@ class GoodsController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['a.store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = ['in',"0,{$this->is_jurisdiction}"];
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -48,6 +50,20 @@ class GoodsController extends AdminController
 		$data = (new GoodsType)->Common_Select($offset,$limit,$where,$order);
 
 		$data['data'] = Model('Common/Tree')->toFormatTree($data['data'],'goods_type_name');
+
+		foreach ($data['data'] as $key => $value) {
+			
+			$find = (new StoreTypeRecommend)->Common_Find(['type_id' => $value['id'], 'store_id' => $this->is_jurisdiction]);
+
+			if ($find) {
+				
+				$data['data'][$key]['recommend_name'] = '是';
+
+			}else{
+
+				$data['data'][$key]['recommend_name'] = '否';
+			}
+		}
 
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
@@ -1247,5 +1263,57 @@ class GoodsController extends AdminController
 		if($del)
 			return json(['code' => 200, 'msg' => '删除成功']);
 			return json(['code' => 400, 'msg' => '删除失败']);
+	}
+
+	//首页推荐
+	public function goods_type_update_recommend_type(){
+
+		$id = input('post.id/d');
+
+		$recommend_name = input('post.recommend_name/s');
+
+		$store_id = input('post.store_id/d');
+
+		if ($recommend_name == '是') {
+
+			if ($store_id == 0 && $this->is_jurisdiction == 0) { //批量删除
+			
+				$edit = (new StoreTypeRecommend)->Common_Delete(['type_id' => $id]);
+
+			}else{
+
+				$edit = (new StoreTypeRecommend)->Common_Delete(['type_id' => $id, 'store_id' => $this->is_jurisdiction]);
+			}
+		}else{
+
+			if ($store_id == 0 && $this->is_jurisdiction == 0) { //批量新增
+
+				$zuijia = [['id' => 0]]; //追加一个店铺
+				
+				$store = (new Store)->Common_All_Select(['status' => 1],[],['store_id id','store_name name']);
+
+				$arr = [];
+
+				if ($store) {
+					
+					$store = array_merge($zuijia,$store);
+				}
+
+				foreach ($store as $key => $value) {
+					
+					$arr[] = ['type_id' => $id, 'state' => 0, 'store_id' => $value['id']];
+				}
+
+				$edit = (new StoreTypeRecommend)->Common_InsertAll($arr);
+
+			}else{
+
+				$edit = (new StoreTypeRecommend)->Common_Insert(['type_id' => $id, 'state' => 0, 'store_id' => $this->is_jurisdiction]);
+			}
+
+		}
+		if($edit)
+			return json(['code' => 200, 'msg' => '操作成功']);
+			return json(['code' => 400, 'msg' => '操作失败']);
 	}
 }
