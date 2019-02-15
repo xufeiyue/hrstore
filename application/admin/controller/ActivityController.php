@@ -29,7 +29,7 @@ class ActivityController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['store_id'] = ['in',$this->is_jurisdiction];
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -71,7 +71,7 @@ class ActivityController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['store_id'] = ['in',$this->is_jurisdiction];
 		}
 
 		$order = ['id' => 'desc'];

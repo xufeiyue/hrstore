@@ -30,7 +30,7 @@ class AdvertisementController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['store_id'] = ['in',$this->is_jurisdiction];
 		}
 
 		$where['status'] = 0;
@@ -150,7 +150,7 @@ class AdvertisementController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['a.store_id'] = $this->is_jurisdiction;
+			$where['a.store_id'] = ['in',$this->is_jurisdiction];
 		}
 
 		$where['a.status'] = 0;

@@ -32,7 +32,7 @@ class GoodsController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['store_id'] = ['in',$this->is_jurisdiction];
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -148,7 +148,7 @@ class GoodsController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['store_id'] = ['in',$this->is_jurisdiction];
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -294,7 +294,7 @@ class GoodsController extends AdminController
 
 			$order = ['id' => 'desc'];
 
-			$goods_type = (new GoodsType)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
+			$goods_type = (new GoodsType)->type(['store_id' => ['in',$this->is_jurisdiction]; , 'status' => 0],$order);
 
 			$this->assign('goods_type',$goods_type);
 
@@ -526,7 +526,7 @@ class GoodsController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['store_id'] = ['in',$this->is_jurisdiction];
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -588,7 +588,7 @@ class GoodsController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['store_id'] = ['in',$this->is_jurisdiction];
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -662,7 +662,7 @@ class GoodsController extends AdminController
 
 			$order = ['id' => 'desc'];
 
-			$goods_type = (new GoodsType)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
+			$goods_type = (new GoodsType)->type(['store_id' => ['in',$this->is_jurisdiction]; , 'status' => 0],$order);
 
 			$this->assign('goods_type',$goods_type);
 
@@ -808,7 +808,7 @@ class GoodsController extends AdminController
 
 		$where['status'] = 0;
 
-		$Goods = (new Goods)->Goods_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => $this->is_jurisdiction],$order);
+		$Goods = (new Goods)->Goods_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => ['in',$this->is_jurisdiction];],$order);
 
 		if (!empty($Goods)) {
 			
