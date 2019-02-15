@@ -35,7 +35,9 @@ class MemberController extends CommonController
 	      if ($value['goods_images']) {
 	      
 	        $goods_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
-	      
+              $arr = explode('.',$value['goods_present_price']);
+              $goods_list[$key]['price1'] = $arr[0];
+              $goods_list[$key]['price2'] = '.'.$arr[1];
 	      }
 	    }
 
@@ -97,6 +99,10 @@ class MemberController extends CommonController
 				
 				$collection[$key]['goods_images'] = json_decode($value['goods_images'],true)[0];
 			}
+
+            $arr = explode('.',$value['goods_present_price']);
+            $collection[$key]['price1'] = $arr[0];
+            $collection[$key]['price2'] = '.'.$arr[1];
 		}
 
 		$this->assign('collection',$collection);
@@ -140,7 +146,11 @@ class MemberController extends CommonController
 			if ($value['goods_images']) {
 				
 				$browsinglog[$key]['goods_images'] = json_decode($value['goods_images'],true)[0];
+
 			}
+            $arr = explode('.',$value['goods_present_price']);
+            $browsinglog[$key]['price1'] = $arr[0];
+            $browsinglog[$key]['price2'] = '.'.$arr[1];
 		}
 
     	$this->assign('browsinglog',$browsinglog);

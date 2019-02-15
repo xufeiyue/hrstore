@@ -37,7 +37,7 @@
                         <a href="{:url('Index/detail',['id' => $vo['goods_id']])}" class="">
                             <img src="{$vo['goods_images']}" />
                             <div class="am-gallery-desc am-gallery-yuan">{$vo['goods_name']}</div>
-                            <div class="am-gallery-desc am-gallery-color c-am-gallery-color"><em>￥</em>{$vo['goods_original_price']}<!-- <em>.00</em> --></div>
+                            <div class="am-gallery-desc am-gallery-color c-am-gallery-color"><em>￥</em>{$vo['price1']}<em>{$vo['price2']}</em></div>
                         </a>
                     </div>
                 </li>

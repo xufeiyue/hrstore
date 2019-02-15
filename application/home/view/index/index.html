@@ -151,6 +151,7 @@
     }
 </style>
 <!--首次一元红包弹出层-->
+{if condition="$rec_key eq 1"}
 <div class="shouCi_box TCC_Box">
     <img src="http://huaruncard.redh5.cn/static/home/images/lijilingbao.png">
 
@@ -158,6 +159,7 @@
 
     <span class="shouCi_Close"></span>
 </div>
+{/if}
 <!--首次一元红包弹出层-->
 <!--完善信息弹出层-->
 <div class="WanShan_box">
@@ -315,11 +317,11 @@
 </script>
 <script>
     function getHongbao(){
-        $.post("{:url('Index/ajax_index')}",function(res){
+        $.post("{:url('Coupon/get_receive_coupon')}",function(res){
             if(res.code == 200){
-
+                alert(1)
             }else{
-
+                alert(2)
             }
         })
     }

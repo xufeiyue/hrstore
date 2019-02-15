@@ -1,5 +1,6 @@
 <?php
 namespace app\home\controller;
+use app\home\model\Coupon;
 use app\home\model\CouponType;
 use think\Controller;
 use app\home\model\Store;
@@ -37,6 +38,19 @@ class IndexController extends CommonController
     $this->assign('store_id',$store_id);
 
     $this->assign('title',$this->title);
+
+    // 判断当前用户是否领取过新人红包
+
+        $coupon_model = new CouponType();
+
+        $w['mr.member_id'] = $this->userId;
+        $w['ctt.card_type_id'] = 30;
+        $c = $coupon_model->getRegCoupon($w);
+        if(empty($c)){
+            $this->assign('rec_key',1);
+        }else{
+            $this->assign('rec_key',2);
+        }
 
     return view();
   }
@@ -292,12 +306,12 @@ class IndexController extends CommonController
 
     if ($type_id) {
 
-      $Goods = (new Goods)->Common_All_Select(['type_id' => $type_id, 'state' => 0, 'status' => 0, 'store_id' => $this->store_id],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
-
       if($GoodsType){
           // 判断当前分类pid是否为0，如果为0，显示当前分类下的二级分类，如果不为0，取出当前分类的pid，再取出当前二级分类
           $this_pid = (new GoodsType())->Common_Find(array('id'=>$type_id));
           if($this_pid['pid'] == 0){
+              //遍历该分类下的所有商品
+              $Goods = (new Goods)->getchildgoods($type_id,$this->store_id);
               // 取指定分类的二级分类
               $where_type_last = array('pid'=>$type_id,'status'=>0);
 
@@ -329,7 +343,7 @@ class IndexController extends CommonController
         
         $type_id = $GoodsType['0']['id'];
 
-        $Goods = (new Goods)->Common_All_Select(['type_id' => $GoodsType['0']['id'], 'state' => 0, 'status' => 0, 'store_id' => $this->store_id],['id' => 'desc'], ['id','goods_name','goods_images','goods_original_price','goods_present_price']);
+          $Goods = (new Goods)->getchildgoods($type_id,$this->store_id);
 
           // 取最后一个分类的二级分类
           $where_type_last = array('pid'=>$type_id,'status'=>0);
@@ -340,10 +354,9 @@ class IndexController extends CommonController
               $two_type_id = $last_type_list[0]['id'];
               $this->assign('two_type_id',$two_type_id);
           }
-
-
-
       }
+      $this->assign('type_id',$type_id);
+      $this->assign('tk',1);
     }
 
     if ($Goods) {
@@ -409,6 +422,9 @@ class IndexController extends CommonController
     foreach ($goods_list as $key => $value) {
       if ($value['goods_images']) {
         $goods_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0];
+        $arr = explode('.',$value['goods_present_price']);
+        $goods_list[$key]['price1'] = $arr[0];
+        $goods_list[$key]['price2'] = '.'.$arr[1];
       }
     }
 

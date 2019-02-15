@@ -75,11 +75,20 @@
 							<!--<span class="Two_lest">到静安寺了</span>-->
 							<!--<span class="Two_lest">到静安寺了</span>-->
 							<!--<span class="Two_lest">到静安寺了</span>-->
-
+							{if condition="$tk eq 1"}
+							<span class="Two_lest Two_lest_color">
+							<a href="{:url('Index/category',['type_id' => $type_id])}" >全部</a></span>
+							</span>
 							{foreach name="last_type_list" item="vo"}
-							<span {if condition="$two_type_id == $vo['id']"}class="Two_lest Two_lest_color"{else /}class="Two_lest"{/if}>
-							<a href="{:url('Index/category',['type_id' => $vo['id']])}"  {if condition="$two_type_id == $vo['id']"}class="Two_lest Two_lest_color"{else /}class="Two_lest"{/if}>{$vo['goods_type_name']}</a></span>
+							<span class="Two_lest">
+							<a href="{:url('Index/category',['type_id' => $vo['id']])}" class="Two_lest">{$vo['goods_type_name']}</a></span>
 							{/foreach}
+							{/if}
+
+							<!--{foreach name="last_type_list" item="vo"}-->
+							<!--<span {if condition="$two_type_id == $vo['id']"}class="Two_lest Two_lest_color"{else /}class="Two_lest"{/if}>-->
+							<!--<a href="{:url('Index/category',['type_id' => $vo['id']])}"  {if condition="$two_type_id == $vo['id']"}class="Two_lest Two_lest_color"{else /}class="Two_lest"{/if}>{$vo['goods_type_name']}</a></span>-->
+							<!--{/foreach}-->
 						</div>
 					</div>
 				</div>
