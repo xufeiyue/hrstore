@@ -563,10 +563,13 @@ class GoodsController extends AdminController
 
 //			$data['goods_attribute'] = json_encode($goods_attribute);
 
+            $data['goods_bk_paixu'] = input('post.goods_bk_paixu/d');
+
+            $data['goods_rq_paixu'] = input('post.goods_rq_paixu/d');
+
 			$data['goods_detail'] = input('post.goods_detail/s');
 
 			$data['update_time'] = time();
-
 			$edit = (new Goods)->Common_Update($data,['id' => $id]);
 
 			if($edit)
