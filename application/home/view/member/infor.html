@@ -34,9 +34,10 @@
 						<span>家庭：</span>
 						<select id="family" name="family" value="">
 							<option value ="0">请选择</option>
-							<option value ="1" {if condition="$member['family'] eq 1"}selected="selected"{/if}>三口之家</option>
 							<option value ="2" {if condition="$member['family'] eq 2"}selected="selected"{/if}>单身贵族</option>
 							<option value="3" {if condition="$member['family'] eq 3"}selected="selected"{/if}>二人世界</option>
+							<option value ="1" {if condition="$member['family'] eq 1"}selected="selected"{/if}>三口之家</option>
+							<option value ="4" {if condition="$member['family'] eq 4"}selected="selected"{/if}>四口以上</option>
 						</select>
 					</div>
 					<div class="my_age">
@@ -45,6 +46,9 @@
 							<option value ="0">请选择</option>
 							<option value ="1" {if condition="$member['age'] eq 1"}selected="selected"{/if}>12岁以上</option>
 							<option value ="2" {if condition="$member['age'] eq 2"}selected="selected"{/if}>18-30岁之间</option>
+							<option value ="3" {if condition="$member['age'] eq 3"}selected="selected"{/if}>30-45岁之间</option>
+							<option value ="4" {if condition="$member['age'] eq 4"}selected="selected"{/if}>45-60岁之间</option>
+							<option value ="5" {if condition="$member['age'] eq 5"}selected="selected"{/if}>60岁以上</option>
 						</select>
 					</div>
 					<div class="my_gender">

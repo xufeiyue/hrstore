@@ -17,6 +17,8 @@ use app\home\model\Questionnaire;
 use app\home\model\Problem;
 use app\home\model\Member;
 use app\home\model\MemberAndQuestionnaire;
+use think\Loader;
+
 class IndexController extends CommonController
 {
   public $title;
@@ -99,8 +101,6 @@ class IndexController extends CommonController
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
     $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field); //商品列表
-
-
 
     foreach ($goods_list as $key => $value) {
 
@@ -229,9 +229,13 @@ class IndexController extends CommonController
       }
     }
 
+    Loader::import('character.Character',EXTEND_PATH);
+
+    $store_list = (new \Character())->groupByInitials($store_list,'store_name');
     $this->assign('store_list',$store_list);
 
     $this->assign('title',$this->title);
+
 
     return view();
   }
@@ -378,7 +382,7 @@ class IndexController extends CommonController
     $this->assign('Goods',$Goods);
 
     $this->assign('GoodsType',$GoodsType);
-      $this->assign('last_type_list',$last_type_list);
+    $this->assign('last_type_list',$last_type_list);
 
     return view();
   }
