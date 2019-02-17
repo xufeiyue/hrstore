@@ -19,6 +19,10 @@ class LoginController extends Controller
     			//设置session
     			session('user_name',$rs['user_name']);//账号
     			session('user_id',$rs['id']); //管理员id
+                if (!is_numeric($rs['store_id'])) { //多店铺的时候
+                    $rs['store_id'] = explode(',', $rs['store_id'])[0]; //多店铺默认管理第一个店铺
+                    session('admin_type',1);
+                }
                 session('store_id',$rs['store_id']); //店铺id
                 return json(['code' => 1 , 'msg' => '登录成功,正在跳转中....']);
     		}elseif ($rs && ($rs['status'] == 0)) {

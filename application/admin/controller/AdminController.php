@@ -44,12 +44,6 @@ class AdminController extends Controller
 		$menu = $this->getMenus($controller);
 
         $is_jurisdiction = is_jurisdiction(); //判断是否是店铺
- 
-        $store = [
-            ['id' => 1 , 'name' => '名称1'],
-            ['id' => 2 , 'name' => '名称2'],
-            ['id' => 3 , 'name' => '名称3']
-        ];
         
         $store_model = new Store();
 
@@ -120,7 +114,7 @@ class AdminController extends Controller
 
             $data['update_time'] = time();
 
-            $data['store_id'] = input('post.store_id/d');
+            $data['store_id'] = input('post.store_id/a') ? implode(',', input('post.store_id/a')) : '';
 
 			$User = Model('User');
 
@@ -160,7 +154,7 @@ class AdminController extends Controller
 				unset($data['password']);
 			}
 	        
-            $data['store_id'] = input('post.store_id/d');
+            $data['store_id'] = input('post.store_id/a') ? implode(',', input('post.store_id/a')) : '';
 
             $data['update_time'] = time();
 
@@ -181,6 +175,7 @@ class AdminController extends Controller
 			$id = input('id');
 			$User = Model('User');
 			$data = $User->find($id);
+            $data['store_id'] = explode(',', $data['store_id']);
 			$this->assign('data',$data);
 			$get_role_list = get_role_list();
 

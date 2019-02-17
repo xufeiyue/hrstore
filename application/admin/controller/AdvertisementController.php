@@ -4,6 +4,7 @@ use app\admin\model\ad_style;
 use app\admin\model\Store;
 use think\Controller;
 use think\Request;
+use think\Db;
 use app\admin\model\AdvertisementType;
 use app\admin\model\Advertisement;
 class AdvertisementController extends AdminController
@@ -55,8 +56,8 @@ class AdvertisementController extends AdminController
 			
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
-			if (!$data['store_id'])
-				return json(['code' => 400 , 'msg' => '请选择店铺']);
+			// if (!$data['store_id'])
+			// 	return json(['code' => 400 , 'msg' => '请选择店铺']);
 
 			$data['type_name'] = input('post.type_name/s');
 
@@ -85,8 +86,8 @@ class AdvertisementController extends AdminController
 			
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
-			if (!$data['store_id'])
-				return json(['code' => 400 , 'msg' => '请选择店铺']);
+			// if (!$data['store_id'])
+			// 	return json(['code' => 400 , 'msg' => '请选择店铺']);
 
 			$data['type_name'] = input('post.type_name/s');
 
@@ -168,15 +169,12 @@ class AdvertisementController extends AdminController
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
 
-	//新增广告类型
+	//新增广告
 	public function advertisement_add(){
 
 		if ($_POST) {
 			
-			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
-
-			if (!$data['store_id'])
-				return json(['code' => 400 , 'msg' => '请选择店铺']);
+			$store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
 
 			$data['type_id'] = input('post.type_id/d');
 
@@ -190,22 +188,49 @@ class AdvertisementController extends AdminController
 
 			$data['update_time'] = time();
 
-			$add = (new Advertisement)->Common_Insert($data);
+			Db::startTrans();
+        	try{
 
-			if ($add)
+				if (is_array($store_id)) {
+
+					$arr = [];
+					
+					foreach ($store_id as $key => $value) {
+						
+						$data['store_id'] = $value;
+
+						$arr[] = $data;
+					}
+
+					(new Advertisement)->Common_InsertAll($arr);
+
+				}else{
+
+					$data['store_id'] = $store_id;
+
+					(new Advertisement)->Common_Insert($data);
+				}
+
+
+				//提交事务
+				Db::commit();
 				return json(['code' => 200 , 'msg' => '新增成功']);
-				return json(['code' => 400 , 'msg' => '新增失败']);
+			}catch (\Exception $e) {
+	            // 回滚事务
+	            Db::rollback();
+	            return json(['code' => 400 , 'msg' => '新增失败']);
+	        }
 
 		}else{
 
 			$type = [];
 
-			if ($this->is_jurisdiction) { // 店铺下广告类型
+			// if ($this->is_jurisdiction) { // 店铺下广告类型
 
 				$order = ['id' => 'desc'];
 
-				$type = (new AdvertisementType)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
-			}
+				$type = (new AdvertisementType)->type(['store_id' => ['in',"0,{$this->is_jurisdiction}"], 'status' => 0],$order);
+			// }
 
 			$this->assign('type',$type);
 
@@ -249,7 +274,7 @@ class AdvertisementController extends AdminController
 
 			$list = (new Advertisement)->Common_Find(['id' => $id]);
 
-			$type = (new AdvertisementType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
+			$type = (new AdvertisementType)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
 
 			$this->assign('type',$type);
 
