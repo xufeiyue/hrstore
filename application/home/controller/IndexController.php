@@ -84,7 +84,7 @@ class IndexController extends CommonController
 
     $activity = (new Activity)->Common_Find(['banner' => 0, 'store_id' => $store['store_id']]); //轮播活动
 
-    $AdvertisementType = (new AdvertisementType)->Common_Find(['store_id' => $store['store_id'], 'status' => 0, 'type_name' => '首页']);
+    $AdvertisementType = (new AdvertisementType)->Common_Find('status' => 0, 'type_name' => '首页']);
 
     $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
 
@@ -403,7 +403,7 @@ class IndexController extends CommonController
 
     $this->title = '人气商品排行榜';
 
-    $AdvertisementType = (new AdvertisementType)->Common_Find(['store_id' => $this->store_id, 'status' => 0, 'type_name' => '人气']);
+    $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '人气']);
 
     $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $this->store_id, 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
 
@@ -442,7 +442,7 @@ class IndexController extends CommonController
 
     $this->title = '推荐爆款';
 
-    $AdvertisementType = (new AdvertisementType)->Common_Find(['store_id' => $this->store_id, 'status' => 0, 'type_name' => '爆款']);
+    $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '爆款']);
 
     $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $this->store_id, 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
 

@@ -3,9 +3,14 @@ namespace app\admin\model;
 use think\Model;
 use think\Validate;
 use think\Db;
-class User extends Model
+class User extends Common
 {
-	 
+	private $table = 'user';
+
+	public function __construct(){
+
+		parent::__construct($this->table);
+	}
 	/**
 	 * [check 验证用户名密码是否正确]
 	 * @param  string $where [条件]
@@ -15,7 +20,7 @@ class User extends Model
 	{
 		// $where['status'] = 1; //有效
 		$where['state'] = 0; //正常
-		$rs = $this->where($where)->find();
+		$rs = Db::name('user')->where($where)->find();
 		if($rs){
 			//登录成功 加入登录日志
 			$data['user_id'] = $rs['id'];
@@ -27,7 +32,7 @@ class User extends Model
 
 			return $rs;
 		}else{
-			return $this->getError();
+			return false;
 		}
 	}
 	// 新增用户数据
@@ -51,7 +56,7 @@ class User extends Model
 	public function lists($offset=0,$limit=10,$where=[],$order=[])
 	{
 
-		$data = $this
+		$data = Db::name('user')
 			->alias('a')
 			->where($where)
 			->field('a.*,r.title')
@@ -60,7 +65,7 @@ class User extends Model
 			->order($order)
 			->select();
 
-		$count = $this
+		$count = Db::name('user')
 			->alias('a')
 			->where($where)
 			->count();
