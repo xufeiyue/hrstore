@@ -16,8 +16,24 @@ class GoodsType extends Common
     	$data = Db::name($this->table)
     		->alias('g')
     		->join('store_type_recommend s',"s.type_id = g.id and s.store_id = {$store_id}",'left')
+    		->join('store_type_sort t',"t.type_id = g.id and s.store_id = {$store_id}",'left')
 			->where($where)
 			->limit($offset,$limit)
+			->order($order)
+			->field($field)
+			->select();
+
+		return $data;
+    }
+
+    //全部分类+排序
+    public function goods_type_all($where=[],$order=[],$field=[]){
+    	
+    	$data = Db::name($this->table)
+    		->alias('g')
+    		->join('store_type_recommend s',"s.type_id = g.id and s.store_id = {$store_id}",'left')
+    		->join('store_type_sort t',"t.type_id = g.id and s.store_id = {$store_id}",'left')
+			->where($where)
 			->order($order)
 			->field($field)
 			->select();

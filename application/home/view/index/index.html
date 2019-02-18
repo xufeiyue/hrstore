@@ -206,7 +206,6 @@
     function getinfo(latitude,longitude){
 
         $.post("{:url('Index/ajax_index')}",{latitude: latitude, longitude: longitude,store_id: store_id},function(res){
-
             var store = res.data.store
             var advertisement = res.data.advertisement
             var goods_list = res.data.goods_list

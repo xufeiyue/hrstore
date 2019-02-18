@@ -40,10 +40,11 @@ class CommonController extends Controller
 			$this->store_id = session('store_id');
 
 		}else{
-			 // $url = urlencode(Request()->domain().'/home/Wx/getChatInfo');
-			 // $state = base64_encode(json_encode(["module" => $module, "controller" => $controller, "action" => $action]));
-			 // $wechat = new Wechat();
-			 // $wechat->accredit($url,$state);
+			 $url = urlencode(Request()->domain().'/home/Wx/getChatInfo');
+			 $state = base64_encode(json_encode(["module" => $module, "controller" => $controller, "action" => $action]));
+			 // $state = base64_encode('/'.$module.'/'.$controller.'/'.$action);
+			 $wechat = new Wechat();
+			 $wechat->accredit($url,$state);
 		}
 
 		

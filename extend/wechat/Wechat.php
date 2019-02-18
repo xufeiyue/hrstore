@@ -13,6 +13,13 @@ class Wechat extends Controller
 		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_url}&response_type=code&scope=snsapi_userinfo&state={$state}#wechat_redirect";
 
         $this->redirect($url);
+
+        // $ourl= "http://crvweixin.crv.com.cn/activities/impl/actThird!toActOauth.action?actUrl=zqcj1&appidType=1";  //华润的接口地址
+        // $ourl=str_replace('&amp;','&',$ourl);
+        // // 接口回调后想带的参数，我这边做华润活动一般填写这次华润活动的路径，用于回调以后的跳转，需要使用base64加密
+        // $lasturl = $ourl.'&thirdParams='.$state;     //拼接跳转华润的接口路径                                                                 
+        // $oauthUrl=$lasturl;
+        // $this->redirect($oauthUrl);
 	}
 
 	public function getAccessToken($code=''){

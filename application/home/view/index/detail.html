@@ -1,16 +1,16 @@
 {include file="common/header"}
-<title>商品</title>
-    <header data-am-widget="header" class="am-header am-header-default sq-head ">
+<title>{$goods_detail['goods_name']}</title>
+   <!--   <header data-am-widget="header" class="am-header am-header-default sq-head ">
       <div class="am-header-left am-header-nav">
         <a href="javascript:history.back()" class="">
           <i class="am-icon-chevron-left"></i>
         </a>
       </div>
-      <h1 class="am-header-title">
+    <h1 class="am-header-title">
                 <a href="" class="">{$title}</a>
             </h1>
       </header>
-      <div style="height: 42px;"></div>
+      <div style="height: 42px;"></div>-->
       <!--图片轮换-->
     <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
       <ul class="am-slides">
@@ -22,9 +22,7 @@
     <div class="detal-info" style=" margin-top: 10px;">
       <!--<span style="padding: 5px 10px; background: #ff4646; color: #ffffff;">产品名称</span>-->
         <p style=" margin-bottom:13px;">{$goods_detail['goods_name']}</p>
-
-        <span style="float: left; color: #ff4646; font-size: 1.8rem;line-height: 2rem; margin-bottom:13px; width: 100%;display: block;"><em style="font-size: 1rem">￥</em>{$goods_detail['price1']}<em style="font-size: 1rem">{$goods_detail['price2']}</em></em></span>
-
+        <span style="float: left; color: #ff4646; font-size: 2.4rem;line-height: 2rem; margin-bottom:13px; width: 100%;display: block;"><em style="font-size: 1.2rem">￥</em>{$goods_detail['price1']}<em style="font-size: 1.2rem">{$goods_detail['price2']}</em></em></span>
 
       <!--<h2>商城价：<span>￥{$goods_detail['goods_original_price']}</span></h2>-->
       <div class="ZLY_info" style="overflow: hidden; width: 100%;">

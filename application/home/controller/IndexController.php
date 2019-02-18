@@ -17,6 +17,8 @@ use app\home\model\Questionnaire;
 use app\home\model\Problem;
 use app\home\model\Member;
 use app\home\model\MemberAndQuestionnaire;
+use think\Loader;
+
 class IndexController extends CommonController
 {
   public $title;
@@ -100,8 +102,6 @@ class IndexController extends CommonController
 
     $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field); //商品列表
 
-
-
     foreach ($goods_list as $key => $value) {
 
       if ($value['goods_images']) {
@@ -118,9 +118,9 @@ class IndexController extends CommonController
 
     $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0];
 
-    $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(s.id,0)recommend_type'];
+    $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(s.id,0)recommend_type','COALESCE(t.sort,0)sort'];
     //产品分类
-    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['recommend_type' => 'desc','g.id' => 'desc'],$goods_type_field,$store['store_id']);
+    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['recommend_type' => 'desc','sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$store['store_id']);
 
     // 获取
 
@@ -229,9 +229,13 @@ class IndexController extends CommonController
       }
     }
 
+    Loader::import('character.Character',EXTEND_PATH);
+
+    $store_list = (new \Character())->groupByInitials($store_list,'store_name');
     $this->assign('store_list',$store_list);
 
     $this->assign('title',$this->title);
+
 
     return view();
   }
@@ -298,9 +302,11 @@ class IndexController extends CommonController
 
     $type_id = input('type_id/d') ? : 0;
 
-    $where = ['store_id' => ['in',"0,{$this->store_id}"], 'status' => 0, 'pid' => 0];
+    $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0];
 
-    $GoodsType = (new GoodsType)->Common_All_Select($where, ['id' => 'desc'],['id','goods_type_name','url']); //全部分类
+    $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(s.id,0)recommend_type','COALESCE(t.sort,0)sort'];
+
+    $GoodsType = (new GoodsType)->goods_type_all($where, ['recommend_type' => 'desc' 'sort' => 'ASC','g.id' => 'desc'],$goods_type_field); //全部分类
 
     $Goods = [];
 
@@ -378,7 +384,7 @@ class IndexController extends CommonController
     $this->assign('Goods',$Goods);
 
     $this->assign('GoodsType',$GoodsType);
-      $this->assign('last_type_list',$last_type_list);
+    $this->assign('last_type_list',$last_type_list);
 
     return view();
   }
@@ -448,7 +454,7 @@ class IndexController extends CommonController
 
     $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
 
-    $order = ['number_of_visits' => 'desc']; //爆款人气排序
+    $order = ['number_of_visits' => 'desc','']; //爆款人气排序
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
@@ -610,5 +616,6 @@ class IndexController extends CommonController
       return json(['code' => 400, 'msg' => '参与调研失败']);
 
   }
+
 
 }
