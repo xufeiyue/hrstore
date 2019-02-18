@@ -120,13 +120,13 @@ class AdminController extends Controller
 
             $rs = $User->add($data);
 
-			if($rs['code']){
+			if($rs){
 			
             	return json(['code' => 1 , 'msg' => '新增成功']);
 			
             }else{
 			
-            	return json(['code' => 0 , 'msg' => $rs['msg']]);
+            	return json(['code' => 0 , 'msg' => '新增失败']);
 			}
 		}else{
 			
@@ -158,13 +158,15 @@ class AdminController extends Controller
 
             $data['update_time'] = time();
 
+            $data['id'] = input('post.id/d');
+
 			$User = Model('User');
 			$AuthGroup = Model('AuthGroup');
 			$gid = input('post.role_id/d');
 	        if( $gid && !$AuthGroup->checkGroupId($gid)){
 	            $this->error($AuthGroup->error);
 	        }
-			$rs = $User->where(['id'=>input('post.id/d')])->update($data);
+			$rs = $User->update($data);
 			
 			if($rs){
                 return json(['code' => 1 , 'msg' => '编辑成功']);

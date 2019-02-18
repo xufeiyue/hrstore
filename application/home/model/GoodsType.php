@@ -27,8 +27,8 @@ class GoodsType extends Common
     }
 
     //全部分类+排序
-    public function goods_type_all($where=[],$order=[],$field=[]){
-    	
+    public function goods_type_all($where=[],$order=[],$field=[],$store_id=0){
+
     	$data = Db::name($this->table)
     		->alias('g')
     		->join('store_type_recommend s',"s.type_id = g.id and s.store_id = {$store_id}",'left')

@@ -38,12 +38,7 @@ class User extends Common
 	// 新增用户数据
 	public function add($data)
 	{
-
-	    if ($this->validate(true)->save($data)) {
-	        return ['code'=>1];
-	    } else {
-	        return ['code'=>0,'msg'=>$this->getError()];
-	    }
+	    return Db::name('user')->insert($data);
 	}
 
 	public function loginlog($data)
@@ -71,5 +66,14 @@ class User extends Common
 			->count();
 			
 		return ['total'=>$count,'rows'=>$data];
+	}
+
+	public function find($id){
+
+		return Db::name('user')->where(['id' => $id])->find();
+	}
+
+	public function update($data){
+		return Db::name('user')->where(['id' => $data['id']])->update($data);
 	}
 }
