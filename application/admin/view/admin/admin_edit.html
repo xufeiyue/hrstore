@@ -6,12 +6,15 @@
               <span class="x-red">*</span>选择店铺
             </label>
             <div class="layui-input-block">
-              <select name="store_id" lay-filter="store_id">
-                <option value="0">请选择</option>
+              <!-- <select name="store_id" lay-filter="store_id"> -->
+                <dl class="checkmod">
+              
+                <input type="checkbox" lay-filter="filter" title="全选">
                 {volist name="store" id="vo"}
-                    <option value="{$vo.id}" {if condition="$data['store_id'] eq $vo['id']"}selected="selected"{/if}>{$vo.name}</option>
+                     <input type="checkbox" name="store_id[]" value="{$vo['id']}" title="{$vo.name}" {foreach name="data['store_id']" item="vo1" key="k1" } {if condition="$vo1 eq $vo['id']"} checked="checked"{/if} {/foreach}>
                 {/volist}
-              </select>
+                </dl>
+              <!-- </select> -->
             </div>
           </div>
           <div class="layui-form-item">
@@ -90,6 +93,13 @@
                 }
             }
           });
+
+          form.on('checkbox(filter)', function(data){ //全选
+
+              $(this).closest('dl').find('input').prop('checked',this.checked);
+             
+              form.render('checkbox');//渲染
+          });  
 
           //监听提交
           form.on('submit(edit)', function(data){

@@ -8,6 +8,17 @@ class WxController extends Controller
 //拉取信息 跳转页面
 	public function getChatInfo(){
 
+        // $thirdParams = $_GET['thirdParams'];
+
+        // $param = $_GET['param'];
+
+        // $key='crv_ehasdfu_sgfnasdbf_pw';   // 秘钥 这地方有可能会换
+        // $hrinfo = $this->decrypt($_GET['param'],$key);  //解密
+        // $hrinfo=preg_replace('/[\x00-\x1F\x80-\x9F]/u', '', trim($hrinfo));
+        // $userinfo = json_decode($hrinfo,true);  //这一步就获取到了用户信息
+
+        // echo '<pre>';print_r($userinfo);exit;
+
 		$wechat = new Wechat();//实例化微信类
 
         $code = $_GET['code'];  //获取跳转后的code
@@ -83,5 +94,45 @@ class WxController extends Controller
     public function _redirect($state) {
         return join('/', json_decode(base64_decode($state), true));
     }
+
+    public function decrypt($dStr = '', $key, $use3des = true){
+      //$key=$this->keyStr;
+      if (empty($dStr) || empty($key))
+      {
+        return False;
+      }
+      
+      $replaceStr = $this->replaceStr($dStr,False);
+    //        $replaceStr = $dStr;
+      $cipher = $use3des ? MCRYPT_TRIPLEDES : MCRYPT_DES;
+      $modes  = MCRYPT_MODE_ECB;
+      $td     = mcrypt_module_open( $cipher, '', $modes, '' );
+      $iv     = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_RAND );
+      mcrypt_generic_init($td, $key, $iv);
+      //开始base64反编码
+      $decode64=base64_decode($replaceStr);
+      //开始解密
+      $decrypted = mdecrypt_generic($td, $decode64);
+      //执行清理工作
+      mcrypt_generic_deinit($td);
+      mcrypt_module_close($td);
+      return $decrypted;
+    }
+      
+      public function replaceStr($rStr,$rMode=True){
+        $replaceStr='';
+        if($rMode)
+        {
+          $replaceStr = str_replace("+", "*", $rStr);
+          $replaceStr = str_replace("/", ":", $replaceStr);
+          $replaceStr = str_replace("=", "_", $replaceStr);
+        }else
+        {
+          $replaceStr = str_replace("*", "+", $rStr);
+          $replaceStr = str_replace(":", "/", $replaceStr);
+          $replaceStr = str_replace("_", "=", $replaceStr);
+        }
+        return $replaceStr;
+      }
 
 }

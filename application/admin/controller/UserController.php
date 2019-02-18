@@ -38,10 +38,10 @@ class UserController extends AdminController
     		$data['password'] = MD5(input('password'));
 			$User = Model('lock_user');
 			$rs = $User->add($data);
-			if($rs['code']){
+			if($rs){
 				$this->success('添加成功',url('user_list'));
 			}else{
-				$this->error($rs['msg']);
+				$this->error('添加失败');
 			}
     	}else{
     		return view();
