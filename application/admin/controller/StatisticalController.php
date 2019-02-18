@@ -27,7 +27,9 @@ class StatisticalController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
+
 			$where['a.store_id'] = $this->is_jurisdiction;
+
 		}
 
 		$type_id = input('post.type_id');
@@ -257,6 +259,7 @@ class StatisticalController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
+
 			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
@@ -699,7 +702,7 @@ class StatisticalController extends AdminController
 
 		$order = ['id' => 'desc'];
 
-		$problem = (new Problem)->Problem_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => $this->is_jurisdiction],$order);
+		$problem = (new Problem)->Problem_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => ['in',$this->is_jurisdiction]],$order);
 
 		if (!empty($problem)) {
 			
@@ -929,7 +932,7 @@ class StatisticalController extends AdminController
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 			
-			$where['store_id'] = $this->is_jurisdiction;
+			$where['store_id'] = ['in',$this->is_jurisdiction];
 		}
 
 		$where['a.status'] = 0;
