@@ -118,9 +118,9 @@ class IndexController extends CommonController
 
     $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0];
 
-    $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(s.id,0)recommend_type'];
+    $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(s.id,0)recommend_type','COALESCE(t.sort,0)sort'];
     //产品分类
-    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['recommend_type' => 'desc','g.id' => 'desc'],$goods_type_field,$store['store_id']);
+    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['recommend_type' => 'desc','sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$store['store_id']);
 
     // 获取
 
@@ -302,9 +302,11 @@ class IndexController extends CommonController
 
     $type_id = input('type_id/d') ? : 0;
 
-    $where = ['store_id' => ['in',"0,{$this->store_id}"], 'status' => 0, 'pid' => 0];
+    $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0];
 
-    $GoodsType = (new GoodsType)->Common_All_Select($where, ['id' => 'desc'],['id','goods_type_name','url']); //全部分类
+    $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(s.id,0)recommend_type','COALESCE(t.sort,0)sort'];
+
+    $GoodsType = (new GoodsType)->goods_type_all($where, ['recommend_type' => 'desc' 'sort' => 'ASC','g.id' => 'desc'],$goods_type_field); //全部分类
 
     $Goods = [];
 
@@ -617,5 +619,6 @@ class IndexController extends CommonController
       return json(['code' => 400, 'msg' => '参与调研失败']);
 
   }
+
 
 }

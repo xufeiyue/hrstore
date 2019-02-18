@@ -10,6 +10,7 @@ use app\admin\model\Activity;
 use app\admin\model\GoodsBrand;
 use app\admin\model\StoreTypeRecommend;
 use app\admin\model\Store;
+use app\admin\model\StoreTypeSort;
 class GoodsController extends AdminController
 {
 	/*
@@ -85,6 +86,8 @@ class GoodsController extends AdminController
 
 			$data['update_time'] = time();
 
+			$sort = input('post.sort/d');
+
 			Db::startTrans();
         	try{
 
@@ -105,7 +108,33 @@ class GoodsController extends AdminController
 
 					$data['store_id'] = $store_id;
 
-					(new GoodsType)->Common_Insert($data);
+					$type_id = (new GoodsType)->Common_Insert($data);
+				}
+
+
+				if ($this->is_jurisdiction == 0) { //批量新增
+
+					$zuijia = [['id' => 0]]; //追加一个店铺
+					
+					$store = (new Store)->Common_All_Select(['status' => 1],[],['store_id id','store_name name']);
+
+					$arr = [];
+
+					if ($store) {
+						
+						$store = array_merge($zuijia,$store);
+					}
+
+					foreach ($store as $key => $value) {
+						
+						$arr[] = ['type_id' => $type_id, 'sort' => $sort, 'store_id' => $value['id']];
+					}
+
+					(new StoreTypeSort)->Common_InsertAll($arr);
+
+				}else{
+
+					(new StoreTypeSort)->Common_Insert(['type_id' => $type_id, 'sort' => $sort, 'store_id' => $this->is_jurisdiction]);
 				}
 
 
@@ -144,15 +173,41 @@ class GoodsController extends AdminController
 
 			$data['update_time'] = time();
 
-			$add = (new GoodsType)->Common_Update($data,['id' => $id]);
+			$sort = input('post.sort/d');
 
-			if ($add)
-				return json(['code' => 200 , 'msg' => '新增成功']);
-				return json(['code' => 400 , 'msg' => '新增失败']);
+			$list = (new GoodsType)->Common_Find(['id' => $id]);
+
+			$StoreTypeSort = (new StoreTypeSort)->Common_Find(['type_id' => $id, 'store_id' => $this->is_jurisdiction]);
+
+			if ($StoreTypeSort) {
+				
+				(new StoreTypeSort)->Common_Update(['type_id' => $id, 'store_id' => $this->is_jurisdiction],['sort' => $sort]);
+
+			}else{
+
+				(new StoreTypeSort)->Common_Insert(['type_id' => $id, 'sort' => $sort, 'store_id' => $this->is_jurisdiction]);
+			}
+
+			$edit = (new GoodsType)->Common_Update($data,['id' => $id]);
+
+			if ($edit)
+				return json(['code' => 200 , 'msg' => '编辑成功']);
+				return json(['code' => 400 , 'msg' => '编辑失败']);
 
 		}else{
 
 			$list = (new GoodsType)->Common_Find(['id' => $id]);
+
+			$StoreTypeSort = (new StoreTypeSort)->Common_Find(['type_id' => $id, 'store_id' => $this->is_jurisdiction]);
+
+			if ($StoreTypeSort) {
+				
+				$list['sort'] = $StoreTypeSort['sort'];
+			
+			}else{
+			
+				$list['sort'] = 0;
+			}
 
 			$this->assign('list',$list);
 
