@@ -452,7 +452,7 @@ class IndexController extends CommonController
 
     $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
 
-    $order = ['number_of_visits' => 'desc']; //爆款人气排序
+    $order = ['number_of_visits' => 'desc','']; //爆款人气排序
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
