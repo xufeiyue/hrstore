@@ -417,7 +417,7 @@ class IndexController extends CommonController
 
     $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
 
-    $order = ['number_of_visits' => 'desc'];
+    $order = ['goods_rq_paixu'=>'asc','number_of_visits' => 'desc'];
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
@@ -430,6 +430,7 @@ class IndexController extends CommonController
         $goods_list[$key]['price1'] = $arr[0];
         $goods_list[$key]['price2'] = '.'.$arr[1];
       }
+        $goods_list[$key]['key'] = $key + 1; //排名
     }
 
     $this->assign('title',$this->title);
@@ -452,7 +453,7 @@ class IndexController extends CommonController
 
     $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
 
-    $order = ['number_of_visits' => 'desc','']; //爆款人气排序
+    $order = ['goods_bk_paixu'=>'asc','number_of_visits' => 'desc']; //爆款人气排序
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
@@ -463,7 +464,9 @@ class IndexController extends CommonController
       if ($value['goods_images']) {
       
         $goods_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
-      
+          $arr = explode('.',$value['goods_present_price']);
+          $goods_list[$key]['price1'] = $arr[0];
+          $goods_list[$key]['price2'] = '.'.$arr[1];
       }
 
       $goods_list[$key]['key'] = $key + 1; //排名
