@@ -64,8 +64,8 @@ class ActivityController extends CommonController
 	      
 	         $goods_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
 	          $arr = explode('.',$value['goods_present_price']);
-	          $goods_list[$key]['goods_price1'] = $arr[0];
-	          $goods_list[$key]['goods_price2'] = '.'.$arr[1];
+	          $goods_list[$key]['price1'] = $arr[0];
+	          $goods_list[$key]['price2'] = '.'.$arr[1];
 	      }
 	    }
 
