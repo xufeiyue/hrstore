@@ -67,6 +67,8 @@ class NewdiscoveryController extends AdminController
 
 			$data['update_time'] = time();
 
+			$data['sort'] = input('post.sort/d');
+
 			$add = (new NewDiscovery)->Common_Insert($data);
 
 			if($add)
@@ -98,6 +100,8 @@ class NewdiscoveryController extends AdminController
 			$data['create_time'] = time();
 
 			$data['update_time'] = time();
+
+			$data['sort'] = input('post.sort/d');
 
 			$edit = (new NewDiscovery)->Common_Update($data,['id' => $id]);
 

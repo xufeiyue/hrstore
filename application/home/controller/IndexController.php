@@ -404,7 +404,7 @@ class IndexController extends CommonController
 
     $this->title = '新发现 新生活';
 
-    $NewDiscovery = (new NewDiscovery)->Common_All_Select(['status' => 0,'store_id' => $this->store_id], ['id' => 'desc'],['id','src','url']);
+    $NewDiscovery = (new NewDiscovery)->Common_All_Select(['status' => 0,'store_id' => $this->store_id], ['sort' => 'desc','id' => 'desc'],['id','src','url']);
 
     $this->assign('title',$this->title);
 
