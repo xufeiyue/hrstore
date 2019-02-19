@@ -37,7 +37,17 @@ class CouponController extends CommonController
         $field = [];
         $order=[];
         $coupon_type_pt_list = $coupon_type_model->Common_All_Select($where_pt,$order,$field);
+        if(!empty($coupon_type_pt_list)){
+            foreach($coupon_type_pt_list as $k_p=>$v_p){
+                $n = (new Coupon())->getNum(array('card_type_id'=>$v_p['card_type_id'],'status'=>2));
+                if($n>0){
+                    $coupon_type_pt_list[$k_p]['num_status']= 1; // 有剩余
+                }else{
+                    $coupon_type_pt_list[$k_p]['num_status']= 2; // 已领完
+                }
+            }
 
+        }
 
         // 获取所有单品券
         $where_dp['t1.end_time'] = array('>',$time);
@@ -45,9 +55,19 @@ class CouponController extends CommonController
         $where_dp['t1.ticket_type'] = 2;
         $field = ['t1.*','g.goods_images'];
         $coupon_type_dp_list = $coupon_type_model->get_coupon_type_dp_list($where_dp,$field);
-        foreach($coupon_type_dp_list as $key=>$val){
-            $coupon_type_dp_list[$key]['goods_img'] = json_decode($val['goods_images'],true)[0];
+        if(!empty($coupon_type_dp_list)){
+            foreach($coupon_type_dp_list as $key=>$val){
+                $coupon_type_dp_list[$key]['goods_img'] = json_decode($val['goods_images'],true)[0];
+                $n = (new Coupon())->getNum(array('card_type_id'=>$val['card_type_id'],'status'=>2));
+                if($n>0){
+                    $coupon_type_dp_list[$key]['num_status']= 1; // 有剩余
+                }else{
+                    $coupon_type_dp_list[$key]['num_status']= 2; // 已领完
+                }
+            }
+
         }
+
         $this->assign('coupon_type_pt_list',$coupon_type_pt_list);
         $this->assign('coupon_type_dp_list',$coupon_type_dp_list);
         return view();
@@ -129,7 +149,6 @@ class CouponController extends CommonController
         $data['card_ticket_id'] = $card_ticket_info['card_ticket_id'];
         $data['status'] = 1;
         $data['create_time'] = time();
-        file_put_contents('test.txt',$this->userId);
         $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket_info['card_ticket_id']),array('status'=>1));
 
         if($res){

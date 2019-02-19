@@ -13,6 +13,7 @@
 <div class="quan-box" style="display: block;">
     <ul class="pingtai">
         {volist name="coupon_type_pt_list" id="vo"}
+        {if condition="$vo['num_status'] eq 1"}
         <li class="pingtai-list">
             <div class="jinE pingtai-jinE">
                 <h1><i>￥</i>{$vo.face_value}</h1>
@@ -27,10 +28,27 @@
                 </div>
             </div>
         </li>
+        {else /}
+        <li class="pingtai-list" style="position: relative;">
+            <div class="jinE pingtai-jinE">
+                <h1><i>￥</i>{$vo.face_value}</h1>
+                <p>平台卡券</p>
+            </div>
+            <div class="pingtai-info">
+                <p>{$vo.ticket_name}</p>
+                <div class="pingtai-function">
+                    <span>有效期：{$vo.end_time_desc}</span>
+                    <a class="pingtai-btn">立即使用</a>
+                </div>
+            </div>
+            <div class="gy-pic"><img src="__IMAGES__/lingwan.png"/></div>
+        </li>
+        {/if}
         {/volist}
     </ul>
     <ul class="danpin">
         {volist name="coupon_type_dp_list" id="vo"}
+        {if condition="$vo['num_status'] eq 1"}
         <li class="danpin-list">
             <div class="jinE danpin-jinE">
                 <h1><i>￥</i>{$vo.face_value}</h1>
@@ -48,6 +66,25 @@
                 <a class="danpin-btn" href="javascript:get_coupon({$vo.card_type_id})">立即领取</a>
             </div>
         </li>
+        {else /}
+        <li class="danpin-list" style="position: relative;">
+            <div class="jinE danpin-jinE">
+                <h1><i>￥</i>{$vo.face_value}</h1>
+                <p>单品卡券</p>
+            </div>
+            <div class="danpin-info">
+                <div class="danpin-product">
+                    <img src="{$vo.goods_img}">
+                </div>
+                <div class="danpin-function">
+                    <p>{$vo.ticket_name}</p>
+                    <span>有效期：{$vo.end_time_desc}</span>
+                </div>
+                <a class="danpin-btn">立即使用</a>
+            </div>
+            <div class="gy-pic"><img src="__IMAGES__/lingwan.png"/></div>
+        </li>
+        {/if}
         {/volist}
     </ul>
 </div>

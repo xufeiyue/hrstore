@@ -189,9 +189,18 @@ class IndexController extends CommonController
 
     $coupon_type_info = $coupon_type_model->Common_Find(array('goods_id'=>$goods_id));
 
-      $goods_detail['face_value'] = $coupon_type_info['face_value'];
+    if(empty($coupon_type_info)){
+        $this->assign('is_have_coupon',1);
 
-      $goods_detail['card_type_id'] = $coupon_type_info['card_type_id'];
+    }else{
+        $goods_detail['face_value'] = $coupon_type_info['face_value'];
+
+        $goods_detail['card_type_id'] = $coupon_type_info['card_type_id'];
+        $this->assign('is_have_coupon',2);
+
+    }
+
+
 
     $this->assign('collection',$collection);
 
@@ -465,7 +474,9 @@ class IndexController extends CommonController
       if ($value['goods_images']) {
       
         $goods_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
-      
+          $arr = explode('.',$value['goods_present_price']);
+          $goods_list[$key]['price1'] = $arr[0];
+          $goods_list[$key]['price2'] = '.'.$arr[1];
       }
 
       $goods_list[$key]['key'] = $key + 1; //排名
@@ -492,7 +503,9 @@ class IndexController extends CommonController
         if ($value['goods_images']) {
         
           $goods[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
-        
+            $arr = explode('.',$value['goods_present_price']);
+            $goods_list[$key]['price1'] = $arr[0];
+            $goods_list[$key]['price2'] = '.'.$arr[1];
         }
       }
 

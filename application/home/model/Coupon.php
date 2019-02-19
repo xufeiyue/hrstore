@@ -35,6 +35,10 @@ class Coupon extends Common
         }
     }
 
+    public function getNum($where){
+        return Db::name($this->table)->where($where)->count();
+    }
+
     public function get_my_coupon_pt($member_id){
         $time = time();
         $sql = "SELECT * from th_member_card_ticket_relation as r 

@@ -23,6 +23,7 @@
       <!--<span style="padding: 5px 10px; background: #ff4646; color: #ffffff;">产品名称</span>-->
         <p style=" margin-bottom:13px;">{$goods_detail['goods_name']}</p>
         <span style="float: left; color: #ff4646; font-size: 2.4rem;line-height: 2rem; margin-bottom:13px; width: 100%;display: block;"><em style="font-size: 1.2rem">￥</em>{$goods_detail['price1']}<em style="font-size: 1.2rem">{$goods_detail['price2']}</em>
+            {if condition="$is_have_coupon eq 2"}
           <em style="padding: 3px 10px;
     background: #ff4646;
     color: #ffffff;
@@ -30,16 +31,10 @@
     border-radius: 5px;
     margin-left:30px;
     font-size:1.3rem;">优惠券￥{$goods_detail['face_value']}</em>
-        
+            {/if}
         </span>
 
-      <!--<h2>商城价：<span>￥{$goods_detail['goods_original_price']}</span></h2>-->
-  <!--<div class="ZLY_info" style="overflow: hidden; width: 100%;">
-        <ul style="float: left;">
-          <li>优惠券￥{$goods_detail['face_value']}</li>
-        </ul>
-      </div>
-      -->
+
       <span style="font-size: 1.6rem;">活动时间：{$goods_detail['start_time']}至{$goods_detail['end_time']}</span>
     </div>
 
@@ -114,7 +109,11 @@
     <!--底部-->
  <div style=" height: 55px;"></div>
  <ul class="fix-shopping">
-  <li style="background: #ffba35;"><a class="join"><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>
+     {if condition="$is_have_coupon eq 1"}
+  <!--<li style="background: darkgray;"><a><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>-->
+     {else /}
+     <li style="background: #ffba35;"><a class="join"><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>
+     {/if}
   {if condition="$collection eq 0"}
   <li style="width: 35%;"><a class="imm-buy"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>加入收藏</a></li>
   {/if}
