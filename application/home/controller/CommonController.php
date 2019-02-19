@@ -4,6 +4,7 @@ use think\Controller;
 use wechat\Wechat;
 use think\Request;
 use app\home\model\Member;
+use app\home\model\Store;
 class CommonController extends Controller
 {
 	public $store_id;
@@ -34,8 +35,16 @@ class CommonController extends Controller
 
 			 if ((time() - $expiration_time) > 1800 && $module = 'home' && $controller = 'Index' && $module = 'index') { //缓存时间已超过半个小时并且回到首页 重新定位最近的店铺
 
-			 	session('store_id',null);
+			 	session('store_id',0);
+			 	
 			 }
+
+			 if ($expiration_time > 0 && (time() - $expiration_time) > 1800) {
+			 	
+			 	session('store_id',0);
+		 		
+		 		$this->redirect('/home/Index/index');
+		 	}
 
 			$this->store_id = session('store_id');
 

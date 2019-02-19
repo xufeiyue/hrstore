@@ -302,11 +302,11 @@ class IndexController extends CommonController
 
     $type_id = input('type_id/d') ? : 0;
 
-    $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0];
+    $where = ['g.store_id' => ['in',"0,{$this->store_id}"], 'g.status' => 0, 'g.pid' => 0];
 
     $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(s.id,0)recommend_type','COALESCE(t.sort,0)sort'];
 
-    $GoodsType = (new GoodsType)->goods_type_all($where, ['recommend_type' => 'desc' 'sort' => 'ASC','g.id' => 'desc'],$goods_type_field); //全部分类
+    $GoodsType = (new GoodsType)->goods_type_all($where, ['recommend_type' => 'desc', 'sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$this->store_id); //全部分类
 
     $Goods = [];
 
