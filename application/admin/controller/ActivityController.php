@@ -611,7 +611,7 @@ class ActivityController extends AdminController
 
 			if ($add) {
 				
-				(new ActivityGoods)->Common_Update(['url' => Request()->domain().'/home/Index/activity_default/id/'.$add],['id' => $add]);
+				(new ActivityGoods)->Common_Update(['url' => Request()->domain().'/home/Activity/activity_default/id/'.$add],['id' => $add]);
 
 				return json(['code' => 200, 'msg' => '新增成功']);
 			}
