@@ -3,6 +3,7 @@ namespace app\home\controller;
 use think\Controller;
 use app\home\model\Activity;
 use app\home\model\ActivityLog;
+use app\home\model\Goods;
 class ActivityController extends CommonController
 {
 	/*
