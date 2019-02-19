@@ -90,7 +90,7 @@ class IndexController extends CommonController
 
     $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
 
-    $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
+    $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0];
 
     $offset = 0;
 
@@ -115,6 +115,16 @@ class IndexController extends CommonController
 
     //底部商品列表
     $goods_top_list = (new Goods)->Common_Select(8,17,$where,$order,$goods_field); //商品列表
+
+      foreach($goods_top_list as $key1=>$val1){
+          if ($val1['goods_images']) {
+
+              $goods_top_list[$key1]['goods_images'] = json_decode($val1['goods_images'],true)[0]; //取第一张图片
+              $arr = explode('.',$val1['goods_present_price']);
+              $goods_top_list[$key1]['goods_price1'] = $arr[0];
+              $goods_top_list[$key1]['goods_price2'] = '.'.$arr[1];
+          }
+      }
 
     $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0];
     

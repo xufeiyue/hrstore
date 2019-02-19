@@ -189,7 +189,7 @@
 				return false
 			}
 
-			$.post("{:url('Member/edit_member')}",{mobilephone: mobilephone, code: code},function(data){
+			$.post("{:url('Member/edit_member')}",{mobilephone: mobilephone, code: code,t:1},function(data){
 
 				if (data.code == 200) {
 					$(".XinXi_box").css("display","none");

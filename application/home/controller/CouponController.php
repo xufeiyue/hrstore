@@ -198,15 +198,21 @@ class CouponController extends CommonController
         // 根据card_type_id分配 card_ticket_id
         $card_ticket_model = new Coupon();
         $card_ticket = $card_ticket_model->Common_Find(array('card_type_id'=>$card_type_id,'status'=>2));
-        $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
-        $data['status'] = 1;
-        $data['create_time'] = time();
-        $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1));
-
-        if($res){
-            return json(['code' => 200 , 'msg' => '领取成功']);
+        if(!empty($card_ticket)){
+            $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
+            $data['status'] = 1;
+            $data['create_time'] = time();
+            $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1));
+            if($res){
+                return json(['code' => 200 , 'msg' => '领取成功']);
+            }else{
+                return json(['code' => 100 , 'msg' => '领取失败']);
+            }
         }else{
-            return json(['code' => 100 , 'msg' => '领取失败']);
+            return json(['code' => 300 , 'msg' => '领取失败']);
         }
+
     }
+
+
 }

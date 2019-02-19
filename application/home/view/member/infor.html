@@ -2,6 +2,87 @@
 <style>
 .safty li .iconfont{ float:left; font-size:1.8rem; display:block; margin:0;}
 </style>
+<style>
+
+	.gengxin_box{
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 9999;
+		background: rgba(0,0,0,0.5);
+		display: none;
+	}
+
+	.gengxin_info{
+		width: 60%;
+		height: 16rem;
+		position: absolute;
+		left: 20%;
+		top:50%;
+		margin-top: -10rem;
+		z-index: 10;
+		border-radius: 15px;
+		box-shadow: 0 0 15px rgba(0,0,0,0.7);
+		overflow: hidden;
+		background: #fff;
+	}
+	.gengxin_info img{
+		display: block;
+		margin: 0 auto;height: 12rem;
+	}
+	.gengxin_info p{
+		width: 100%;
+		height: 4rem;
+		text-align: center;
+		line-height: 4rem;
+		font-size: 2rem;
+		background: #ff5500;
+		color: #fff;
+		text-indent: 10px;
+	}
+
+
+	.lqsb_box{
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 9999;
+		background: rgba(0,0,0,0.5);
+		display: none;
+	}
+
+	.lqsb_info{
+		width: 60%;
+		height: 16rem;
+		position: absolute;
+		left: 20%;
+		top:50%;
+		margin-top: -10rem;
+		z-index: 10;
+		border-radius: 15px;
+		box-shadow: 0 0 15px rgba(0,0,0,0.7);
+		overflow: hidden;
+		background: #fff;
+	}
+	.lqsb_info img{
+		display: block;
+		margin: 0 auto;height: 12rem;
+	}
+	.lqsb_info p{
+		width: 100%;
+		height: 4rem;
+		text-align: center;
+		line-height: 4rem;
+		font-size: 2rem;
+		background: #ff5500;
+		color: #fff;
+		text-indent: 10px;
+	}
+</style>
 <title>{$title}</title>
 		<!--<header data-am-widget="header" class="am-header am-header-default sq-head ">-->
 			<!--<div class="am-header-left am-header-nav">-->
@@ -13,6 +94,19 @@
   	            <!--<a href="" class=""></a>-->
             <!--</h1>-->
 	    <!--</header>-->
+<div class="gengxin_box">
+	<div class="gengxin_info">
+		<img src="http://huaruncard.redh5.cn/static/home/images/gxcg.png">
+		<p id="close1">确定</p>
+	</div>
+</div>
+
+<div class="lqsb_box">
+	<div class="gengxin_info">
+		<img src="http://huaruncard.redh5.cn/static/home/images/lqsb.png">
+		<p id="close2">确定</p>
+	</div>
+</div>
 	<div class="shhshjwh"></div>
 	    <ul class="safty" >
         </br>
@@ -52,8 +146,8 @@
 							<option value ="0">请选择</option>
 							<option value ="1" {if condition="$member['age'] eq 1"}selected="selected"{/if}>18-30岁之间</option>
 							<option value ="2" {if condition="$member['age'] eq 2"}selected="selected"{/if}>30-45岁之间</option>
-                            <option value ="1" {if condition="$member['age'] eq 1"}selected="selected"{/if}>45-65岁之间</option>
-							<option value ="2" {if condition="$member['age'] eq 2"}selected="selected"{/if}>65岁以上</option>
+                            <option value ="3" {if condition="$member['age'] eq 3"}selected="selected"{/if}>45-65岁之间</option>
+							<option value ="4" {if condition="$member['age'] eq 4"}selected="selected"{/if}>65岁以上</option>
 						</select>
 					</div>
 					<div class="my_gender">
@@ -130,9 +224,18 @@
 
 		$.post("{:url('Member/edit_member')}",{nickname: nickname, sex: sex, age: age, family: family, mobilephone: mobilephone, code: code},function(data){
 
-			alert(data.msg)
+			if (data.code == 200){
+				$(".gengxin_box").show()
+				//return json(['code' => 200, 'msg' => '更新成功']);
+			}else{
+				//return json(['code' => 400, 'msg' => '更新失败']);
+			}
+
+
 		})
 
 	})
-
+	$("#close1").click(function(){
+		$(".gengxin_box").hide()
+	})
 </script>

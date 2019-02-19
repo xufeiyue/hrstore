@@ -1,6 +1,7 @@
 <?php
 namespace app\home\controller;
 use app\home\model\Coupon;
+use app\home\model\CouponType;
 use think\Controller;
 use think\Db;
 use app\home\model\Goods;
@@ -274,7 +275,9 @@ class MemberController extends CommonController
 
 		$code = input('post.code/s');
 
-		if ($mobilephone) {
+		$t =  input('post.t/d');
+
+		if ($mobilephone && $t==1) {
 			
 			$sms = (new SmsLog)->Common_Find(['phone' => $mobilephone, 'code' => $code , 'create_time' => ['>',time() - 300], 'status' => 0]);
 
@@ -286,22 +289,114 @@ class MemberController extends CommonController
 
 			$data['mobilephone'] = $mobilephone;
 
-		}
+            $edit = (new Member)->Common_Update($data,['id' => $this->userId]);
 
-		$data['nickname'] = input('post.nickname/s');
+            if ($edit){
+                return json(['code' => 200, 'msg' => '更新成功']);
+            }else{
+                return json(['code' => 400, 'msg' => '更新失败']);
+            }
 
-		$data['sex'] = input('post.sex/d');
+		}else{
 
-		$data['age'] = input('post.age/d');
+		    if($mobilephone){
+                $sms = (new SmsLog)->Common_Find(['phone' => $mobilephone, 'code' => $code , 'create_time' => ['>',time() - 300], 'status' => 0]);
 
-		$data['family'] = input('post.family/d');
+                if (!$sms)
+                    return json(['code' => 400 , 'msg' => '验证码不正确']);
+                (new SmsLog)->Common_Update(['status' => 1],['id' => $sms['id']]);
+                $data['mobilephone'] = $mobilephone;
+            }
 
-		$edit = (new Member)->Common_Update($data,['id' => $this->userId]);
 
-		if ($edit)
-			return json(['code' => 200, 'msg' => '更新成功']);
-			return json(['code' => 400, 'msg' => '更新失败']);
+
+            //$data['nickname'] = input('post.nickname/s');
+
+            $data['sex'] = input('post.sex/d');
+
+            $data['age'] = input('post.age/d');
+
+            $data['family'] = input('post.family/d');
+
+            // 查询是否已经完善过资料
+
+            $is_ws = (new Member())->Common_Find(array('id'=>$this->userId));
+
+            if($is_ws['is_ws'] == 1){ // 未完善
+                if($is_ws['mobilephone'] == ''){
+                    if($mobilephone !='' && $data['sex'] !='' && $data['age'] !='' && $data['family'] !=''){
+                        // 给优惠券
+                        $res = $this->get_receive_coupon1();
+
+                    }
+                }else{
+                    if($data['sex'] !='' && $data['age'] !='' && $data['family'] !=''){
+                        // 给优惠券
+                        $res = $this->get_receive_coupon1();
+                    }
+                }
+                $data['is_ws'] = 2;
+            }
+
+            $edit = (new Member)->Common_Update($data,['id' => $this->userId]);
+
+            if ($edit){
+                return json(['code' => 200, 'msg' => '更新成功']);
+            }else{
+                return json(['code' => 400, 'msg' => '更新失败']);
+            }
+        }
+
+
+
+//        if ($edit && $res == 1){
+//            return json(['code' => 200, 'msg' => '更新成功']);
+//        }elseif(($edit == false)){
+//            return json(['code' => 400, 'msg' => '更新失败']);
+//        }elseif ($res == 2){
+//            return json(['code' => 500, 'msg' => '领取失败']);
+//        }elseif($res == 3){
+//            return json(['code' => 600, 'msg' => '已领完']);
+//        }elseif ($res == 4){
+//            return json(['code' => 700, 'msg' => '已领取']);
+//        }else{
+//            return json(['code' => 400, 'msg' => '更新失败']);
+//        }
 
 	}
+// 完善资料给红包
+    private function get_receive_coupon1(){
+        $card_type_id = 31;
+        $data['member_id'] = $this->userId;
+        // 查询是否领取过
+        // 判断当前用户是否领取过新人红包
 
+        $coupon_model = new CouponType();
+
+        $w['mr.member_id'] = $this->userId;
+        $w['ctt.card_type_id'] = 31;
+        $c = $coupon_model->getRegCoupon($w);
+        if(empty($c)){
+            // 根据card_type_id分配 card_ticket_id
+            $card_ticket_model = new Coupon();
+            $card_ticket = $card_ticket_model->Common_Find(array('card_type_id'=>$card_type_id,'status'=>2));
+            if(!empty($card_ticket)){
+                $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
+                $data['status'] = 1;
+                $data['create_time'] = time();
+                $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1));
+                if($res){
+                    return 1; // 领取成功
+                }else{
+                    return 2;// 领取失败
+                }
+            }else{
+                return 3; // 已领完 没有券了
+            }
+        }else{
+            return 4; // 已领取
+        }
+
+
+    }
 }

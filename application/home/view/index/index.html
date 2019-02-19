@@ -63,7 +63,42 @@
     <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  id="goods_top_list">
         
     </ul>
-
+    <!--我是放活动的地方-->
+<div class="Active_area">
+<!--活动样式1/一行一列-->
+    <div class="Active_area_list Active_area_One">
+        <a>
+            <img src="http://huaruncard.redh5.cn/static/home/images/peag1.jpg"/>
+        </a>
+    </div>
+    <div class="Active_area_list Active_area_One">
+        <a>
+            <img src="http://huaruncard.redh5.cn/static/home/images/peag2.jpg"/>
+        </a>
+    </div>
+    <div class="Active_area_list Active_area_One">
+        <a>
+            <img src="http://huaruncard.redh5.cn/static/home/images/peag3.jpg"/>
+        </a>
+    </div>
+    <div class="Active_area_list Active_area_One">
+        <a>
+            <img src="http://huaruncard.redh5.cn/static/home/images/peag4.jpg"/>
+        </a>
+    </div>
+    <div class="Active_area_list Active_area_One">
+        <a>
+            <img src="http://huaruncard.redh5.cn/static/home/images/peag5.jpg"/>
+        </a>
+    </div>
+</div>
+    
+<div class="yiqiangwan_box">
+    <div class="yiqiangwan_info">
+        <img src="http://huaruncard.redh5.cn/static/home/images/yiqiangwan.png">
+        <p id="close">确定</p>
+    </div>
+</div>
  <div style="height: 55px;"></div>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
     <ul class="am-navbar-nav am-cf am-avg-sm-4 Icon-Name">
@@ -149,6 +184,44 @@
         left: 40%;
         text-align: center;
     }
+    .yiqiangwan_box{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+        display: none;
+    }
+
+    .yiqiangwan_info{
+        width: 60%;
+        height: 16rem;
+        position: absolute;
+        left: 20%;
+        top:50%;
+        margin-top: -10rem;
+        z-index: 10;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.7);
+        overflow: hidden;
+        background: #fff;
+    }
+    .yiqiangwan_info img{
+        display: block;
+        margin: 0 auto;height: 12rem;
+    }
+    .yiqiangwan_info p{
+        width: 100%;
+        height: 4rem;
+        text-align: center;
+        line-height: 4rem;
+        font-size: 2rem;
+        background: #ff5500;
+        color: #fff;
+        text-indent: 10px;
+    }
 </style>
 <!--首次一元红包弹出层-->
 {if condition="$rec_key eq 1"}
@@ -171,8 +244,17 @@
 <script>
     $(function () {
         $(".shouCi_Open").click(function() {
-            $(".WanShan_box").css("display","block");
-            $(".shouCi_box").css("display","none");
+            $.post("{:url('Coupon/get_receive_coupon')}",function(res){
+                if(res.code == 200){
+                    $(".WanShan_box").css("display","block");
+                    $(".shouCi_box").css("display","none");
+                }else if(res.code == 100){
+
+                }else{
+                    $(".shouCi_box").css("display","none");
+                    $(".yiqiangwan_box").show()
+                }
+            })
         });
         $(".shouCi_Close").click(function() {
             $(".shouCi_box").css("display","none");
@@ -290,8 +372,8 @@
                 goods_top_list_html +=        '<a href="{:url("Index/detail")}?id='+goods_top_list[i].id+'" class="">';
                 goods_top_list_html +=            '<img src="'+goods_top_list[i].goods_images+'" />';
                 goods_top_list_html +=            '<h3 class="am-gallery-title">'+goods_top_list[i].goods_name+'</h3>';
-                goods_top_list_html +=            '<div class="am-gallery-desc am-gallery-yuan">原价￥'+goods_top_list[i].goods_original_price+'</div>';
-                goods_top_list_html +=            '<div class="am-gallery-desc">折扣价￥'+goods_top_list[i].goods_present_price+'</div>';
+                goods_top_list_html +=            '<div class="am-gallery-desc Y_hui"><p>优惠价</p><p><em>￥</em>'+goods_top_list[i].goods_price1+'<em>'+goods_top_list[i].goods_price2+'</em></p></div>';
+
                 goods_top_list_html +=        '</a>';
                 goods_top_list_html +=    '</div>';
                 goods_top_list_html += '</li>';
@@ -315,15 +397,10 @@
     }
 </script>
 <script>
-    function getHongbao(){
-        $.post("{:url('Coupon/get_receive_coupon')}",function(res){
-            if(res.code == 200){
-                alert(1)
-            }else{
-                alert(2)
-            }
-        })
-    }
+
+    $("#close").click(function(){
+        $(".yiqiangwan_box").hide()
+    })
 </script>
 {include file="common/footer"}
  
