@@ -5,6 +5,7 @@ use think\Request;
 use app\admin\model\Activity;
 use app\admin\model\ActivityLibrary;
 use think\Db;
+use app\admin\model\ActivityGoods;
 class ActivityController extends AdminController
 {	
 	/*
@@ -551,5 +552,134 @@ class ActivityController extends AdminController
 			return json(['code' => 200 , 'msg' => '拉取成功']);
 			return json(['code' => 400 , 'msg' => '拉取失败']);
 
+	}
+
+	//活动产品模板
+	public function activity_goods_default(){
+
+		return view();
+	}
+
+	//ajax获取活动产品数据
+	public function ajax_activity_goods_default(){
+
+		$where = [];
+
+		$activity_goods_name = input('post.activity_goods_name/s');
+
+		if($activity_goods_name){
+
+			$where['a.activity_goods_name']  = ['like',"%{$activity_goods_name}%"];
+		}
+
+		if ($this->is_jurisdiction) { //判断是管理员还是商家
+
+			$where['a.store_id'] = $this->is_jurisdiction;
+		}
+
+		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+		$limit = input('post.limit/d') ? : 10;
+
+		$order = ['a.id' => 'desc'];
+
+		$where['a.status'] = 0;
+
+		$data = (new ActivityGoods)->Common_Select($offset,$limit,$where,$order);
+
+		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
+	}
+
+	//新增
+	public function activity_goods_default_add(){
+
+		if ($_POST) {
+
+			$data['activity_goods_name'] = input('post.activity_goods_name/s');
+
+			$data['start_time'] = strtotime(input('post.start_time/s'));
+
+			$data['end_time'] = strtotime(input('post.end_time/s'));
+
+			$data['create_time'] = time();
+
+			$data['update_time'] = time();
+
+			$data['store_id'] = $this->is_jurisdiction;
+
+			$add = (new ActivityGoods)->Common_Insert($data);
+
+			if ($add) {
+				
+				(new ActivityGoods)->Common_Update(['url' => Request()->domain().'/home/Index/activity_default/id/'.$add],['id' => $add]);
+
+				return json(['code' => 200, 'msg' => '新增成功']);
+			}
+
+			return json(['code' => 400, 'msg' => '新增失败']);
+
+		}else{
+
+			return view();
+		}
+	}
+
+	//编辑
+	public function activity_goods_default_edit(){
+
+		$id = input('id/d');
+
+		if ($_POST) {
+			
+			$data['activity_goods_name'] = input('post.activity_goods_name/s');
+
+			$data['start_time'] = strtotime(input('post.start_time/s'));
+
+			$data['end_time'] = strtotime(input('post.end_time/s'));
+
+			$data['update_time'] = time();
+
+			$edit = (new ActivityGoods)->Common_Insert($data);
+
+			if ($edit)
+				return json(['code' => 200, 'msg' => '更新成功']);
+				return json(['code' => 400, 'msg' => '更新失败']);
+
+		}else{
+
+			$list = (new ActivityGoods)->Common_Find(['id' => $id]);
+
+			$list['start_time'] = date('Y-m-d H:i:s',$list['start_time']);
+
+			$list['end_time'] = date('Y-m-d H:i:s',$list['end_time']);
+
+			$this->assign('list',$list);
+
+			return view();
+		}
+	}
+
+	//删除活动
+	public function activity_goods_default_del(){
+
+		$id = input('post.id/d');
+
+		$del = (new ActivityGoods)->Common_Update(['status' => 1],['id' => $id]);
+
+		if($del)
+			return json(['code' => 1 , 'msg' => '删除成功']);
+			return json(['code' => 2 , 'msg' => '删除失败']);
+	}
+
+	//批量删除
+	public function activity_goods_default_delAll(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$del = (new ActivityGoods)->Common_Update(['status' => 1],['id' => ['in', $id]]);
+
+		if($del)
+			return json(['code' => 1 , 'msg' => '删除成功']);
+			return json(['code' => 2 , 'msg' => '删除失败']);
 	}
 }
