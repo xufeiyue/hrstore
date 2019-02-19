@@ -179,16 +179,41 @@ class GoodsController extends AdminController
 
 			$list = (new GoodsType)->Common_Find(['id' => $id]);
 
-			$StoreTypeSort = (new StoreTypeSort)->Common_Find(['type_id' => $id, 'store_id' => $this->is_jurisdiction]);
+			if ($this->is_jurisdiction > 0) {
+				$StoreTypeSort = (new StoreTypeSort)->Common_Find(['type_id' => $id, 'store_id' => $this->is_jurisdiction]);
 
-			if ($StoreTypeSort) {
-				
-				(new StoreTypeSort)->Common_Update(['sort' => $sort],['type_id' => $id, 'store_id' => $this->is_jurisdiction]);
+				if ($StoreTypeSort) {
+					
+					(new StoreTypeSort)->Common_Update(['sort' => $sort],['type_id' => $id, 'store_id' => $this->is_jurisdiction]);
 
+				}else{
+
+	                (new StoreTypeSort)->Common_Insert(['type_id' => $id, 'sort' => $sort, 'store_id' => $this->is_jurisdiction]);
+				}
 			}else{
 
-                (new StoreTypeSort)->Common_Insert(['type_id' => $id, 'sort' => $sort, 'store_id' => $this->is_jurisdiction]);
+				$zuijia = [['id' => 0]]; //追加一个店铺
+					
+				$store = (new Store)->Common_All_Select(['status' => 1],[],['store_id id','store_name name']);
+
+				$arr = [];
+
+				if ($store) {
+					
+					$store = array_merge($zuijia,$store);
+				}
+
+				(new StoreTypeSort)->Common_Delete(['type_id' => $id]); //全部删除
+
+				foreach ($store as $key => $value) { //新增
+
+					$arr[] = ['type_id' => $id, 'sort' => $sort, 'store_id' => $value['id']];
+				}
+
+				(new StoreTypeSort)->Common_InsertAll($arr);
 			}
+
+			
 
 			$edit = (new GoodsType)->Common_Update($data,['id' => $id]);
 
