@@ -1,0 +1,96 @@
+{include file="public/header"}
+    <div class="x-body">
+        <form class="layui-form">
+          <input type="hidden" id="id" value="{$list['id']}" name="id" required="" lay-verify="id">
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>标题
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="activity_name" name="activity_goods_name" value="{$list['activity_goods_name']}" lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="activity_start_time" class="layui-form-label">
+                  <span class="x-red">*</span>开始时间
+              </label>
+                <div class="layui-input-inline">
+                  <input type="text" lay-verify="required" value="{$list['start_time']}" autocomplete="off" class="layui-input" name="start_time" id="start" placeholder="请输入开始时间">
+                </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="activity_end_time" class="layui-form-label">
+                  <span class="x-red">*</span>结束时间
+              </label>
+                <div class="layui-input-inline">
+                  <input type="text" lay-verify="required" value="{$list['end_time']}" autocomplete="off" class="layui-input" name="end_time" id="end" placeholder="请输入结束时间">
+                </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="edit" lay-submit="">
+                  更新
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+        layui.use(['form','layer','upload','laydate','layedit'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,laydate = layui.laydate
+          ,layer = layui.layer;
+
+          //日期时间选择器
+          laydate.render({
+            elem: '#start'
+            ,type: 'datetime'
+          });
+
+          laydate.render({
+            elem: '#end'
+            ,type: 'datetime'
+          });
+
+
+          //监听提交
+          form.on('submit(edit)', function(data){
+            console.log(data);
+            
+            //发异步，把数据提交给php
+            $.post('/Admin/Activity/activity_goods_default_edit', data.field, function(res){
+
+                if(res.code == 200){
+                    layer.alert(res.msg, {icon: 1},function () {
+                      // 获得frame索引
+                      var index = parent.layer.getFrameIndex(window.name);
+
+                      //关闭当前frame
+                      parent.layer.close(index);
+                     
+                      window.parent.location.reload();
+
+                  });
+                }else{
+                  layer.msg(res.msg,{time: 1000});
+                  // layer.alert(res.msg, {icon: 1});
+                }
+            })
+
+            
+            return false;
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

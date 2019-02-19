@@ -3,6 +3,7 @@ namespace app\home\controller;
 use think\Controller;
 use app\home\model\Activity;
 use app\home\model\ActivityLog;
+use app\home\model\Goods;
 class ActivityController extends CommonController
 {
 	/*
@@ -46,6 +47,29 @@ class ActivityController extends CommonController
 		$this->assign('title',$this->title);
 
 		$this->assign('Activity',$Activity);
+
+		return view();
+	}
+
+	//活动产品列表
+	public function activity_default(){
+
+		$id = input('id/d');
+
+		$goods_list = (new Goods)->Common_All_Select(['activity_id' => $id, 'store_id' => $this->store_id],['id' => 'desc'],['id','goods_name','goods_original_price','goods_present_price','goods_images']);
+
+		foreach ($goods_list as $key => $value) {
+
+	      if ($value['goods_images']) {
+	      
+	         $goods_list[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
+	          $arr = explode('.',$value['goods_present_price']);
+	          $goods_list[$key]['goods_price1'] = $arr[0];
+	          $goods_list[$key]['goods_price2'] = '.'.$arr[1];
+	      }
+	    }
+
+		$this->assign('goods_list',$goods_list);
 
 		return view();
 	}

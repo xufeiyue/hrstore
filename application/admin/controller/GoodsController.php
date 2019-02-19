@@ -11,6 +11,7 @@ use app\admin\model\GoodsBrand;
 use app\admin\model\StoreTypeRecommend;
 use app\admin\model\Store;
 use app\admin\model\StoreTypeSort;
+use app\admin\model\ActivityGoods;
 class GoodsController extends AdminController
 {
 	/*
@@ -525,7 +526,7 @@ class GoodsController extends AdminController
 
 			$goods_brand = (new GoodsBrand)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
 
-			$activity = (new Activity)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_name']);
+			$activity = (new ActivityGoods)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_goods_name activity_name']);
 
 			$this->assign('activity',$activity);
 
@@ -676,7 +677,7 @@ class GoodsController extends AdminController
 
 			$goods_brand = (new GoodsBrand)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
 
-			$activity = (new Activity)->Common_All_Select(['store_id' => $list['store_id'] , 'status' => 0],['id' => 'desc'],['id','activity_name']);
+			$activity = (new ActivityGoods)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_goods_name activity_name']);
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 
