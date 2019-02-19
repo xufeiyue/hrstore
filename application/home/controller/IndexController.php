@@ -120,7 +120,7 @@ class IndexController extends CommonController
 
     $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(s.id,0)recommend_type','COALESCE(t.sort,0)sort'];
     //产品分类
-    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['sort' => 'ASC','recommend_type' => 'desc','g.id' => 'desc'],$goods_type_field,$store['store_id']);
+    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$store['store_id']);
 
     // 获取
 
