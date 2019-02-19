@@ -183,11 +183,11 @@ class GoodsController extends AdminController
 
 			if ($StoreTypeSort) {
 				
-				(new StoreTypeSort)->Common_Update(['type_id' => $id, 'store_id' => $this->is_jurisdiction],['sort' => $sort]);
+				(new StoreTypeSort)->Common_Update(['sort' => $sort],['type_id' => $id, 'store_id' => $this->is_jurisdiction]);
 
 			}else{
 
-				(new StoreTypeSort)->Common_Insert(['type_id' => $id, 'sort' => $sort, 'store_id' => $this->is_jurisdiction]);
+                (new StoreTypeSort)->Common_Insert(['type_id' => $id, 'sort' => $sort, 'store_id' => $this->is_jurisdiction]);
 			}
 
 			$edit = (new GoodsType)->Common_Update($data,['id' => $id]);
@@ -1342,6 +1342,8 @@ class GoodsController extends AdminController
 		$recommend_name = input('post.recommend_name/s');
 
 		$store_id = input('post.store_id/d');
+
+
 
 		if ($recommend_name == '是') {
 
