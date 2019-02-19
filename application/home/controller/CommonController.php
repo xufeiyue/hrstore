@@ -43,7 +43,7 @@ class CommonController extends Controller
 			 	
 			 	session('store_id',0);
 		 		
-		 		$this->redirect('/home/Index/index');
+		 		//$this->redirect('/home/Index/index');
 		 	}
 
 			$this->store_id = session('store_id');
