@@ -36,8 +36,10 @@ class GoodsController extends AdminController
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
-			
+
+
 			$where['a.store_id'] = ['in',"0,{$this->is_jurisdiction}"];
+
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -181,11 +183,11 @@ class GoodsController extends AdminController
 
 			if ($StoreTypeSort) {
 				
-				(new StoreTypeSort)->Common_Update(['type_id' => $id, 'store_id' => $this->is_jurisdiction],['sort' => $sort]);
+				(new StoreTypeSort)->Common_Update(['sort' => $sort],['type_id' => $id, 'store_id' => $this->is_jurisdiction]);
 
 			}else{
 
-				(new StoreTypeSort)->Common_Insert(['type_id' => $id, 'sort' => $sort, 'store_id' => $this->is_jurisdiction]);
+                (new StoreTypeSort)->Common_Insert(['type_id' => $id, 'sort' => $sort, 'store_id' => $this->is_jurisdiction]);
 			}
 
 			$edit = (new GoodsType)->Common_Update($data,['id' => $id]);
@@ -293,7 +295,8 @@ class GoodsController extends AdminController
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
-			
+
+
 			$where['a.store_id'] = $this->is_jurisdiction;
 		}
 
@@ -302,6 +305,7 @@ class GoodsController extends AdminController
 		if ($store_id || $store_id == -1) {
 
 			$where['a.store_id'] = $store_id > 0 ? $store_id : 0;
+
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -490,7 +494,7 @@ class GoodsController extends AdminController
 
 			$order = ['id' => 'desc'];
 
-			$goods_type = (new GoodsType)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
+			$goods_type = (new GoodsType)->type(['store_id' => ['in',$this->is_jurisdiction], 'status' => 0],$order);
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 
@@ -776,8 +780,9 @@ class GoodsController extends AdminController
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
-			
+
 			$where['a.store_id'] = $this->is_jurisdiction;
+
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -838,8 +843,10 @@ class GoodsController extends AdminController
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
-			
+
+
 			$where['a.store_id'] = $this->is_jurisdiction;
+
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
@@ -919,7 +926,7 @@ class GoodsController extends AdminController
 
 			$order = ['id' => 'desc'];
 
-			$goods_type = (new GoodsType)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
+			$goods_type = (new GoodsType)->type(['store_id' => ['in',$this->is_jurisdiction] , 'status' => 0],$order);
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 
@@ -1074,7 +1081,7 @@ class GoodsController extends AdminController
 
 		$where['status'] = 0;
 
-		$Goods = (new Goods)->Goods_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => $this->is_jurisdiction],$order);
+		$Goods = (new Goods)->Goods_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => ['in',$this->is_jurisdiction]],$order);
 
 		if (!empty($Goods)) {
 			
@@ -1335,6 +1342,8 @@ class GoodsController extends AdminController
 		$recommend_name = input('post.recommend_name/s');
 
 		$store_id = input('post.store_id/d');
+
+
 
 		if ($recommend_name == '是') {
 

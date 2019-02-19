@@ -30,13 +30,11 @@
 	<div id="slider">
 		<div class="slider-content">
 			<ul>
-				{foreach name="store_list" item="vo" key="key"}
-				<li id="{$key|strtolower}"><a name="{$key}" class="title" >{$key}</a>
-					{foreach name="vo" item="vo1"}
+				{foreach name="store_list" item="vo"}
+				<li id="{$vo['initials']}"><a name="{$vo['initials']}" class="title" href="{:url('Index/index',['store_id' => $vo['store_id']])}">{$vo['initials']}</a>
 					<ul>
-						<li><a href="{:url('Index/index',['store_id' => $vo1['store_id']])}">{$vo1['store_name']}</a></li>
+						<li><a href="#">{$vo['store_name']}</a></li>
 					</ul>
-					{/foreach}
 				</li>
 				{/foreach}
 			</ul>

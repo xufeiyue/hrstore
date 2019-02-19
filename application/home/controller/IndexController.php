@@ -120,7 +120,7 @@ class IndexController extends CommonController
 
     $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(s.id,0)recommend_type','COALESCE(t.sort,0)sort'];
     //产品分类
-    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['recommend_type' => 'desc','sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$store['store_id']);
+    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['sort' => 'ASC','recommend_type' => 'desc','g.id' => 'desc'],$goods_type_field,$store['store_id']);
 
     // 获取
 
@@ -457,7 +457,7 @@ class IndexController extends CommonController
     $order = ['number_of_visits' => 'desc','']; //爆款人气排序
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
-
+    //print_r($where);exit;
     $goods_list = (new Goods)->Common_All_Select($where,$order,$goods_field); //商品列表
 
     foreach ($goods_list as $key => $value) {

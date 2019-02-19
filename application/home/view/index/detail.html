@@ -22,18 +22,25 @@
     <div class="detal-info" style=" margin-top: 10px;">
       <!--<span style="padding: 5px 10px; background: #ff4646; color: #ffffff;">产品名称</span>-->
         <p style=" margin-bottom:13px;">{$goods_detail['goods_name']}</p>
-        <span style="float: left; color: #ff4646; font-size: 2.4rem;line-height: 2rem; margin-bottom:13px; width: 100%;display: block;"><em style="font-size: 1.2rem">￥</em>{$goods_detail['price1']}<em style="font-size: 1.2rem">{$goods_detail['price2']}</em></em></span>
+        <span style="float: left; color: #ff4646; font-size: 2.4rem;line-height: 2rem; margin-bottom:13px; width: 100%;display: block;"><em style="font-size: 1.2rem">￥</em>{$goods_detail['price1']}<em style="font-size: 1.2rem">{$goods_detail['price2']}</em>
+          <em style="padding: 3px 10px;
+    background: #ff4646;
+    color: #ffffff;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    margin-left:30px;
+    font-size:1.3rem;">优惠券￥{$goods_detail['face_value']}</em>
+        
+        </span>
 
       <!--<h2>商城价：<span>￥{$goods_detail['goods_original_price']}</span></h2>-->
-      <div class="ZLY_info" style="overflow: hidden; width: 100%;">
-
+  <!--<div class="ZLY_info" style="overflow: hidden; width: 100%;">
         <ul style="float: left;">
           <li>优惠券￥{$goods_detail['face_value']}</li>
-          <!--<li>优惠券￥60</li>-->
-          <!--<li>优惠券￥60</li>-->
         </ul>
       </div>
-      <span style="font-size: 1.3rem;">活动时间：{$goods_detail['start_time']}至{$goods_detail['end_time']}</span>
+      -->
+      <span style="font-size: 1.6rem;">活动时间：{$goods_detail['start_time']}至{$goods_detail['end_time']}</span>
     </div>
 
 <input type="hidden" name="card_type_id" value="{$goods_detail['start_time']}" id="card_type_id"/>
