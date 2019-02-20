@@ -112,18 +112,23 @@
  <div style=" height: 55px;"></div>
  <ul class="fix-shopping">
      {if condition="$is_have_coupon eq 1"}
-  <!--<li style="background: darkgray;"><a><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>-->
+         {if condition="$collection eq 0"}
+         <li class="ssw yibai"><a class="imm-buy"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>加入收藏</a></li>
+         {/if}
+         {if condition="$collection eq 1"}
+         <li class="ssw yibai"><a class="imm-buy" style="background: darkgray;"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>已收藏</a></li>
+         {/if}
      {else /}
-     <li style="background: #ffba35;"><a class="join"><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>
+     <li class="ssw"><a class="join"><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>
+         {if condition="$collection eq 0"}
+         <li class="ssw"><a class="imm-buy"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>加入收藏</a></li>
+         {/if}
+         {if condition="$collection eq 1"}
+         <li class="ssw"><a class="imm-buy" style="background: darkgray;"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>已收藏</a></li>
+         {/if}
      {/if}
-  {if condition="$collection eq 0"}
-  <li class="ssw"><a class="imm-buy"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>加入收藏</a></li>
-  {/if}
-  {if condition="$collection eq 1"}
-  <li class="ssw"><a class="imm-buy" style="background: darkgray;"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>已收藏</a></li>
-  {/if}
  </ul>
- 
+
  <script type="text/javascript">
   var goods_id = $("#goods_id").val();
    $(".join").click(function(){

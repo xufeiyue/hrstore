@@ -314,12 +314,15 @@ class GoodsController extends AdminController
 		$where = [];
 
 		$goods_name = input('post.goods_name/s');
-
+        $store_name = input('post.store_name/s');
 		if($goods_name){
 
 			$where['a.goods_name']  = ['like',"%{$goods_name}%"];
 		}
+        if($store_name){
 
+            $where['s.store_name']  = ['like',"%{$store_name}%"];
+        }
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
 
 
@@ -355,6 +358,7 @@ class GoodsController extends AdminController
 				$data['data'][$key]['pid_name'] = '自创';
 			}
 		}
+
 
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}

@@ -5,6 +5,7 @@
         <div class="demoTable layui-form layui-col-md12 x-so">
             <div class="layui-inline">
                 <input class="layui-input" name="goods_name" placeholder="请输入商品名称" id="demoReload" autocomplete="off">
+                <input class="layui-input" name="store_name" placeholder="请输入店铺名" id="demoReload1" autocomplete="off">
             </div>
             <button class="layui-btn" data-type="reload">搜索</button>
         </div>
@@ -59,6 +60,7 @@
 
                 {field: 'id',  title: 'ID', sort: true ,align: 'center'}
                 ,{field: 'goods_name', title: '商品名称',align: 'center'}
+                ,{field: 'store_name', title: '店铺名称',align: 'center'}
                 ,{field: 'goods_original_price', title: '商品原价',align: 'center'}
                 ,{field: 'goods_present_price', title: '商品现价',align: 'center'}
                 ,{field: 'pid_name', title: '来自',align: 'center'}
@@ -212,6 +214,7 @@
             }
             ,reload: function(){
                 var demoReload = $('#demoReload');
+                var demoReload1 = $('#demoReload1');
                 //执行重载
                 tableIns.reload({
                     page: {
@@ -219,6 +222,7 @@
                     }
                     ,where: {
                         goods_name: demoReload.val(),
+                        store_name:demoReload1.val()
                     }
                 })
             }

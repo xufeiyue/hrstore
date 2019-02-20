@@ -326,13 +326,13 @@ class MemberController extends CommonController
                 if($is_ws['mobilephone'] == ''){
                     if($mobilephone !='' && $data['sex'] !='' && $data['age'] !='' && $data['family'] !=''){
                         // 给优惠券
-                        $res = $this->get_receive_coupon1();
+                        //$res = $this->get_receive_coupon1();
 
                     }
                 }else{
                     if($data['sex'] !='' && $data['age'] !='' && $data['family'] !=''){
                         // 给优惠券
-                        $res = $this->get_receive_coupon1();
+                        //$res = $this->get_receive_coupon1();
                     }
                 }
                 $data['is_ws'] = 2;
