@@ -138,6 +138,10 @@ class AdvertisementController extends AdminController
 	//广告页面渲染
 	public function advertisement_list(){
 
+		$AdvertisementType = (new AdvertisementType)->Common_All_Select(['status' => 0],['id' => 'desc'],['id','type_name']);
+
+		$this->assign('AdvertisementType',$AdvertisementType);
+
 		return view();
 	}
 
@@ -147,6 +151,13 @@ class AdvertisementController extends AdminController
 		$where = [];
 
 		$name = input('post.name/s');
+
+		$type_id = input('post.type_id/d');
+		
+		if($type_id){
+
+			$where['a.type_id'] = $type_id;
+		}
 
 		if ($name) {
 			

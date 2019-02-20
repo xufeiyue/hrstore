@@ -639,7 +639,7 @@ class ActivityController extends AdminController
 
 			$data['update_time'] = time();
 
-			$edit = (new ActivityGoods)->Common_Insert($data);
+			$edit = (new ActivityGoods)->Common_Update($data,['id' => $id]);
 
 			if ($edit)
 				return json(['code' => 200, 'msg' => '更新成功']);

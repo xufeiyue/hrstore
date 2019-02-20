@@ -282,6 +282,7 @@ class IndexController extends CommonController
     Loader::import('character.Character',EXTEND_PATH);
 
     $store_list = (new \Character())->groupByInitials($store_list,'store_name');
+    // echo '<pre>';print_r($store_list);exit;
     $this->assign('store_list',$store_list);
 
     $this->assign('title',$this->title);
