@@ -1,5 +1,52 @@
 {include file="common/header"}
 <title>全部卡券</title>
+<style>
+    .shoucang_box{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+        display: none;
+    }
+    .shoucang_info{
+        width: 60%;
+        height: 16rem;
+        position: absolute;
+        left: 20%;
+        top:50%;
+        margin-top: -10rem;
+        z-index: 10;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.7);
+        overflow: hidden;
+        background: #fff;
+    }
+    .shoucang_info img{
+        display: block;
+        margin: 0 auto;height: 12rem;
+    }
+    .shoucang_info p{
+        width: 100%;
+        height: 4rem;
+        text-align: center;
+        line-height: 4rem;
+        font-size: 2rem;
+        background: #ff5500;
+        color: #fff;
+        text-indent: 10px;
+    }
+</style>
+<!--收藏成功弹出层-->
+    <div class="shoucang_box">
+        <div class="shoucang_info">
+            <img src="http://huaruncard.redh5.cn/static/home/images/youhuijuan.png">
+            <p id="close">确定</p>
+        </div>
+    </div>
+<!--收藏成功弹出层-->
 <!--<header data-am-widget="header" class="am-header am-header-default sq-head ">-->
     <!--<div class="am-header-left am-header-nav">-->
         <!--<a href="javascript:history.back()" class="">-->
@@ -137,10 +184,13 @@ function get_coupon(card_type_id){
         dataType: "json",
 
         success: function(data){
-            alert(data.msg)
+            $(".shoucang_box").show()
         }
 
     });
 }
+$("#close").click(function(){
+  $(".shoucang_box").hide()
+})
 </script>
 {include file="common/footer"}

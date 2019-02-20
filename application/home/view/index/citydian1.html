@@ -15,27 +15,24 @@
 	/* demo */
 	.demofghf{width:100%;height: 100%; position: fixed;}
 </style>
-
 <div class="demofghf">
 
 	<div id="slider">
 		<div class="slider-content">
 			<ul>
-			{foreach name="store_list" item="vo" key="key"}
-				<li id="{$key|strtolower}"><a name="{$key}" class="title">{$key}</a>
+				{foreach name="store_list" item="vo" key="key"}
+				<li id="{$key|strtolower}"><a name="{$key}" class="title" >{$key}</ a>
 					<ul>
-					{foreach name="vo" item="vo1"}
-						<li><a href="{:url('Index/index',['store_id' => $vo1['store_id']])}">{$vo1['store_name']}{$vo1['juli']}km</a></li>
-					{/foreach}
+						{foreach name="vo" item="vo1"}
+							<li style="font-size:2rem; line-height:3.6rem;"><a href="{:url('Index/index',['store_id' => $vo1['store_id']])}">{$vo1['store_name']}{$vo1['juli']}km</a></li>
+						{/foreach}
 					</ul>
 				</li>
-			{/foreach}
-				
+				{/foreach}
 			</ul>
 		</div>
 	</div>
 
 </div>
-
-</body>
+	</body>
 </html>

@@ -15,26 +15,54 @@
         </h1>
     </header>
 </div>-->
-<div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0" style="position: relative;height: 30%;">
-	<header data-am-widget="header" class="am-header am-header-default tm-head" id="shortbar" style="height: 30px;line-height: 28px;">
+<!--<div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0" style="position: relative;height: 30%;">-->
+	<!--<header data-am-widget="header" class="am-header am-header-default tm-head" id="shortbar" style="height: 30px;line-height: 28px;">-->
+        <!--<div class="am-header-left am-header-nav" id="store_name">-->
+
+        <!--</div>-->
+        <!--<div class="am-header-right am-header-nav" id="mendian">-->
+
+        <!--</div>-->
+    <!--</header>-->
+    <!--<div class="box">-->
+        <!--<ol></ol>-->
+        <!--<ul id="ulList">-->
+        <!--</ul>-->
+    <!--</div>-->
+
+<!--</div>-->
+<!--<ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  id="goods_list">-->
+
+
+<!--</ul>-->
+
+
+<div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0" style="position: relative;">
+    <header data-am-widget="header" class="am-header am-header-default tm-head" id="shortbar" style="height: 30px;line-height: 28px;">
         <div class="am-header-left am-header-nav" id="store_name">
 
         </div>
         <div class="am-header-right am-header-nav" id="mendian">
-            
+
         </div>
     </header>
     <div class="box">
-        <ol></ol>
-        <ul id="ulList">
-        </ul>
-    </div>
+    <ul class="am-slides" id="ulList">
 
+        <!-- <li><img src="__IMAGES__/banner1.png" /></li>
+        <li><img src="__IMAGES__/banner1.png" /></li>
+        <li><img src="__IMAGES__/banner1.png" /></li>
+        <li><img src="__IMAGES__/banner1.png" /></li>
+        <li><img src="__IMAGES__/banner1.png" /></li> -->
+
+    </ul>
+    </div>
 </div>
+<!--图片轮换-->
 <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  id="goods_list">
-    
-    
+
 </ul>
+
 <!--导航-->
  <div class="sq-nav"  >
      <div class="List-head" style="padding: 0 3px;">
@@ -167,6 +195,7 @@
         top: 64%;
         left: 15%;
         text-align: center;
+
     }
     .WanShan_box a{
         width: 70%;
@@ -195,6 +224,7 @@
         background: rgba(0,0,0,0.5);
         display: none;
     }
+
     .yiqiangwan_info{
         width: 60%;
         height: 16rem;
@@ -219,7 +249,7 @@
         line-height: 4rem;
         font-size: 2rem;
         background: #ff5500;
-        color: #fff;
+        color: #fff;fff
         text-indent: 10px;
     }
 </style>
@@ -235,11 +265,11 @@
 {/if}
 <!--首次一元红包弹出层-->
 <!--完善信息弹出层-->
-<div class="WanShan_box">
-    <img src="http://huaruncard.redh5.cn/static/home/images/wanshanxinxibao.png">
-    <a class="WanShan_Open" href="http://huaruncard.redh5.cn/home/member/infor.html"></a>
-    <span class="WanShan_Close"></span>
-</div>
+<!--<div class="WanShan_box">-->
+    <!--<img src="http://huaruncard.redh5.cn/static/home/images/wanshanxinxibao.png">-->
+    <!--<a class="WanShan_Open" href="http://huaruncard.redh5.cn/home/member/infor.html"></a>-->
+    <!--<span class="WanShan_Close"></span>-->
+<!--</div>-->
 <!--完善信息弹出层-->
 <script>
     $(function () {
@@ -249,6 +279,7 @@
                     $(".WanShan_box").css("display","block");
                     $(".shouCi_box").css("display","none");
                 }else if(res.code == 100){
+
                 }else{
                     $(".shouCi_box").css("display","none");
                     $(".yiqiangwan_box").show()
@@ -258,6 +289,7 @@
         $(".shouCi_Close").click(function() {
             $(".shouCi_box").css("display","none");
         });
+
         $(".WanShan_Close").click(function() {
             $(".WanShan_box").css("display","none");
         });
@@ -273,14 +305,18 @@
                 var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
                 var speed = res.speed; // 速度，以米/每秒计
                 var accuracy = res.accuracy; // 位置精度
+
                 getinfo(latitude,longitude)
             },
             error: function (error) {
+
             }
         });
     });
     var store_id = $("#store_id").val()
+
     function getinfo(latitude,longitude){
+
         $.post("{:url('Index/ajax_index')}",{latitude: latitude, longitude: longitude,store_id: store_id},function(res){
             var store = res.data.store
             var advertisement = res.data.advertisement
@@ -288,17 +324,24 @@
             var goods_type_list = res.data.goods_type_list
             var goods_top_list = res.data.goods_top_list
             var activity = res.data.activity
+
             var store_name = '<a href="{:url("Index/city_info")}?id='+store.store_id+'"><img style="height: 18px;margin-top: -2px;" src="__IMAGES__/city111.png" /><p style="font-size: 1.4rem; margin-top: -35px;">'+store.store_name+'</p></a>';
             $("#store_name").html('')
             $("#store_name").append(store_name);
+
             var mendian_html = ''
+
             mendian_html += '<a href="{:url("Index/cityDian")}?store_id='+store.store_id+'" >';
             mendian_html +=  '<p style="font-size: 1.2rem; margin-top: -35px;">更多门店></p>';
             mendian_html += '</a>';
+
             $("#mendian").html('')
             $("#mendian").append(mendian_html)
+
             var advertisement_html = '';
+
             for (i in advertisement) {
+                // advertisement_html += '<li><img src="'+advertisement[i].image+'" /></li>';
                 // alert(i)
                 if (i == 0) {
                     advertisement_html += '<li class="active" style="left:0;z-index:11;"> <a href="'+advertisement[i].url+'" ><img src="'+advertisement[i].image+'" /></a></li>';
@@ -308,7 +351,11 @@
             }
             console.log(advertisement_html)
             $("#ulList").append(advertisement_html);
+
+
+
             scrollAd(".box")
+
             var goods_list_html = '';
                 goods_list_html +='<div class="List-head">';
                 goods_list_html +=    '<h1 class="List-head-name">推荐爆款</h1>';
@@ -321,15 +368,19 @@
                 goods_list_html +=            '<img src="'+goods_list[i].goods_images+'" />';
                 goods_list_html +=            '<h3 class="am-gallery-title">'+goods_list[i].goods_name+'</h3>';
 //                goods_list_html +=            '<div class="am-gallery-desc Y_hui"><p>优惠价</p><p>￥'+goods_list[i].goods_present_price+'</p></div>';
+
                 goods_list_html +=            '<div class="am-gallery-desc Y_hui"><p>优惠价</p><p><em>￥</em>'+goods_list[i].goods_price1+'<em>'+goods_list[i].goods_price2+'</em></p></div>';
+
                 goods_list_html +=        '</a>';
                 goods_list_html +=    '</div>';
                 goods_list_html += '</li>';
             }
             $("#goods_list").html('')
             $("#goods_list").append(goods_list_html)
+
             var goods_type_list_html = ''
             for (i in goods_type_list) {
+
                 goods_type_list_html += '<li>';
                 goods_type_list_html +=     '<div class="am-gallery-item">';
                 goods_type_list_html +=         '<a href="{:url("Index/category")}?type_id='+goods_type_list[i].id+'" class="">';
@@ -339,27 +390,36 @@
                 goods_type_list_html +=       '</div>';
                 goods_type_list_html +=  '</li>';
             }
+
             $("#goods_type_list").html('')
             $("#goods_type_list").append(goods_type_list_html)
+
             var goods_top_list_html = '';
+
             for (i in goods_top_list) {
+
                 goods_top_list_html += '<li class="Active-area">';
                 goods_top_list_html +=    '<div class="am-gallery-item">';
                 goods_top_list_html +=        '<a href="{:url("Index/detail")}?id='+goods_top_list[i].id+'" class="">';
                 goods_top_list_html +=            '<img src="'+goods_top_list[i].goods_images+'" />';
                 goods_top_list_html +=            '<h3 class="am-gallery-title">'+goods_top_list[i].goods_name+'</h3>';
                 goods_top_list_html +=            '<div class="am-gallery-desc Y_hui"><p>优惠价</p><p><em>￥</em>'+goods_top_list[i].goods_price1+'<em>'+goods_top_list[i].goods_price2+'</em></p></div>';
+
                 goods_top_list_html +=        '</a>';
                 goods_top_list_html +=    '</div>';
                 goods_top_list_html += '</li>';
             }
+
             $("#goods_top_list").html('')
             $("#goods_top_list").append(goods_top_list_html)
+
             var activity_html = ''
             if (activity) {
+
                 activity_html += '<a href="{:url("Activity/lq_huodong")}?id='+activity.id+'">';
                 activity_html +=    '<img src="'+activity.activity_url+'" width="24"/>';
                 activity_html += '</a>';
+
                 $("#activity").html('')
                 $("#activity").append(activity_html)
             }
@@ -368,8 +428,13 @@
     }
 </script>
 <script>
+
     $("#close").click(function(){
         $(".yiqiangwan_box").hide()
     })
 </script>
 {include file="common/footer"}
+ 
+ 
+ 
+
