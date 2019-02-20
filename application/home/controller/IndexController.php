@@ -57,6 +57,37 @@ class IndexController extends CommonController
     return view();
   }
 
+  public function index1(){
+      $this->title = '首页';
+
+      $store_id = input('store_id/d') ? : 0;
+
+      if ($store_id) {
+
+          session('store_id',$store_id);
+
+      }
+
+      $this->assign('store_id',$store_id);
+
+      $this->assign('title',$this->title);
+
+      // 判断当前用户是否领取过新人红包
+
+      $coupon_model = new CouponType();
+
+      $w['mr.member_id'] = $this->userId;
+      $w['ctt.card_type_id'] = 30;
+      $c = $coupon_model->getRegCoupon($w);
+      if(empty($c)){
+          $this->assign('rec_key',1);
+      }else{
+          $this->assign('rec_key',2);
+      }
+
+      return view();
+  }
+
   //ajax获取首页数据
   public function ajax_index(){
 
@@ -96,7 +127,7 @@ class IndexController extends CommonController
 
     $limit = 8;
 
-    $order = ['id' => 'desc'];
+    $order = ['goods_bk_paixu' => 'desc'];
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
@@ -114,7 +145,7 @@ class IndexController extends CommonController
     }
 
     //底部商品列表
-    $goods_top_list = (new Goods)->Common_Select(8,17,$where,$order,$goods_field); //商品列表
+    $goods_top_list = (new Goods)->Common_Select(8,6,$where,$order,$goods_field); //商品列表
 
       foreach($goods_top_list as $key1=>$val1){
           if ($val1['goods_images']) {
@@ -436,9 +467,9 @@ class IndexController extends CommonController
 
     $limit = 10;
 
-    $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
+    $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0];
 
-    $order = ['number_of_visits' => 'desc'];
+    $order = ['goods_rq_paixu'=>'desc','number_of_visits' => 'desc'];
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
@@ -471,10 +502,10 @@ class IndexController extends CommonController
 
     $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $this->store_id, 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
 
-    $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
+    $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0];
 
-    $order = ['number_of_visits' => 'desc']; //爆款人气排序
-
+//    $order = ['number_of_visits' => 'desc']; //爆款人气排序
+      $order = ['goods_bk_paixu' => 'desc']; //爆款人气排序
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
     //print_r($where);exit;
     $goods_list = (new Goods)->Common_All_Select($where,$order,$goods_field); //商品列表

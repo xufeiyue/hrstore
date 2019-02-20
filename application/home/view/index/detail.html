@@ -95,6 +95,8 @@
         color: #fff;
         text-indent: 10px;
     }
+	.fix-shopping .ssw{ width:35%;}
+    .fix-shopping .yibai{ width:100%;}
 </style>
 
 <!--收藏成功弹出层-->
@@ -115,10 +117,10 @@
      <li style="background: #ffba35;"><a class="join"><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>
      {/if}
   {if condition="$collection eq 0"}
-  <li style="width: 35%;"><a class="imm-buy"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>加入收藏</a></li>
+  <li class="ssw"><a class="imm-buy"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>加入收藏</a></li>
   {/if}
   {if condition="$collection eq 1"}
-  <li style="width: 35%;"><a class="imm-buy" style="background: darkgray;"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>已收藏</a></li>
+  <li class="ssw"><a class="imm-buy" style="background: darkgray;"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>已收藏</a></li>
   {/if}
  </ul>
  

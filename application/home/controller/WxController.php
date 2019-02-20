@@ -8,16 +8,15 @@ class WxController extends Controller
 //拉取信息 跳转页面
 	public function getChatInfo(){
 
-        // $thirdParams = $_GET['thirdParams'];
+//         $thirdParams = $_GET['thirdParams'];
+//
+//         $param = $_GET['param'];
+//         $key='crv_ehasdfu_sgfnasdbf_pw';   // 秘钥 这地方有可能会换
+//         $hrinfo = $this->decrypt($param,$key);  //解密
+//         $hrinfo=preg_replace('/[\x00-\x1F\x80-\x9F]/u', '', trim($hrinfo));
+//         $userinfo = json_decode($hrinfo,true);  //这一步就获取到了用户信息
 
-        // $param = $_GET['param'];
 
-        // $key='crv_ehasdfu_sgfnasdbf_pw';   // 秘钥 这地方有可能会换
-        // $hrinfo = $this->decrypt($_GET['param'],$key);  //解密
-        // $hrinfo=preg_replace('/[\x00-\x1F\x80-\x9F]/u', '', trim($hrinfo));
-        // $userinfo = json_decode($hrinfo,true);  //这一步就获取到了用户信息
-
-        // echo '<pre>';print_r($userinfo);exit;
 
 		$wechat = new Wechat();//实例化微信类
 
@@ -94,14 +93,19 @@ class WxController extends Controller
     public function _redirect($state) {
         return join('/', json_decode(base64_decode($state), true));
     }
-
-    public function decrypt($dStr = '', $key, $use3des = true){
+    public function decrypt($param,$key){
+        $replaceStr = $this->replaceStr($param,False);
+        //开始base64反编码
+        $decode64=base64_decode($replaceStr);
+        echo $decode64;exit;
+    }
+    public function decrypt3($dStr = '', $key, $use3des = true){
       //$key=$this->keyStr;
       if (empty($dStr) || empty($key))
       {
         return False;
       }
-      
+
       $replaceStr = $this->replaceStr($dStr,False);
     //        $replaceStr = $dStr;
       $cipher = $use3des ? MCRYPT_TRIPLEDES : MCRYPT_DES;
@@ -118,7 +122,12 @@ class WxController extends Controller
       mcrypt_module_close($td);
       return $decrypted;
     }
-      
+      public function decrypt2($param,$key){
+          $ciphertext_dec = base64_decode($param);
+          $iv = substr($key, 0, 16);
+          $decrypted = openssl_decrypt($ciphertext_dec, 'AES-256-CBC', $key, OPENSSL_RAW_DATA|OPENSSL_ZERO_PADDING, $iv);
+          return $decrypted;
+      }
       public function replaceStr($rStr,$rMode=True){
         $replaceStr='';
         if($rMode)

@@ -213,6 +213,4 @@ class CouponController extends CommonController
         }
 
     }
-
-
 }
