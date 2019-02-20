@@ -119,12 +119,16 @@
          <li class="ssw yibai"><a class="imm-buy" style="background: darkgray;"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>已收藏</a></li>
          {/if}
      {else /}
-     <li class="ssw"><a class="join"><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>
+        {if condition="$is_user_have eq 1"}
+        <li class="ssw" style="background: #fdb942;"><a class="join"><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>领取优惠券</a></li>
+        {else /}
+     <li class="ssw" style="background: darkgray;"><a class="join"><i class="iconfont icon-qiaquan" style="margin-right: 8px;"></i>已领取</a></li>
+     {/if}
          {if condition="$collection eq 0"}
-         <li class="ssw"><a class="imm-buy"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>加入收藏</a></li>
+         <li><a class="imm-buy"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>加入收藏</a></li>
          {/if}
          {if condition="$collection eq 1"}
-         <li class="ssw"><a class="imm-buy" style="background: darkgray;"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>已收藏</a></li>
+         <li><a class="imm-buy" style="background: darkgray;"><i class="iconfont icon-shoucang" style="margin-right: 5px;"></i>已收藏</a></li>
          {/if}
      {/if}
  </ul>

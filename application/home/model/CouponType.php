@@ -41,7 +41,7 @@ class CouponType extends Common
     public function getRegCoupon($w){
         return $data = Db::name('member_card_ticket_relation')
             ->alias('mr')
-            ->join('card_ticket ct','ct.card_ticket_id = mr.card_ticket_id')
+            ->join('card_ticket ct','ct.card_ticket_id = mr.card_ticket_id','LEFT')
             ->join('card_ticket_type ctt','ctt.card_type_id = ct.card_type_id','LEFT')
             ->where($w)
             ->select();

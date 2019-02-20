@@ -234,9 +234,20 @@ class IndexController extends CommonController
         $this->assign('is_have_coupon',1);
 
     }else{
+
+
         $goods_detail['face_value'] = $coupon_type_info['face_value'];
 
         $goods_detail['card_type_id'] = $coupon_type_info['card_type_id'];
+        // 查询用户是否领取过此优惠券
+        $w['ct.goods_id'] = $goods_id;
+        $w['mr.member_id'] = $this->userId;
+        $is_user_have = (new Coupon())->get_member_card_ticket_relation_info($w);
+        if(!empty($is_user_have)){
+            $this->assign('is_user_have',1);
+        }else{
+            $this->assign('is_user_have',2);
+        }
         $this->assign('is_have_coupon',2);
 
     }
