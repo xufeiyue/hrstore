@@ -108,7 +108,7 @@ where r.member_id = $member_id and ctt.end_time < $time and ctt.ticket_type='2'"
 
     // 根据优惠券类型id查询用户是否有此商品的优惠券
     public function is_coupon_type_card($w){
-        Db::name('member_card_ticket_relation')
+        return Db::name('member_card_ticket_relation')
             ->alias('mr')
             ->join('card_ticket ct','ct.card_ticket_id = mr.card_ticket_id','LEFT')
             ->where($w)->select();

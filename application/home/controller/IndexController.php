@@ -242,7 +242,7 @@ class IndexController extends CommonController
         // 查询用户是否领取过此优惠券
         $w['ct.goods_id'] = $goods_id;
         $w['mr.member_id'] = $this->userId;
-        $is_user_have = (new Coupon())->get_member_card_ticket_relation_info($w);
+        $is_user_have = (new Coupon())->is_coupon_type_card($w);
         if(!empty($is_user_have)){
             $this->assign('is_user_have',1);
         }else{
