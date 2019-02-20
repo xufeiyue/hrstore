@@ -14,6 +14,12 @@
 	body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";background:#eee;}
 	/* demo */
 	.demofghf{width:100%;height: 100%; position: fixed;}
+	.slider-content ul ul li a{
+		font-size: 16px;
+	}
+	.slider-content ul ul li a i{
+		font-style: normal;
+	}
 </style>
 
 <div class="demofghf">
@@ -25,7 +31,7 @@
 				<li id="{$key|strtolower}"><a name="{$key}" class="title">{$key}</a>
 					<ul>
 					{foreach name="vo" item="vo1"}
-						<li><a href="{:url('Index/index',['store_id' => $vo1['store_id']])}">{$vo1['store_name']}{$vo1['juli']}km</a></li>
+						<li><a href="{:url('Index/index',['store_id' => $vo1['store_id']])}">{$vo1['store_name']}<i style="float: right;">{$vo1['juli']}km</i></a></li>
 					{/foreach}
 					</ul>
 				</li>

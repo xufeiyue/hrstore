@@ -65,9 +65,9 @@
 						color: #ff4646;
 					}
 				</style>
-				<div class="Two_Box">
-					<div class="Two_lestBox">
-						<div class="Two_sssbox">
+				<!--<div class="Two_Box">-->
+					<!--<div class="Two_lestBox">-->
+						<!--<div class="Two_sssbox">-->
 							<!--<span class="Two_lest Two_lest_color">到静安寺了</span>-->
 							<!--<span class="Two_lest">到静安寺了</span>-->
 							<!--<span class="Two_lest">到静安寺了</span>-->
@@ -76,13 +76,13 @@
 							<!--<span class="Two_lest">到静安寺了</span>-->
 							<!--<span class="Two_lest">到静安寺了</span>-->
 							<!--<span class="Two_lest Two_lest_color">全部</span>-->
-							{foreach name="last_type_list" item="vo"}
-							<span {if condition="$two_type_id == $vo['id']"}class="Two_lest Two_lest_color"{else /}class="Two_lest"{/if}>
-							<a href="{:url('Index/category',['type_id' => $vo['id']])}"  {if condition="$two_type_id == $vo['id']"}class="Two_lest Two_lest_color"{else /}class="Two_lest"{/if}>{$vo['goods_type_name']}</a></span>
-							{/foreach}
-						</div>
-					</div>
-				</div>
+							<!--{foreach name="last_type_list" item="vo"}-->
+							<!--<span {if condition="$two_type_id == $vo['id']"}class="Two_lest Two_lest_color"{else /}class="Two_lest"{/if}>-->
+							<!--<a href="{:url('Index/category',['type_id' => $vo['id']])}"  {if condition="$two_type_id == $vo['id']"}class="Two_lest Two_lest_color"{else /}class="Two_lest"{/if}>{$vo['goods_type_name']}</a></span>-->
+							<!--{/foreach}-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
 				<!--二级分类-->
 				<ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  >
 					{foreach name="Goods" item="vo"}
