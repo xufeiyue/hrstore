@@ -21,8 +21,9 @@
                 <a href="{:url('Index/detail',['id' => $vo['id']])}" class="">
                     <img src="{$vo['goods_images']}" />
                     <!--<h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>-->
-                    <div class="am-gallery-desc am-gallery-yuan">原价￥{$vo['goods_present_price']}</div>
+
                     <div class="am-gallery-desc am-gallery-color">{$vo['goods_name']}</div>
+                    <div class="am-gallery-desc am-gallery-yuan">原价<em>￥</em>{$vo['goods_present_price']}</div>
                 </a>
             </div>
         </li>
