@@ -19,7 +19,7 @@ class MemberController extends CommonController
 
 		$member = (new Member)->Common_Find(['id' => $this->userId]);
 
-		$where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'characteristic' => 0,'start_time' => ['<=',time()], 'end_time' => ['>=',time()]];
+		$where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'characteristic' => 0];
 
 		$offset = 0;
 
@@ -84,7 +84,7 @@ class MemberController extends CommonController
 		$this->title = '我的收藏';
 
 		//查询收藏并且没用到期的商品
-		$collection = (new CollectionAndCoupons)->collection_goods(['c.userId' => $this->userId, 'c.status' => 0, 'c.type' => 1, 'g.start_time' => ['<=',time()], 'g.end_time' => ['>=',time()] ],['c.id' => 'desc'],['c.id','c.goods_id','g.goods_name','g.goods_original_price','g.goods_present_price','g.goods_images']);
+		$collection = (new CollectionAndCoupons)->collection_goods(['c.userId' => $this->userId, 'c.status' => 0, 'c.type' => 1 ],['c.id' => 'desc'],['c.id','c.goods_id','g.goods_name','g.goods_original_price','g.goods_present_price','g.goods_images']);
 
 		//过期商品id
 		$collection_id = (new CollectionAndCoupons)->collection_id(['c.userId' => $this->userId, 'c.status' => 0, 'c.type' => 1, 'g.end_time' => ['<',time()] ],['c.id' => 'desc'],['c.id']);
