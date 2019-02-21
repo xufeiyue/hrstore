@@ -34,6 +34,7 @@ class CouponController extends CommonController
         $where_pt['end_time'] = array('>',$time);
         $where_pt['is_use'] = 2;
         $where_pt['ticket_type'] = 1;
+        $where_pt['id'] = array('not in','30,31');//不显示新人注册券和完善资料券
         $field = [];
         $order=[];
         $coupon_type_pt_list = $coupon_type_model->Common_All_Select($where_pt,$order,$field);
