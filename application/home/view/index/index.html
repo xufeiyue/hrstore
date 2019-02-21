@@ -222,13 +222,51 @@
         color: #fff;
         text-indent: 10px;
     }
+
+    .lqcg_box{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+        display: none;
+    }
+    .lqcg_info{
+        width: 60%;
+        height: 16rem;
+        position: absolute;
+        left: 20%;
+        top:50%;
+        margin-top: -10rem;
+        z-index: 10;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.7);
+        overflow: hidden;
+        background: #fff;
+    }
+    .lqcg_info img{
+        display: block;
+        margin: 0 auto;height: 12rem;
+    }
+    .lqcg_info p{
+        width: 100%;
+        height: 4rem;
+        text-align: center;
+        line-height: 4rem;
+        font-size: 2rem;
+        background: #ff5500;
+        color: #fff;
+        text-indent: 10px;
+    }
 </style>
 <!--首次一元红包弹出层-->
 {if condition="$rec_key eq 1"}
 <div class="shouCi_box TCC_Box">
     <img src="http://huaruncard.redh5.cn/static/home/images/lijilingbao.png">
 
-    <span class="shouCi_Open" onclick="getHongbao()"></span>
+    <span class="shouCi_Open"></span>
 
     <span class="shouCi_Close"></span>
 </div>
@@ -240,7 +278,14 @@
     <!--<a class="WanShan_Open" href="http://huaruncard.redh5.cn/home/member/infor.html"></a>-->
     <!--<span class="WanShan_Close"></span>-->
 <!--</div>-->
-<!--完善信息弹出层-->
+<!--领取成功弹出层-->
+<div class="lqcg_box">
+    <div class="lqcg_info">
+        <img src="http://huaruncard.redh5.cn/static/home/images/youhuijuan.png">
+        <p id="lqcg_close">确定</p>
+    </div>
+</div>
+<!--领取成功弹出层-->
 <script>
     $(function () {
         $(".shouCi_Open").click(function() {
@@ -248,6 +293,7 @@
                 if(res.code == 200){
                     $(".WanShan_box").css("display","block");
                     $(".shouCi_box").css("display","none");
+                    $(".lqcg_box").css("display","block");
                 }else if(res.code == 100){
                 }else{
                     $(".shouCi_box").css("display","none");
@@ -370,6 +416,9 @@
 <script>
     $("#close").click(function(){
         $(".yiqiangwan_box").hide()
+    })
+    $("#lqcg_close").click(function () {
+        $(".lqcg_box").hide()
     })
 </script>
 {include file="common/footer"}
