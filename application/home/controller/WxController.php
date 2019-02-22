@@ -9,9 +9,10 @@ class WxController extends Controller
 //拉取信息 跳转页面
 	public function getChatInfo(){
 
+         
+         $param = $_GET['param'];
          $thirdParams = $_GET['thirdParams'];
 
-         $param = $_GET['param'];
 //         $key='crv_ehasdfu_sgfnasdbf_pw';   // 秘钥 这地方有可能会换
 //         $hrinfo = $this->decrypt($param,$key);  //解密
 //         $hrinfo=preg_replace('/[\x00-\x1F\x80-\x9F]/u', '', trim($hrinfo));
@@ -81,8 +82,8 @@ class WxController extends Controller
       
        session('wechat_user',$member);
 
-       $obj = $this->_redirect($state);
-
+       $obj = $this->_redirect($thirdParams);
+// echo '<pre>';print_r($obj);exit;
        if ($obj) {
             $this->redirect($obj);
         }else{
@@ -95,7 +96,7 @@ class WxController extends Controller
      * 解析条转过来的页面地址
     * */
     public function _redirect($state) {
-        return join('/', json_decode(base64_decode($state), true));
+        return base64_decode($state);
     }
 
     public function decrypt_old($dStr = '', $key, $use3des = true)
