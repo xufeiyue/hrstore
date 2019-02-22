@@ -43,17 +43,16 @@ class IndexController extends CommonController
 
     // 判断当前用户是否领取过新人红包
 
-        $coupon_model = new CouponType();
+    $coupon_model = new CouponType();
 
-        $w['mr.member_id'] = $this->userId;
-        $w['ctt.card_type_id'] = 30;
-        $c = $coupon_model->getRegCoupon($w);
-        if(empty($c)){
-            $this->assign('rec_key',1);
-        }else{
-            $this->assign('rec_key',2);
-        }
-
+    $w['mr.member_id'] = $this->userId;
+    $w['ctt.card_type_id'] = 30;
+    $c = $coupon_model->getRegCoupon($w);
+    if(empty($c)){
+        $this->assign('rec_key',1);
+    }else{
+        $this->assign('rec_key',2);
+    }
     return view();
   }
 
