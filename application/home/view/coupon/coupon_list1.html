@@ -2,7 +2,7 @@
 <title>全部卡券</title>
 
 <!--手机登录-->
-<!--<div class="XinXi_box">
+<div class="XinXi_box">
     <div class="XinXi">
         <h1 class="name_title">手机登录</h1>
         <span class="iconfont icon-cha Cha_btn"></span>
@@ -18,7 +18,7 @@
 
         <input type="button" class="login-btn" value="立即提交">
     </div>
-</div>-->
+</div>
 <!--手机登录-->
 <style>
     .shoucang_box{
@@ -87,13 +87,11 @@
                 <p>平台卡券</p>
             </div>
             <div class="pingtai-info">
-                <p>{$vo.ticket_name}<br>
-                    全区限领5万张，领完即止。
-                </p>
+                <p>{$vo.ticket_name}</p>
                 <div class="pingtai-function">
                     <span>有效期：{$vo.end_time_desc}</span>
                     <!--<a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id']])}">立即领取</a>-->
-                    <a class="pingtai-btn" href="javascript:get_coupon({$vo.card_type_id})">立即领取</a>
+                    <a class="pingtai-btn lingqu_hide_{$vo.card_type_id}" href="javascript:get_coupon({$vo.card_type_id})">立即领取</a>
                 </div>
             </div>
         </li>
@@ -104,13 +102,13 @@
                 <p>平台卡券</p>
             </div>
             <div class="pingtai-info">
-                <p>{$vo.ticket_name}<br />全区限领5万张，领完即止。</p>
+                <p>{$vo.ticket_name}</p>
                 <div class="pingtai-function">
                     <span>有效期：{$vo.end_time_desc}</span>
-                    <!-- <a class="pingtai-btn">立即使用</a> -->
+                    <a class="pingtai-btn">立即使用</a>
                 </div>
             </div>
-            <div class="gy-pic"><img src="__IMAGES__/lingwan.png"/></div>
+            <div class="gy-pic" id="lingwan_{$vo['card_type_id']}"><img src="__IMAGES__/lingwan.png"/></div>
         </li>
         {/if}
         {/volist}
@@ -134,7 +132,6 @@
                 <!--<a class="danpin-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id']])}">立即领取</a>-->
                 <a class="danpin-btn lingqu_hide_{$vo.card_type_id}" href="javascript:get_coupon({$vo.card_type_id})">立即领取</a>
             </div>
-            <div class="gy-pic lingwan_{$vo['card_type_id']}" style="display: none;"><img src="__IMAGES__/lingwan.png"/></div>
         </li>
         {else /}
         <li class="danpin-list" style="position: relative;">
@@ -152,48 +149,11 @@
                 </div>
                 <a class="danpin-btn">立即使用</a>
             </div>
-            <div class="gy-pic"><img src="__IMAGES__/lingwan.png"/></div>
+            <div class="gy-pic" id="lingwan_{$vo['card_type_id']}"><img src="__IMAGES__/lingwan.png"/></div>
         </li>
         {/if}
         {/volist}
     </ul>
-    
-    <!--满减券-->
-    <ul class="manjian">
-        {volist name="coupon_type_pl_list" id="vo3"}
-        {if condition="$vo3['my_have_status'] eq 2"}
-        <li class="manjian-list">
-            <div class="jinE manjian-jinE">
-                <h1><i>￥</i>{$vo3.small_value}</h1>
-                <p>满减卡券</p>
-            </div>
-            <div class="pingtai-info manjian-info">
-                <p>{$vo3.ticket_name}</p>
-                <div class="pingtai-function">
-                    <span>有效期：{$vo3.end_time_desc}</span>
-                    <a class="pingtai-btn lingqu_hide_{$vo3.card_type_id}" href="javascript:get_coupon({$vo3.card_type_id})">立即领取</a>
-                </div>
-            </div>
-            <div class="gy-pic lingwan_{$vo3.card_type_id}" style="display: none;"><img src="__IMAGES__/lingwan.png"/></div>
-        </li>
-        {else /}
-        <li class="manjian-list" style="position: relative;">
-            <div class="jinE manjian-jinE">
-                <h1><i>￥</i>{$vo3.small_value}</h1>
-                <p>满减卡券</p>
-            </div>
-            <div class="pingtai-info manjian-info">
-                <p>{$vo3.ticket_name}</p>
-                <div class="pingtai-function">
-                    <span>有效期：{$vo3.end_time_desc}</span>
-                </div>
-            </div>
-            <div class="gy-pic"><img src="__IMAGES__/lingwan.png"/></div>
-        </li>
-        {/if}
-        {/volist}
-    </ul>
-    <!--满减券-->
 </div>
 <!--底部导航-->
 <div style="height: 55px;"></div>
@@ -244,24 +204,16 @@ function get_coupon(card_type_id){
         dataType: "json",
 
         success: function(data){
-            // $(".lingwan_"+card_type_id).show()
+            $(".shoucang_box").show()
+            $("#lingwan_"+card_type_id).show()
             $(".lingqu_hide_"+card_type_id).hide()
-            if(data.code == 200){
-                $(".shoucang_box").show()
-               
-            }else if(data.code == 100){
-                $(".shoucang_box").show()
-            }else{
-                $(".shoucang_box").show()
-            }
-
         }
 
     });
 }
-//$(".Cha_btn").click(function() {
-//    $(".XinXi_box").css("display","none");
-//});
+$(".Cha_btn").click(function() {
+    $(".XinXi_box").css("display","none");
+});
 $("#close").click(function(){
   $(".shoucang_box").hide()
 })
