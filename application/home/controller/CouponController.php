@@ -33,26 +33,43 @@ class CouponController extends CommonController
         $time = time();
         $where_pt['end_time'] = array('>',$time);
         $where_pt['is_use'] = 2;
+        $where_pt['status'] = 1;
         $where_pt['ticket_type'] = 1;
-        $where_pt['card_type_id'] = array('not in','30,31'); // 不显示新人注册券和完善资料券
+        $where_pt['card_type_id'] = array('not in','31'); // 不显示新人注册券和完善资料券
         $field = [];
         $order=[];
-        $coupon_type_pt_list = $coupon_type_model->Common_All_Select($where_pt,$order,$field);
-        if(!empty($coupon_type_pt_list)){
-            foreach($coupon_type_pt_list as $k_p=>$v_p){
-                $n = (new Coupon())->getNum(array('card_type_id'=>$v_p['card_type_id'],'status'=>2));
-                if($n>0){
-                    $coupon_type_pt_list[$k_p]['num_status']= 1; // 有剩余
-                }else{
-                    $coupon_type_pt_list[$k_p]['num_status']= 2; // 已领完
-                }
-            }
-
+        $coupon_type_pt_list = $coupon_type_model->selAll($where_pt,$order,$field);
+        // 获取我的所有品类优惠券
+        $my_coupon_type_list1 = $coupon_type_model->getRegCoupon(['mr.member_id'=>$this->userId],"ctt.card_type_id");
+        $arr1 = [];
+        foreach($my_coupon_type_list1 as $key=>$val){
+            $arr1[] = $val['card_type_id'];
         }
+        foreach ($coupon_type_pt_list as $key2=>$val2){
+            if(in_array($val2['card_type_id'],$arr1)){
+                $coupon_type_pt_list[$key2]['num_status'] = 2;//有这个优惠券
+            }else{
+                $coupon_type_pt_list[$key2]['num_status'] = 1;//没有这个优惠券
+            }
+        }
+        // echo '<pre>';print_r($coupon_type_pt_list);exit;
+
+        // $coupon_type_pt_list = $coupon_type_model->Common_All_Select($where_pt,$order,$field);
+        // if(!empty($coupon_type_pt_list)){
+        //     foreach($coupon_type_pt_list as $k_p=>$v_p){
+        //         $n = (new Coupon())->getNum(array('card_type_id'=>$v_p['card_type_id'],'status'=>2));
+        //         if($n>0){
+        //             $coupon_type_pt_list[$k_p]['num_status']= 1; // 有剩余
+        //         }else{
+        //             $coupon_type_pt_list[$k_p]['num_status']= 2; // 已领完
+        //         }
+        //     }
+        // }
 
         // 获取所有单品券
         $where_dp['t1.end_time'] = array('>',$time);
         $where_dp['t1.is_use'] = 2;
+        $where_dp['t1.status'] = 1;
         $where_dp['t1.ticket_type'] = 2;
         $field = ['t1.*','g.goods_images'];
         $coupon_type_dp_list = $coupon_type_model->get_coupon_type_dp_list($where_dp,$field);
@@ -69,8 +86,29 @@ class CouponController extends CommonController
 
         }
 
+        // 获取品类券
+        $where_pinlei['end_time'] = array('>',$time);
+        $where_pinlei['is_use'] = 2;
+        $where_pinlei['ticket_type'] = 3;
+        $where_pinlei['status'] = 1;
+        $coupon_type_pl_list = $coupon_type_model->selAll($where_pinlei);
+        // 获取我的所有品类优惠券
+        $my_coupon_type_list = $coupon_type_model->getRegCoupon(['mr.member_id'=>$this->userId],"ctt.card_type_id");
+        $arr = [];
+        foreach($my_coupon_type_list as $key=>$val){
+            $arr[] = $val['card_type_id'];
+        }
+        foreach ($coupon_type_pl_list as $key2=>$val2){
+            if(in_array($val2['card_type_id'],$arr)){
+                $coupon_type_pl_list[$key2]['my_have_status'] = 1;//有这个优惠券
+            }else{
+                $coupon_type_pl_list[$key2]['my_have_status'] = 2;//没有这个优惠券
+            }
+        }
+        //print_r($my_coupon_type_list);exit;
         $this->assign('coupon_type_pt_list',$coupon_type_pt_list);
         $this->assign('coupon_type_dp_list',$coupon_type_dp_list);
+        $this->assign('coupon_type_pl_list',$coupon_type_pl_list);
         return view();
     }
 
@@ -161,15 +199,32 @@ class CouponController extends CommonController
 
     public function receive_type_coupon(){
         $card_type_id = input('card_type_id');
+
         $data['member_id'] = $this->userId;
         // 根据card_type_id分配 card_ticket_id
         $card_ticket_model = new Coupon();
-        $card_ticket = $card_ticket_model->Common_Find(array('card_type_id'=>$card_type_id,'status'=>2));
-        $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
-        $data['status'] = 1;
-        $data['create_time'] = time();
-        $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1));
 
+        $c = $card_ticket_model->my_is_have_coupon($this->userId,$card_type_id);
+        if($c[0]['c']>0){
+            return json(['code' => 300 , 'msg' => '已领取']);
+        }
+
+
+        // 判断当前card_type_id是不是品类券
+        $card_type_info = (new CouponType())->getTypeInfo(array('card_type_id'=>$card_type_id),['ticket_type']);
+        if($card_type_info['ticket_type'] != 3){
+            $card_ticket = $card_ticket_model->Common_Find(array('card_type_id'=>$card_type_id,'status'=>2));
+            $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
+            $data['status'] = 1;
+            $data['create_time'] = time();
+            $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1),1);
+        }else{
+            $card_ticket = $card_ticket_model->Common_Find(array('card_type_id'=>$card_type_id));
+            $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
+            $data['status'] = 1;
+            $data['create_time'] = time();
+            $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1),2);
+        }
         if($res){
             return json(['code' => 200 , 'msg' => '领取成功']);
         }else{
@@ -203,7 +258,7 @@ class CouponController extends CommonController
             $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
             $data['status'] = 1;
             $data['create_time'] = time();
-            $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1));
+            $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),['card_type_id' => $card_type_id],array('status'=>1));
             if($res){
                 return json(['code' => 200 , 'msg' => '领取成功']);
             }else{

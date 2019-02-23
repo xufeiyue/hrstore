@@ -88,4 +88,21 @@ class CouponType extends Common{
 
         return ['data' => $data , 'count' => $count];
     }
+
+    public function add_pinlei_coupon($data,$data1){
+
+        Db::startTrans();
+        try{
+            $last_id = $this->Common_Insert($data);
+            $data1['card_type_id'] = $last_id;
+            $data1['create_time'] = time();
+            Db::table('th_card_ticket')->insertGetId($data1);
+            Db::commit();
+            return 1;
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return 0;
+        }
+    }
 }

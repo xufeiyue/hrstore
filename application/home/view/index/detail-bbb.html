@@ -1,7 +1,7 @@
 {include file="common/header"}
 <title>{$goods_detail['goods_name']}</title>
 <!--手机登录-->
-<!--<div class="XinXi_box">
+<div class="XinXi_box">
     <div class="XinXi">
         <h1 class="name_title">手机登录</h1>
         <span class="iconfont icon-cha Cha_btn"></span>
@@ -17,7 +17,7 @@
 
         <input type="button" class="login-btn" value="立即提交">
     </div>
-</div>-->
+</div>
 <!--手机登录-->
 <style>
     .shoucang_box{
@@ -199,9 +199,9 @@
     })
    })
 
-  //$(".Cha_btn").click(function() {
-//      $(".XinXi_box").css("display","none");
-//  });
+  $(".Cha_btn").click(function() {
+      $(".XinXi_box").css("display","none");
+  });
   
    $(".imm-buy").click(function(){
     $.post("{:url('Index/collection_and_coupons_update')}",{goods_id: goods_id, type: 1},function(res){

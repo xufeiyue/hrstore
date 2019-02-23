@@ -37,8 +37,10 @@
 
     {{# if (d.ticket_type == 1) { }}
     <font color="red">平台券</font>
-    {{# } else { }}
+    {{# } else if(d.ticket_type=== 2) { }}
     <font color="#6a5acd">单品券</font>
+    {{# } else { }}
+    <font color="#6a5acd">品类券</font>
     {{# } }}
 </script>
 <script type="text/html" id="card_ticket_type_img" >

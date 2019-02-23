@@ -193,6 +193,7 @@ class MemberController extends CommonController
         $list1 = $coupon_model->get_my_coupon_pt($member_id);
         // 我的优惠券且未过期的未使用的单品券
         $list2 = $coupon_model->get_my_coupon_dp($member_id);
+
         foreach($list2 as $key=>$val){
             $list2[$key]['goods_img'] = json_decode($val['goods_images'],true)[0];
         }
@@ -211,12 +212,22 @@ class MemberController extends CommonController
         foreach($list6 as $key=>$val){
             $list6[$key]['goods_img'] = json_decode($val['goods_images'],true)[0];
         }
+
+        // 我的品类券
+        $list7 = $coupon_model->get_my_coupon_pl($member_id);
+        //我的已使用品类券
+        $list8 = $coupon_model->get_my_coupon_is_use_pl($member_id);
+        //我的已过期品类券
+        $list9 = $coupon_model->get_my_coupon_guoqi_pl($member_id);
         $this->assign('list1',$list1);
         $this->assign('list2',$list2);
         $this->assign('list3',$list3);
         $this->assign('list4',$list4);
         $this->assign('list5',$list5);
         $this->assign('list6',$list6);
+        $this->assign('list7',$list7);
+        $this->assign('list8',$list8);
+        $this->assign('list9',$list9);
 		return view();
 	}
 

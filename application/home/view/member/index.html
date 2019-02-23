@@ -1,24 +1,6 @@
 {include file="common/header"}
 <title>个人中心</title>
-	{if condition="$member['mobilephone'] eq ''"}
-	<div class="XinXi_box">
-		<div class="XinXi">
-			<h1 class="name_title">手机登录</h1>
-			<span class="iconfont icon-cha Cha_btn"></span>
-			<div class="ytafg">
-				<i class="iconfont icon-shouji1"></i>
-			<input type="text" name="mobilephone" id="mobilephone" value="" placeholder="请输入手机号" class="login-password">
-			</div>
-			<div class="yzm">
-				<i class="iconfont icon-mima1"></i>
-				<input type="text" name="code" id="code" value="" class="reg-yzm" placeholder="输入验证码" />
-				<input type="button" class="yzm-hq" value="获取验证码" />
-			</div>
 
-			<input type="button" class="login-btn" value="立即提交">
-		</div>
-	</div>
-	{/if}
 
 	<!--<header data-am-widget="header" class="am-header am-header-default sq-head ">-->
 			<!--&lt;!&ndash;<div class="am-header-left am-header-nav">&ndash;&gt;-->
@@ -38,10 +20,10 @@
 	    	</div>
 			<div class="mem-tit">
 				<span class="WX_Name">{$member['nickname']}</span>
-				<!--<a href="infor.html" class="WS_btn">
+				<a href="infor.html" class="WS_btn">
 					<i class="iconfont icon-shezhi"></i>
 					<p class="icon_name">完善资料</p>
-				</a>-->
+				</a>
 				<div class="jindutiao">
 					<i>资料完整度</i>
 					<div class="tiao-box">

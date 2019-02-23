@@ -60,6 +60,26 @@
 				</li>
 				{/volist}
 			</ul>
+            
+            <!--满减券-->
+            <ul class="manjian">
+				{volist name="list7" id="vo"}
+                <li class="manjian-list">
+                    <div class="jinE manjian-jinE">
+                        <h1><i>￥</i>{$vo.small_value}</h1>
+                        <p>满减卡券</p>
+                    </div>
+                    <div class="pingtai-info manjian-info">
+                        <p>{$vo.ticket_name}</p>
+                        <div class="pingtai-function">
+                            <span>有效期：{$vo.end_time_desc}</span>
+                            <a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">立即查看</a>
+                        </div>
+                    </div>
+                </li>
+               {/volist}
+            </ul>
+    		<!--满减券-->
 		</div>
 		<div class="quan-box quan-box2">
 			<ul class="pingtai">
@@ -99,6 +119,25 @@
 				</li>
 				{/volist}
 			</ul>
+            <!--满减券-->
+            <ul class="manjian">
+				{volist name="list8" id="vo"}
+                <li class="manjian-list">
+                    <div class="jinE manjian-jinE">
+                        <h1><i>￥</i>{$vo.small_value}</h1>
+                        <p>满减卡券</p>
+                    </div>
+                    <div class="pingtai-info manjian-info">
+                        <p>{$vo.ticket_name}</p>
+                        <div class="pingtai-function">
+                            <span>有效期：{$vo.end_time_desc}</span>
+                            <a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">查看</a>
+                        </div>
+                    </div>
+                </li>
+               {/volist}
+            </ul>
+    		<!--满减券-->
 		</div>
 		<div class="quan-box quan-box3">
 			<ul class="pingtai">
@@ -140,6 +179,26 @@
 				</li>
 				{/volist}
 			</ul>
+            <!--满减券-->
+            <ul class="manjian">
+				{volist name="list9" id="vo"}
+                <li class="manjian-list">
+                    <div class="jinE manjian-jinE">
+                        <h1><i>￥</i>{$vo.small_value}</h1>
+                        <p>满减卡券</p>
+                    </div>
+                    <div class="pingtai-info manjian-info">
+                        <p>{$vo.ticket_name}</p>
+                        <div class="pingtai-function">
+                            <span>有效期：{$vo.end_time_desc}</span>
+                            <a class="pingtai-btn">立即使用</a>
+                        </div>
+                    </div>
+                    <div class="gy-pic"><img src="__IMAGES__/guoqi.png"/></div>
+                </li>
+               {/volist}
+            </ul>
+    		<!--满减券-->
 		</div>
 		<!--底部导航-->
 		<div style="height: 55px;"></div>

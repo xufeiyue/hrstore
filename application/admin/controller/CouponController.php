@@ -79,13 +79,32 @@ class CouponController extends Controller
             $data['end_time_desc'] = input('post.end_time');
             $data['face_value'] = input('post.face_value');
             $data['ticket_type'] = input('post.ticket_type');
+            $data['is_use'] = 2;
             $data['create_time'] = time();
-            $add = $this->coupon_type->Common_Insert($data);
-            if ($add) {
-                return json(['code' => 1, 'msg' => '添加成功']);
-            } else {
-                return json(['code' => 2, 'msg' => '添加失败']);
+            // 判断是否为品类券
+            if($data['ticket_type'] == 3){
+                // 向th_card_ticket表插入一条记录
+                $data['max_value'] = input('post.max_value');
+                $data['small_value'] = input('post.small_value');
+                $data1['barcode'] = input('post.coupon_code');
+                //$data1['goods_id'] = input('post.goods_id');
+                $res = $this->coupon_type->add_pinlei_coupon($data,$data1);
+                if ($res) {
+                    return json(['code' => 1, 'msg' => '添加成功']);
+                } else {
+                    return json(['code' => 2, 'msg' => '添加失败']);
+                }
+            }else{
+                $add = $this->coupon_type->Common_Insert($data);
+                if ($add) {
+                    return json(['code' => 1, 'msg' => '添加成功']);
+                } else {
+                    return json(['code' => 2, 'msg' => '添加失败']);
+                }
             }
+
+
+
         } else {
             return view();
         }
