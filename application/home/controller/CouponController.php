@@ -258,7 +258,7 @@ class CouponController extends CommonController
             $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
             $data['status'] = 1;
             $data['create_time'] = time();
-            $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),['card_type_id' => $card_type_id],array('status'=>1));
+            $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1),1);
             if($res){
                 return json(['code' => 200 , 'msg' => '领取成功']);
             }else{

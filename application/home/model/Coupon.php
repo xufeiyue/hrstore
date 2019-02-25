@@ -156,4 +156,48 @@ where r.member_id = $member_id and ctt.end_time < $time and ctt.ticket_type='3'"
  as ct on ct.card_ticket_id = ctr.card_ticket_id where ctr.member_id = $member_id) a where card_type_id = $card_type_id";
         return Db::query($sql);
     }
+
+    // 查询没有领取的优惠券
+    public function get_not_use_coupon($w){
+        return Db::name('card_ticket')->where($w)->select();
+    }
+    // 查询重复领取的card_ticket_id
+    public function get_cf_list(){
+        $sql = "select mr.card_ticket_id,count(*) as c from th_member_card_ticket_relation as mr left join th_card_ticket as ct on ct.card_ticket_id = mr.card_ticket_id where ct.card_type_id = 30 GROUP BY mr.card_ticket_id HAVING c>1";
+        return Db::query($sql);
+    }
+
+    // 修改优惠券
+    public function edit_cf($w_cf){
+        // 查询重复的id
+        $sql_cf = "select id,card_ticket_id from th_member_card_ticket_relation where card_ticket_id = {$w_cf['card_ticket_id']} limit 1,{$w_cf['c']}";
+        $cf_id_list = Db::query($sql_cf);
+        $limit_wlq = count($cf_id_list);
+        // 查找未领取的优惠券
+        //$sql_wlq = "select card_ticket_id from th_card_ticket_id where card_type_id = 30 and status = '2' limit $limit_wlq";
+        //$wlq_id_list = Db::query($sql_wlq);
+        // 分配优惠券
+
+    }
+
+    public function aaa($id){
+        // 查询重复的
+        $sql = "select id from th_member_card_ticket_relation where card_ticket_id = $id";
+        $list = Db::query($sql);
+
+        $count = count($list);
+        //echo $count;
+        // 查询未使用的优惠券
+        $sql1 = "select card_ticket_id from th_card_ticket where card_type_id = 30 and status = '2' limit 0,$count";
+        $list1 = Db::query($sql1);
+        //echo '<pre>';print_r($list);exit;
+        foreach($list as $key=>$val){
+            $w['id'] = $val['id'];
+            $data['card_ticket_id'] = $list1[$key]['card_ticket_id'];
+            Db::name('member_card_ticket_relation')->where($w)->update($data);
+            $w1['card_ticket_id'] = $list1[$key]['card_ticket_id'];
+            $data1['status'] = 1;
+            Db::name('card_ticket')->where($w1)->update($data1);
+        }
+    }
 }
