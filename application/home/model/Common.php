@@ -14,10 +14,11 @@ class Common
 	}
 
 	//公共列表+分页+搜索条件+排序
-	public function Common_Select($offset=0,$limit=10,$where=[],$order=[],$field=[]){
+	public function Common_Select($offset=0,$limit=10,$where=[],$order=[],$field=[],$whereor=[]){
 
 		$data = Db::name($this->table)
 			->where($where)
+			->where($whereor)
 			->limit($offset,$limit)
 			->order($order)
 			->field($field)
@@ -27,10 +28,11 @@ class Common
 	}
 
 	//全部数据
-	public function Common_All_Select($where=[],$order=[],$field=[]){
+	public function Common_All_Select($where=[],$order=[],$field=[],$whereor=[]){
 
 		$data = Db::name($this->table)
 			->where($where)
+			->where($whereor)
 			->order($order)
 			->field($field)
 			->select();

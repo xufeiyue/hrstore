@@ -70,6 +70,12 @@ class CouponController extends Controller
     public function add_coupon_type()
     {
         if (Request::instance()->post()) {
+            $whether = ['on','off'];
+            if($xianshi == $whether[0]){
+                $data['xianshi'] = 0;
+            }else{
+                $data['xianshi'] = 1;
+            }
             $data['instructions'] = input('post.instructions');
             $data['card_ticket_type_img'] = input('post.card_ticket_type_img');
             $data['start_time'] = strtotime(input('post.start_time'));
@@ -115,6 +121,12 @@ class CouponController extends Controller
 
     public function edit_coupon_type(){
         if (Request::instance()->post()) {
+            $whether = ['on','off'];
+            if($xianshi == $whether[0]){
+                $data['xianshi'] = 0;
+            }else{
+                $data['xianshi'] = 1;
+            }
             $card_type_id = input('post.card_type_id');
             $data['instructions'] = input('post.instructions');
             $data['card_ticket_type_img'] = input('post.card_ticket_type_img');
@@ -251,5 +263,19 @@ class CouponController extends Controller
             fclose($file1);
             exit();
         }
+    }
+
+    //改变状态
+    public function coupon_xianshi_update(){
+
+        $id = array_unique(input('post.id/a'));
+
+        $xianshi = input('post.xianshi/d');
+
+        $edit = $this->coupon_type->Common_Update(['xianshi' => $xianshi],['card_type_id' => ['in', $id]]);
+
+        if($edit)
+            return json(['code' => 200 , 'msg' => '操作成功']);
+            return json(['code' => 400 , 'msg' => '操作失败']);
     }
 }

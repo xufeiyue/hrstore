@@ -210,6 +210,13 @@
           </div>
 
           <div class="layui-form-item">
+            <label class="layui-form-label">显示状态：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" {if condition="$list['xianshi'] eq 0"} checked="" {/if} name="xianshi" lay-skin="switch" lay-filter="switchTest" lay-text="显示|不显示">
+            </div>
+          </div>
+
+          <div class="layui-form-item">
             <label class="layui-form-label">推荐爆款：</label>
             <div class="layui-input-block">
               <input type="checkbox"  {if condition="$list['sell_well'] eq 0"} checked="" {/if} name="sell_well" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">

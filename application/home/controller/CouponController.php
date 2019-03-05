@@ -31,6 +31,7 @@ class CouponController extends CommonController
         // 获取所有平台优惠券
         $coupon_type_model = new CouponType();
         $time = time();
+        $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
         $where_pt['end_time'] = array('>',$time);
         $where_pt['is_use'] = 2;
         $where_pt['status'] = 1;
@@ -38,7 +39,7 @@ class CouponController extends CommonController
         $where_pt['card_type_id'] = array('not in','31'); // 不显示新人注册券和完善资料券
         $field = [];
         $order=[];
-        $coupon_type_pt_list = $coupon_type_model->selAll($where_pt,$order,$field);
+        $coupon_type_pt_list = $coupon_type_model->selAll($where_pt,$order,$field,$whereor);
         // 获取我的所有品类优惠券
         $my_coupon_type_list1 = $coupon_type_model->getRegCoupon(['mr.member_id'=>$this->userId],"ctt.card_type_id");
         $arr1 = [];
@@ -67,12 +68,13 @@ class CouponController extends CommonController
         // }
 
         // 获取所有单品券
+        $whereor1 = "(t1.xianshi = 0 and t1.end_time >= {$time}) or (t1.start_time <= {$time} and t1.end_time >= {$time})";
         $where_dp['t1.end_time'] = array('>',$time);
         $where_dp['t1.is_use'] = 2;
         $where_dp['t1.status'] = 1;
         $where_dp['t1.ticket_type'] = 2;
         $field = ['t1.*','g.goods_images'];
-        $coupon_type_dp_list = $coupon_type_model->get_coupon_type_dp_list($where_dp,$field);
+        $coupon_type_dp_list = $coupon_type_model->get_coupon_type_dp_list($where_dp,$field,$whereor1);
         if(!empty($coupon_type_dp_list)){
             foreach($coupon_type_dp_list as $key=>$val){
                 $coupon_type_dp_list[$key]['goods_img'] = json_decode($val['goods_images'],true)[0];
@@ -91,7 +93,7 @@ class CouponController extends CommonController
         $where_pinlei['is_use'] = 2;
         $where_pinlei['ticket_type'] = 3;
         $where_pinlei['status'] = 1;
-        $coupon_type_pl_list = $coupon_type_model->selAll($where_pinlei);
+        $coupon_type_pl_list = $coupon_type_model->selAll($where_pinlei,$whereor);
         // 获取我的所有品类优惠券
         $my_coupon_type_list = $coupon_type_model->getRegCoupon(['mr.member_id'=>$this->userId],"ctt.card_type_id");
         $arr = [];

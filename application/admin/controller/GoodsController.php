@@ -383,6 +383,18 @@ class GoodsController extends AdminController
 
 			$popularity = input('post.popularity/s');
 
+			$xianshi = input('post.xianshi/s');
+
+			if($xianshi == $whether[0]){
+
+				$data['xianshi'] = 0;
+
+			}else{
+				
+				$data['xianshi'] = 1;
+			}
+
+
 //			$relation = input('post.relation/s');
 
 			if($state == $whether[0]){
@@ -565,6 +577,17 @@ class GoodsController extends AdminController
 			$popularity = input('post.popularity/s');
 
 //			$relation = input('post.relation/s');
+
+			$xianshi = input('post.xianshi/s');
+
+			if($xianshi == $whether[0]){
+
+				$data['xianshi'] = 0;
+
+			}else{
+				
+				$data['xianshi'] = 1;
+			}
 
 			if($state == $whether[0]){
 
@@ -755,6 +778,20 @@ class GoodsController extends AdminController
 		$state = input('post.state/d');
 
 		$edit = (new Goods)->Common_Update(['state' => $state],['id' => ['in', $id]]);
+
+		if($edit)
+			return json(['code' => 200 , 'msg' => '操作成功']);
+			return json(['code' => 400 , 'msg' => '操作失败']);
+	}
+
+	//显示不显示商品
+	public function goods_xianshi_update(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$xianshi = input('post.xianshi/d');
+
+		$edit = (new Goods)->Common_Update(['xianshi' => $xianshi],['id' => ['in', $id]]);
 
 		if($edit)
 			return json(['code' => 200 , 'msg' => '操作成功']);

@@ -113,6 +113,17 @@ class ActivityController extends AdminController
 
 						$state = input('post.state/s');
 
+						$xianshi = input('post.xianshi/s');
+
+						if ($xianshi == 'on') {
+							
+							$data['xianshi'] = 0;
+						
+						}else{
+
+							$data['xianshi'] = 1;
+						}
+
 						if ($state == 'on') {
 							
 							$data['state'] = 0;
@@ -212,6 +223,17 @@ class ActivityController extends AdminController
 			}else{
 
 				$data['state'] = 1;
+			}
+
+			$xianshi = input('post.xianshi/s');
+
+			if ($xianshi == 'on') {
+				
+				$data['xianshi'] = 0;
+			
+			}else{
+
+				$data['xianshi'] = 1;
 			}
 
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
@@ -427,6 +449,20 @@ class ActivityController extends AdminController
 		$edit = (new Activity)->Common_Update(['banner' => $banner],['id' => $id]); //设置
 
 		return json(['code' => 1 , 'msg' => '更新成功']);
+	}
+
+	//设置首页广告图
+	public function activity_xianshiupdate(){
+
+		$id = input('post.id/d');
+
+		$xianshi = input('post.xianshi/d');
+
+		$edit = (new Activity)->Common_Update(['xianshi' => $xianshi],['id' => $id]); //设置
+
+		if ($edit)
+			return json(['code' => 1 , 'msg' => '更新成功']);
+			return json(['code' => 2 , 'msg' => '更新失败']);
 	}
 
 	//删除活动库

@@ -29,7 +29,7 @@ class CouponType extends Common
     }
 
     // 获取单品卡券列表
-    public function get_coupon_type_dp_list($w,$field){
+    public function get_coupon_type_dp_list($w,$field,$whereor=[]){
         return $data = Db::name($this->table)
             ->alias('t1')
             ->join('goods g','g.id = t1.goods_id','LEFT')
@@ -48,8 +48,8 @@ class CouponType extends Common
             ->select();
     }
 
-    public function selAll($w){
-        return Db::name($this->table)->where($w)->select();
+    public function selAll($w,$whereor=[]){
+        return Db::name($this->table)->where($w)->where($whereor)->select();
     }
 
     public function getTypeInfo($w,$field){

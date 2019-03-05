@@ -21,6 +21,10 @@ class MemberController extends CommonController
 
 		$where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'characteristic' => 0];
 
+		$time = time();
+
+		$whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+
 		$offset = 0;
 
 		$limit = 10;
@@ -29,7 +33,7 @@ class MemberController extends CommonController
 
 		$goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
-		$goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field);
+		$goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field,$whereor);
 
 		foreach ($goods_list as $key => $value) {
 

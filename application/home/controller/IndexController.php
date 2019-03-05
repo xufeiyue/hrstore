@@ -152,6 +152,10 @@ class IndexController extends CommonController
 
     $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0];
 
+    $time = time();
+
+    $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+
     $offset = 0;
 
     $limit = 8;
@@ -160,7 +164,7 @@ class IndexController extends CommonController
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
-    $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field); //商品列表
+    $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field,$whereor); //商品列表
 
     foreach ($goods_list as $key => $value) {
 
@@ -174,7 +178,7 @@ class IndexController extends CommonController
     }
 
     //底部商品列表
-    $goods_top_list = (new Goods)->Common_Select(8,6,$where,$order,$goods_field); //商品列表
+    $goods_top_list = (new Goods)->Common_Select(8,6,$where,$order,$goods_field,$whereor); //商品列表
 
       foreach($goods_top_list as $key1=>$val1){
           if ($val1['goods_images']) {
@@ -545,7 +549,11 @@ class IndexController extends CommonController
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
-    $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field);
+    $time = time();
+
+    $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+
+    $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field,$whereor);
 
     foreach ($goods_list as $key => $value) {
       if ($value['goods_images']) {
@@ -579,8 +587,10 @@ class IndexController extends CommonController
 //    $order = ['number_of_visits' => 'desc']; //爆款人气排序
       $order = ['goods_bk_paixu' => 'desc']; //爆款人气排序
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
+    $time = time();
+    $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
     //print_r($where);exit;
-    $goods_list = (new Goods)->Common_All_Select($where,$order,$goods_field); //商品列表
+    $goods_list = (new Goods)->Common_All_Select($where,$order,$goods_field,$whereor); //商品列表
 
     foreach ($goods_list as $key => $value) {
 
@@ -609,7 +619,11 @@ class IndexController extends CommonController
 
     $a = ['goods_name' => ['like',"%{$goods_name}%"], 'state' => 0, 'status' => 0, 'store_id' => $this->store_id];
 
-    $goods = (new Goods)->Common_All_Select(['goods_name' => ['like',"%{$goods_name}%"], 'state' => 0, 'status' => 0, 'store_id' => $this->store_id],['id' => 'desc'],['id','goods_name','goods_original_price','goods_present_price','goods_images']);
+    $time = time();
+
+    $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+
+    $goods = (new Goods)->Common_All_Select(['goods_name' => ['like',"%{$goods_name}%"], 'state' => 0, 'status' => 0, 'store_id' => $this->store_id],['id' => 'desc'],['id','goods_name','goods_original_price','goods_present_price','goods_images'],$whereor);
 
     foreach ($goods as $key => $value) {
 

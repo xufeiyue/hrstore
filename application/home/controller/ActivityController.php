@@ -56,7 +56,11 @@ class ActivityController extends CommonController
 
 		$id = input('id/d');
 
-		$goods_list = (new Goods)->Common_All_Select(['activity_id' => $id, 'store_id' => $this->store_id],['id' => 'desc'],['id','goods_name','goods_original_price','goods_present_price','goods_images']);
+		$time = time();
+
+		$whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+
+		$goods_list = (new Goods)->Common_All_Select(['activity_id' => $id, 'store_id' => $this->store_id],['id' => 'desc'],['id','goods_name','goods_original_price','goods_present_price','goods_images'],$whereor);
 
 		foreach ($goods_list as $key => $value) {
 
