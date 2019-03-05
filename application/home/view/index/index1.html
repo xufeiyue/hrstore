@@ -354,7 +354,6 @@
             }
         });
     });
-    getinfo()
     var store_id = $("#store_id").val()
     function getinfo(latitude,longitude){
         $.post("{:url('Index/ajax_index')}",{latitude: latitude, longitude: longitude,store_id: store_id},function(res){
