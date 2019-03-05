@@ -27,15 +27,39 @@ class IndexController extends CommonController
 	 */
 	public function index(){
 
-    $this->title = '首页';
 
+    $this->title = '首页';
     $store_id = input('store_id/d') ? : 0;
+    /*
+     *  判断用户是否选过店
+     * */
+    $member = (new Member())->Common_Find(['id'=>$this->userId]);
+    if($member['store_id'] == 0 && $store_id == 0){
+
+        $this->redirect('store_list');
+    }else{
+        if($member['store_id'] == 0 && $store_id>0){
+            // 将用户与店铺进行绑定
+            (new Member())->Common_Update(['store_id'=>$store_id],['id'=>$this->userId]);
+        }
+    }
+
+
 
     if ($store_id) {
      
       session('store_id',$store_id);
-    
+
     }
+
+    // 增加页面访问量
+    if($this->store_id > 0){
+        (new Store())->Common_SetInc('visits_num',['store_id'=>$this->store_id]);
+    }
+
+
+
+
 
     $this->assign('store_id',$store_id);
 
@@ -120,6 +144,12 @@ class IndexController extends CommonController
 
     $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
 
+    // 底部图片
+
+      $AdvertisementType_db = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '首页底部']);
+
+      $Advertisement_db = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType_db['id']],['id' => 'desc'],['id','image','url']);
+
     $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0];
 
     $offset = 0;
@@ -164,7 +194,7 @@ class IndexController extends CommonController
 
     // 获取
 
-    return json(['code' => 200, 'msg' => '请求成功', 'data' => ['store' => $store, 'goods_top_list' => $goods_top_list, 'activity' => $activity, 'advertisement' => $Advertisement, 'goods_list' => $goods_list, 'goods_type_list' => $goods_type_list]]);
+    return json(['code' => 200, 'msg' => '请求成功', 'data' => ['store' => $store, 'goods_top_list' => $goods_top_list, 'activity' => $activity, 'advertisement' => $Advertisement,'advertisement_db'=>$Advertisement_db ,'goods_list' => $goods_list, 'goods_type_list' => $goods_type_list]]);
 
   }
 
@@ -301,6 +331,37 @@ class IndexController extends CommonController
     return view();
   }
 
+  // 门店列表-不需要经纬度
+    public function store_list(){
+        $this->title = '选择门店';
+
+        $store_id = input('store_id/d') ? : 0;
+
+        $store_list = (new store)->Common_All_Select(['status' => 1],['store_id','store_name']);
+
+        foreach ($store_list as $key => $value) {
+
+            if ($value['store_id'] == $store_id) {
+
+                $store_list[$key]['class'] = 1;
+
+            }else{
+
+                $store_list[$key]['class'] = 0;
+            }
+        }
+
+        Loader::import('character.Character',EXTEND_PATH);
+
+        $store_list = (new \Character())->groupByInitials($store_list,'store_name');
+
+        $this->assign('store_list',$store_list);
+
+        $this->assign('title',$this->title);
+
+
+        return view();
+    }
   //店铺详情
   public function city_info(){
 

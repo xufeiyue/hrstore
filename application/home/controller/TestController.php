@@ -51,4 +51,12 @@ class TestController extends Controller
         $model = New Coupon();
         $model ->aaa($id);
     }
+
+    public function hwwebscan_verify(){
+        return view();
+    }
+
+    public function index(){
+        return view('hwwebscan_verify');
+    }
 }

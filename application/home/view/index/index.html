@@ -60,67 +60,26 @@
    <!--我是放活动的地方-->
    
    
-<div class="Active_area">
-<!--首页厂商周广告1/一行一列-->
-
-    <div class="Active_area_list Active_area_One">
-        <a href="http://huaruncard.redh5.cn/home/Activity/lq_huodong/id/391">
-            <img src="http://huaruncard.redh5.cn/static/home/images/changshangzhou1.jpg"/>
-        </a>
-    </div>
-    <!--首页厂商周广告2/一行一列-->
-
-    <div class="Active_area_list Active_area_One">
-        <a href="http://huaruncard.redh5.cn/home/Activity/lq_huodong/id/334">
-            <img src="http://huaruncard.redh5.cn/static/home/images/changshangzhou2.jpg"/>
-        </a>
-    </div>
-
-<!--活动样式1/一行一列-->
+<div class="Active_area" id="Active_area_db">
 
 
-    <div class="Active_area_list Active_area_One">
-        <a>
-            <img src="http://huaruncard.redh5.cn/static/home/images/peag1.jpg"/>
-        </a>
-    </div>
-    <div class="Active_area_list Active_area_One">
-        <a>
-            <img src="http://huaruncard.redh5.cn/static/home/images/peag2.jpg"/>
-        </a>
-    </div>
-    <div class="Active_area_list Active_area_One">
-        <a>
-            <img src="http://huaruncard.redh5.cn/static/home/images/peag3.jpg"/>
-        </a>
-    </div>
-    <div class="Active_area_list Active_area_One">
-        <a>
-            <img src="http://huaruncard.redh5.cn/static/home/images/peag4.jpg"/>
-        </a>
-    </div>
-    <div class="Active_area_list Active_area_One">
-        <a>
-            <img src="http://huaruncard.redh5.cn/static/home/images/peag5.jpg"/>
-        </a>
-    </div>
 </div>
     
  <!--活动图片-->
-    <div class="sq-title" id="activity">
-       
-    </div>
+    <!--<div class="sq-title" id="activity">-->
+       <!---->
+    <!--</div>-->
  <!--首页6个产品-->    
  <!--   <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-3 am-avg-md-3 am-avg-lg-4 am-gallery-default"  id="goods_top_list">
         
     </ul>-->
    <!--厂商周活动长图--> 
    
-       <div class="Active_area_list Active_area_One">
-        <a>
-            <img src="http://huaruncard.redh5.cn/static/home/images/changshangzhouchangtu.jpg"/>
-        </a>
-    </div>
+       <!--<div class="Active_area_list Active_area_One">-->
+        <!--<a>-->
+            <!--<img src="http://huaruncard.redh5.cn/static/home/images/changshangzhouchangtu.jpg"/>-->
+        <!--</a>-->
+    <!--</div>-->
 
    
    
@@ -363,11 +322,12 @@
             var goods_type_list = res.data.goods_type_list
             var goods_top_list = res.data.goods_top_list
             var activity = res.data.activity
+            var db_images = res.data.advertisement_db
             var store_name = '<a href="{:url("Index/city_info")}?id='+store.store_id+'"><img style="height: 18px;margin-top: -2px;" src="__IMAGES__/city111.png" /><p style="font-size: 1.4rem; margin-top: -35px;">'+store.store_name+'</p></a>';
             $("#store_name").html('')
             $("#store_name").append(store_name);
             var mendian_html = ''
-            mendian_html += '<a href="{:url("Index/cityDian")}?store_id='+store.store_id+'" >';
+            mendian_html += '<a href="{:url("Index/store_list")}?store_id='+store.store_id+'" >';
             mendian_html +=  '<p style="font-size: 1.2rem; margin-top: -35px;">更多门店></p>';
             mendian_html += '</a>';
             $("#mendian").html('')
@@ -430,6 +390,15 @@
             }
             $("#goods_top_list").html('')
             $("#goods_top_list").append(goods_top_list_html)
+            var images_list_db_html = '';
+            for (i in db_images){
+                images_list_db_html += '<div class="Active_area_list Active_area_One">';
+                images_list_db_html += '<a href="'+db_images[i].url+'">';
+                images_list_db_html += '<img src="'+db_images[i].image+'"/>';
+                images_list_db_html += '</a></div>';
+            }
+            $("#Active_area_db").html('')
+            $("#Active_area_db").append(images_list_db_html)
             var activity_html = ''
             if (activity) {
                 activity_html += '<a href="{:url("Activity/lq_huodong")}?id='+activity.id+'">';
@@ -438,6 +407,7 @@
                 $("#activity").html('')
                 $("#activity").append(activity_html)
             }
+
             
         })
     }

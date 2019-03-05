@@ -31,6 +31,7 @@ class LoginController extends Controller
                 return json(['code' => 2 , 'msg' => '用户名或密码错误']);
     		}
     	}else{
+
     		return view();
     	}
     }
