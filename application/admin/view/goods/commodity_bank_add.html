@@ -2,7 +2,7 @@
     <div class="x-body">
         <form class="layui-form">
         <div class="layui-form-item">
-          <label  for="store_id" class="layui-form-label">
+          <label  for="type_id" class="layui-form-label">
             <span class="x-red">*</span>选择商品类型
           </label>
           <div class="layui-input-block">
@@ -13,6 +13,51 @@
               {/volist}
             </select>
           </div>
+        </div>
+
+        <div class="layui-form-item">
+          <label  for="brand_id" class="layui-form-label">
+            <span class="x-red"></span>选择商品品牌
+          </label>
+          <div class="layui-input-block">
+            <select name="brand_id" id="brand_id">
+              <option value="0">请选择</option>
+              {volist name="goods_brand" id="vo"}
+                  <option value="{$vo.id}">{$vo.goods_brand_name}</option>
+              {/volist}
+            </select>
+          </div>
+        </div>
+
+        <div class="layui-form-item">
+          <label  for="activity_id" class="layui-form-label">
+            <span class="x-red">*</span>选择活动
+          </label>
+          <div class="layui-input-block">
+            <select name="activity_id" lay-filter="activity_id" id="activity_id">
+              <option value="0">请选择</option>
+              {volist name="activity" id="vo"}
+                  <option value="{$vo.id}">{$vo.activity_name}</option>
+              {/volist}
+            </select>
+          </div>
+        </div>
+
+       <div class="layui-form-item">
+            <label for="start_time" class="layui-form-label">
+                <span class="x-red">*</span>开始时间
+            </label>
+              <div class="layui-input-inline">
+                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="start_time" id="start" placeholder="请输入开始时间">
+              </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="end_time" class="layui-form-label">
+                <span class="x-red">*</span>结束时间
+            </label>
+              <div class="layui-input-inline">
+                <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="end_time" id="end" placeholder="请输入结束时间">
+              </div>
         </div>
 
         <div class="layui-form-item">
@@ -31,7 +76,7 @@
             <div class="layui-upload" id="upload">
               <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
                 <span style="display: inline-block;font-size: 14px;color: red">(图片建议尺寸：750 * 750)</span>
-              <div class="layui-upload-list">
+                <div class="layui-upload-list">
                 <table class="layui-table">
                   <thead>
                     <tr>
@@ -104,13 +149,70 @@
                   <textarea id="goods_detail" lay-verify="goods_detail" name="goods_detail" style="display: none;"></textarea>
                 </div>
           </div>
-
-          <!-- <div class="layui-form-item">
+  
+          <div class="layui-form-item">
             <label class="layui-form-label">状态：</label>
             <div class="layui-input-block">
               <input type="checkbox" name="state" lay-skin="switch" lay-filter="switchTest" lay-text="上架|下架">
             </div>
-          </div> -->
+          </div>
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">显示状态：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="xianshi" lay-skin="switch" lay-filter="switchTest" lay-text="显示|不显示">
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">爆款推荐：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="sell_well" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+            <div class="layui-form-item">
+                <label for="goods_bk_paixu" class="layui-form-label">
+                    <span class="x-red"></span>爆款排序
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="goods_bk_paixu" value="" name="goods_bk_paixu"  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">个人中心：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="characteristic" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">人气：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="popularity" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+            <div class="layui-form-item">
+                <label for="goods_rq_paixu" class="layui-form-label">
+                    <span class="x-red"></span>人气排序
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="goods_rq_paixu" value="" name="goods_rq_paixu" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+             <div class="layui-form-item">
+                <label for="sort" class="layui-form-label">
+                    <span class="x-red"></span>排序
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="sort" value="" name="sort" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+          <!--<div class="layui-form-item">-->
+            <!--<label class="layui-form-label">关联：</label>-->
+            <!--<div class="layui-input-block">-->
+              <!--<input type="checkbox" name="relation" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">-->
+            <!--</div>-->
+          <!--</div>-->
 
           <div class="layui-form-item">
               <label for="L_repass" class="layui-form-label">
@@ -122,17 +224,28 @@
       </form>
     </div>
     <script>
-        layui.use(['form','layer','upload','layedit'], function(){
+        layui.use(['form','layer','upload','layedit','laydate'], function(){
             $ = layui.jquery;
           var form = layui.form
           ,upload = layui.upload
           ,layedit = layui.layedit
+          ,laydate = layui.laydate
           ,layer = layui.layer;
           layedit.set({
             uploadImage: {
               url: '/Admin/Upload/editor_upload', 
               type: 'post'
             }
+          });
+          //日期时间选择器
+          laydate.render({
+            elem: '#start'
+            ,type: 'datetime'
+          });
+
+          laydate.render({
+            elem: '#end'
+            ,type: 'datetime'
           });
           //注意：layedit.set 一定要放在 build 前面，否则配置全局接口将无效。
           var index = layedit.build('goods_detail',{
@@ -252,7 +365,26 @@
               $("#type_id").append(html);
               form.render('select');
             })
+            $.post('/Admin/Goods/store_activity_list',{store_id: data.value},function(res){
+              var html = '';
+              html += '<option value="0">请选择</option>';
+              if (res.code == 200) {
+                for (var i = 0; i < res.data.length; i++) {
+                  html += '<option value="'+res.data[i].id+'">'+res.data[i].activity_name+'</option>'
+                }
+              }
+              $("#activity_id").html('');
+              $("#activity_id").append(html);
+              form.render('select');
+            })
           })
+
+          form.on('checkbox(filter)', function(data){ //全选
+
+              $(this).closest('dl').find('input').prop('checked',this.checked);
+             
+              form.render('checkbox');//渲染
+          });  
 
           //自定义验证规则
           form.verify({

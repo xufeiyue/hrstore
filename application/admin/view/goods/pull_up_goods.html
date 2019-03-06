@@ -1,11 +1,37 @@
 {include file="public/header"}
     <div class="x-body">
+    <form class="layui-form">
+          <div class="layui-form-item">
+            <label  for="store_id" class="layui-form-label">
+              <span class="x-red">*</span>选择店铺
+            </label>
+            <div class="layui-input-block">
+              <!-- <select name="store_id" lay-filter="store_id"> -->
+                <dl class="checkmod">
+              
+                <input type="checkbox" lay-filter="filter" title="全选">
+                {volist name="store" id="vo"}
+                     <input type="checkbox" name="store_id" value="{$vo['id']}" title="{$vo.name}">
+                {/volist}
+                </dl>
+              <!-- </select> -->
+            </div>
+          </div>
+      </form>
       <div class="layui-btn-group demoTable">
         <button class="layui-btn" data-type="getCheckData">拉取</button>
       </div>
       <table class="layui-table" id="demo" lay-filter="useruv">
       </table>
     </div>
+    <script type="text/html" id="switchTpl">
+        <input type="checkbox" name="state" value="{{d.id}}" lay-skin="switch" lay-text="上架|下架" lay-filter="stateDemo" {{ d.state == 0 ? 'checked' : '' }}>
+
+      </script>
+      <script type="text/html" id="switchTpl1">
+        <input type="checkbox" name="xianshi" value="{{d.id}}" lay-skin="switch" lay-text="显示|不显示" lay-filter="stateDemo1" {{ d.xianshi == 0 ? 'checked' : '' }}>
+
+      </script>
       <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
       </script>
@@ -50,14 +76,69 @@
            {checkbox: true, fixed: true,style:'height:100px;'}
           ,{field: 'id',  title: 'ID', sort: true ,align: 'center'}
           ,{field: 'goods_name', title: '商品名称',align: 'center'}
-          ,{field: 'goods_original_price', title: '商品原价',align: 'center'}
-          ,{field: 'goods_present_price', title: '商品现价',align: 'center'}
-          ,{field: 'goods_stock', title: '商品库存',align: 'center'}
+          // ,{field: 'goods_original_price', title: '商品原价',align: 'center'}
+          ,{field: 'goods_present_price', title: '优惠价',align: 'center'}
+          ,{field: 'state', title: '状态', align: 'center',templet: '#switchTpl', unresize: true}
+           ,{field: 'xianshi', title: '显示状态', align: 'center',templet: '#switchTpl1', unresize: true}
+         // ,{field: 'goods_stock', title: '商品库存',align: 'center'}
           // ,{field: 'state', title: '状态', align: 'center',templet: '#switchTpl', unresize: true}
           ,{field: 'create_time', title: '创建时间',align: 'center'}
           ,{field: 'right', title: '操作',toolbar:"#barDemo",align: 'center'}
         ]]
       });
+
+       //监听状态操作
+        form.on('switch(stateDemo)', function(obj){
+          var state;
+          if (obj.elem.checked) {
+            state = 0;
+          }else{
+            state = 1;
+          }
+          // layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+          //发异步更新数据
+          $.post('/Admin/Goods/brank_state_update', {id:this.value,state: state}, function(res){
+            if (res.code == 200) {
+              
+              layer.msg(res.msg,{icon:1,time:1000});
+             
+            }else{
+
+              layer.msg(res.msg,{icon:1,time:1000});
+            }
+
+          })
+        });
+
+        //监听状态操作
+        form.on('switch(stateDemo1)', function(obj){
+          var xianshi;
+          if (obj.elem.checked) {
+            xianshi = 0;
+          }else{
+            xianshi = 1;
+          }
+          // layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+          //发异步更新数据
+          $.post('/Admin/Goods/brank_xianshi_update', {id:this.value,xianshi: xianshi}, function(res){
+            if (res.code == 200) {
+              
+              layer.msg(res.msg,{icon:1,time:1000});
+             
+            }else{
+
+              layer.msg(res.msg,{icon:1,time:1000});
+            }
+
+          })
+        });
+
+        form.on('checkbox(filter)', function(data){ //全选
+
+              $(this).closest('dl').find('input').prop('checked',this.checked);
+             
+              form.render('checkbox');//渲染
+          });
 
         var $ = layui.$, active = {
           getCheckData: function(){ //获取选中数据
@@ -72,9 +153,20 @@
             for (var i = 0; i < data.length; i++) {
               id.push(data[i].id)
             }
+            var obj = document.getElementsByName("store_id")
+            var check_val = [];
+            for (k in obj) {
+              if (obj[k].checked) {
+                check_val.push(obj[k].value)
+              }
+            }
+            if (check_val == '') {
+              layer.msg('请选择店铺', {icon: 1});
+              return false
+            }
              layer.confirm('确认要拉取吗？', function(index){
               //发异步删除数据
-              $.post('/Admin/Goods/store_goods_list', {id:id}, function(res){
+              $.post('/Admin/Goods/store_goods_list', {id:id,store_id:check_val}, function(res){
 
                   if (res.code == 200) {
                     

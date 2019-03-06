@@ -394,9 +394,6 @@ class GoodsController extends AdminController
 				$data['xianshi'] = 1;
 			}
 
-
-//			$relation = input('post.relation/s');
-
 			if($state == $whether[0]){
 
 				$data['state'] = 0;
@@ -433,14 +430,6 @@ class GoodsController extends AdminController
 				$data['popularity'] = 1;
 			}
 
-//			if($relation == $whether[0]){
-//
-//				$data['relation'] = 0;
-//
-//			}else{
-//
-//				$data['relation'] = 1;
-//			}
 
 			$data['brand_id'] = input('post.brand_id/d');
 
@@ -452,7 +441,9 @@ class GoodsController extends AdminController
 
 			$data['activity_id'] = input('post.activity_id/d');
 
-			$data['goods_name'] = input('post.goods_name/s');		
+			$data['goods_name'] = input('post.goods_name/s');	
+
+			$data['sort'] = input('post.sort/d');	
 
 			$images = input('post.file/a');
 
@@ -473,19 +464,7 @@ class GoodsController extends AdminController
 
 			$data['images_detail'] = json_encode($images_detail1);
 
-			//$data['goods_original_price'] = input('post.goods_original_price/f');
-
 			$data['goods_present_price'] = input('post.goods_present_price/f');		
-
-//			$data['goods_stock'] = input('post.goods_stock/d');
-
-			//$goods_specifications = input('post.goods_specifications/a');
-
-			//$data['goods_specifications'] = json_encode($goods_specifications);
-
-//			$goods_attribute = input('post.goods_attribute/a');
-
-//			$data['goods_attribute'] = json_encode($goods_attribute);
 
             $data['goods_bk_paixu'] = input('post.goods_bk_paixu/d');
 
@@ -576,8 +555,6 @@ class GoodsController extends AdminController
 
 			$popularity = input('post.popularity/s');
 
-//			$relation = input('post.relation/s');
-
 			$xianshi = input('post.xianshi/s');
 
 			if($xianshi == $whether[0]){
@@ -625,16 +602,9 @@ class GoodsController extends AdminController
 				$data['popularity'] = 1;
 			}
 
-//			if($relation == $whether[0]){
-//
-//				$data['relation'] = 0;
-//
-//			}else{
-//
-//				$data['relation'] = 1;
-//			}
-
 			$data['brand_id'] = input('post.brand_id/d');
+
+			$data['sort'] = input('post.sort/d');
 
 			$data['start_time'] = strtotime(input('post.start_time/s'));
 
@@ -665,19 +635,7 @@ class GoodsController extends AdminController
 
 			$data['images_detail'] = json_encode($images_detail1);
 
-			//$data['goods_original_price'] = input('post.goods_original_price/f');
-
 			$data['goods_present_price'] = input('post.goods_present_price/f');		
-
-//			$data['goods_stock'] = input('post.goods_stock/d');
-
-			//$goods_specifications = input('post.goods_specifications/a');
-
-			//$data['goods_specifications'] = json_encode($goods_specifications);
-
-//			$goods_attribute = input('post.goods_attribute/a');
-
-//			$data['goods_attribute'] = json_encode($goods_attribute);
 
             $data['goods_bk_paixu'] = input('post.goods_bk_paixu/d');
 
@@ -713,14 +671,6 @@ class GoodsController extends AdminController
 			$list['end_time'] = date('Y-m-d H:i:s',$list['end_time']);
 
 			$list['goods_images'] = json_decode($list['goods_images'],true);
-
-//			$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
-
-//			$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
-
-//			$list['goods_specifications_num'] = count($list['goods_specifications']);
-
-//			$list['goods_attribute_num'] = count($list['goods_attribute']);
 
 			$images_detail = json_decode($list['images_detail'],true);
 
@@ -784,6 +734,20 @@ class GoodsController extends AdminController
 			return json(['code' => 400 , 'msg' => '操作失败']);
 	}
 
+	//批量上下架商品库
+	public function brank_state_update(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$state = input('post.state/d');
+
+		$edit = (new CommodityBank)->Common_Update(['state' => $state],['id' => ['in', $id]]);
+
+		if($edit)
+			return json(['code' => 200 , 'msg' => '操作成功']);
+			return json(['code' => 400 , 'msg' => '操作失败']);
+	}
+
 	//显示不显示商品
 	public function goods_xianshi_update(){
 
@@ -792,6 +756,20 @@ class GoodsController extends AdminController
 		$xianshi = input('post.xianshi/d');
 
 		$edit = (new Goods)->Common_Update(['xianshi' => $xianshi],['id' => ['in', $id]]);
+
+		if($edit)
+			return json(['code' => 200 , 'msg' => '操作成功']);
+			return json(['code' => 400 , 'msg' => '操作失败']);
+	}
+
+	//显示不显示商品
+	public function brank_xianshi_update(){
+
+		$id = array_unique(input('post.id/a'));
+
+		$xianshi = input('post.xianshi/d');
+
+		$edit = (new CommodityBank)->Common_Update(['xianshi' => $xianshi],['id' => ['in', $id]]);
 
 		if($edit)
 			return json(['code' => 200 , 'msg' => '操作成功']);
@@ -909,13 +887,6 @@ class GoodsController extends AdminController
 			$where['a.goods_name']  = ['like',"%{$goods_name}%"];
 		}
 
-		if ($this->is_jurisdiction) { //判断是管理员还是商家
-
-
-			$where['a.store_id'] = $this->is_jurisdiction;
-
-		}
-
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
 
 		$limit = input('post.limit/d') ? : 10;
@@ -934,23 +905,87 @@ class GoodsController extends AdminController
 
 		if ($_POST) {
 
-			$state = 1;
+			$whether = ['on','off'];
+
+			$store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
+
+			$state = input('post.state/s');
+
+			$sell_well = input('post.sell_well/s');
+
+			$characteristic = input('post.characteristic/s');
+
+			$popularity = input('post.popularity/s');
+
+			$xianshi = input('post.xianshi/s');
+
+			if($xianshi == $whether[0]){
+
+				$data['xianshi'] = 0;
+
+			}else{
+				
+				$data['xianshi'] = 1;
+			}
+
+			if($state == $whether[0]){
+
+				$data['state'] = 0;
+
+			}else{
+				
+				$data['state'] = 1;
+			}
+
+			if($sell_well == $whether[0]){
+
+				$data['sell_well'] = 0;
+
+			}else{
+				
+				$data['sell_well'] = 1;
+			}
+
+			if($characteristic == $whether[0]){
+
+				$data['characteristic'] = 0;
+
+			}else{
+				
+				$data['characteristic'] = 1;
+			}
+
+			if($popularity == $whether[0]){
+
+				$data['popularity'] = 0;
+
+			}else{
+				
+				$data['popularity'] = 1;
+			}
+
+
+			$data['brand_id'] = input('post.brand_id/d');
+
+			$data['start_time'] = strtotime(input('post.start_time/s'));
+
+			$data['end_time'] = strtotime(input('post.end_time/s'));
 
 			$data['type_id'] = input('post.type_id/d');
+
+			$data['activity_id'] = input('post.activity_id/d');
 
 			$data['goods_name'] = input('post.goods_name/s');		
 
 			$images = input('post.file/a');
 
-			if (empty($images)) {
-				
-				return json(['code' => 400 , 'msg' => '请上传图片']);
-			}
-
 			$data['goods_images'] = json_encode($images);
 
-
 			$images_detail = input('post.file_detail/a');
+
+			if (empty($images_detail)) {
+				return json(['code' => 400 , 'msg' => '请上传图片']);
+			}
 
 			$images_detail1 = [];
 
@@ -961,31 +996,52 @@ class GoodsController extends AdminController
 
 			$data['images_detail'] = json_encode($images_detail1);
 
-			//$data['goods_original_price'] = input('post.goods_original_price/f');
-
 			$data['goods_present_price'] = input('post.goods_present_price/f');		
 
-//			$data['goods_stock'] = input('post.goods_stock/d');
+            $data['goods_bk_paixu'] = input('post.goods_bk_paixu/d');
 
-//			$goods_specifications = input('post.goods_specifications/a');
-
-//			$data['goods_specifications'] = json_encode($goods_specifications);
-
-//			$goods_attribute = input('post.goods_attribute/a');
-
-//			$data['goods_attribute'] = json_encode($goods_attribute);
+            $data['goods_rq_paixu'] = input('post.goods_rq_paixu/d');
 
 			$data['goods_detail'] = input('post.goods_detail/s');
+
+			$data['sort'] = input('post.sort/d');
 
 			$data['create_time'] = time();
 
 			$data['update_time'] = time();
 
-			$add = (new CommodityBank)->Common_Insert($data);
+			Db::startTrans();
+        	try{
 
-			if($add)
-				return json(['code' => 200 , 'msg' => '新增成功']);
-				return json(['code' => 400 , 'msg' => '新增失败']);
+				if (is_array($store_id)) {
+
+					$arr = [];
+					
+					foreach ($store_id as $key => $value) {
+
+						$data['store_id'] = $value;
+						
+						$arr[] = $data;
+					}
+	
+					(new CommodityBank)->Common_InsertAll($arr);
+
+				}else{
+
+					$data['store_id'] = $store_id;
+
+					(new CommodityBank)->Common_Insert($data);
+				}
+				
+				//  提交事务
+            	Db::commit();
+            	return json(['code' => 200 , 'msg' => '新增成功']);
+			} catch (\Exception $e) {
+	            // 回滚事务
+	            Db::rollback();
+	            return json(['code' => 400 , 'msg' => '新增失败']);
+	        }
+
 
 		}else{
 
@@ -993,9 +1049,17 @@ class GoodsController extends AdminController
 
 			$order = ['id' => 'desc'];
 
-			$goods_type = (new GoodsType)->type(['store_id' => ['in',$this->is_jurisdiction] , 'status' => 0],$order);
+			$goods_type = (new GoodsType)->type(['store_id' => ['in',$this->is_jurisdiction], 'status' => 0],$order);
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
+
+			$goods_brand = (new GoodsBrand)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
+
+			$activity = (new ActivityGoods)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_goods_name activity_name']);
+
+			$this->assign('activity',$activity);
+
+			$this->assign('goods_brand',$goods_brand);
 
 			$this->assign('goods_type',$goods_type);
 
@@ -1010,22 +1074,86 @@ class GoodsController extends AdminController
 
 		if ($_POST) {
 
-			$data['state'] = 1; //默认下架
+			$whether = ['on','off'];
+
+			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
+
+			$state = input('post.state/s');
+
+			$sell_well = input('post.sell_well/s');
+
+			$characteristic = input('post.characteristic/s');
+
+			$popularity = input('post.popularity/s');
+
+			$xianshi = input('post.xianshi/s');
+
+			if($xianshi == $whether[0]){
+
+				$data['xianshi'] = 0;
+
+			}else{
+				
+				$data['xianshi'] = 1;
+			}
+
+			if($state == $whether[0]){
+
+				$data['state'] = 0;
+
+			}else{
+				
+				$data['state'] = 1;
+			}
+
+			if($sell_well == $whether[0]){
+
+				$data['sell_well'] = 0;
+
+			}else{
+				
+				$data['sell_well'] = 1;
+			}
+
+			if($characteristic == $whether[0]){
+
+				$data['characteristic'] = 0;
+
+			}else{
+				
+				$data['characteristic'] = 1;
+			}
+
+			if($popularity == $whether[0]){
+
+				$data['popularity'] = 0;
+
+			}else{
+				
+				$data['popularity'] = 1;
+			}
+
+			$data['brand_id'] = input('post.brand_id/d');
+
+			$data['start_time'] = strtotime(input('post.start_time/s'));
+
+			$data['end_time'] = strtotime(input('post.end_time/s'));
 
 			$data['type_id'] = input('post.type_id/d');
+
+			$data['activity_id'] = input('post.activity_id/d');
 
 			$data['goods_name'] = input('post.goods_name/s');		
 
 			$images = input('post.images/a');
 
-			if (empty($images)) {
-				
-				return json(['code' => 400 , 'msg' => '请上传图片']);
-			}
-
 			$data['goods_images'] = json_encode($images);	
 
 			$images_detail = input('post.file_detail/a');
+
+			if (empty($images_detail)) {
+				return json(['code' => 400 , 'msg' => '请上传图片']);
+			}
 
 			$images_detail1 = [];
 
@@ -1036,24 +1164,17 @@ class GoodsController extends AdminController
 
 			$data['images_detail'] = json_encode($images_detail1);
 
-			//$data['goods_original_price'] = input('post.goods_original_price/f');
-
 			$data['goods_present_price'] = input('post.goods_present_price/f');		
 
-//			$data['goods_stock'] = input('post.goods_stock/d');
+            $data['goods_bk_paixu'] = input('post.goods_bk_paixu/d');
 
-//			$goods_specifications = input('post.goods_specifications/a');
+            $data['goods_rq_paixu'] = input('post.goods_rq_paixu/d');
 
-//			$data['goods_specifications'] = json_encode($goods_specifications);
-
-//			$goods_attribute = input('post.goods_attribute/a');
-
-//			$data['goods_attribute'] = json_encode($goods_attribute);
+            $data['sort'] = input('post.sort/d');
 
 			$data['goods_detail'] = input('post.goods_detail/s');
 
 			$data['update_time'] = time();
-
 			$edit = (new CommodityBank)->Common_Update($data,['id' => $id]);
 
 			if($edit)
@@ -1068,19 +1189,19 @@ class GoodsController extends AdminController
 
 			$list = (new CommodityBank)->Common_Find(['id' => $id]);
 
-			$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
+			$goods_type = (new GoodsType)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
+
+			$goods_brand = (new GoodsBrand)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
+
+			$activity = (new ActivityGoods)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_goods_name activity_name']);
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 
+			$list['start_time'] = date('Y-m-d H:i:s',$list['start_time']);
+
+			$list['end_time'] = date('Y-m-d H:i:s',$list['end_time']);
+
 			$list['goods_images'] = json_decode($list['goods_images'],true);
-
-//			$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
-
-//			$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
-
-			//$list['goods_specifications_num'] = count($list['goods_specifications']);
-
-//			$list['goods_attribute_num'] = count($list['goods_attribute']);
 
 			$images_detail = json_decode($list['images_detail'],true);
 
@@ -1096,6 +1217,10 @@ class GoodsController extends AdminController
 			}
 
 			$this->assign('list',$list);
+
+			$this->assign('activity',$activity);
+
+			$this->assign('goods_brand',$goods_brand);
 
 			$this->assign('goods_type',$goods_type);
 
@@ -1148,12 +1273,12 @@ class GoodsController extends AdminController
 
 		$where['status'] = 0;
 
-		$Goods = (new Goods)->Goods_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => ['in',$this->is_jurisdiction]],$order);
+		// $Goods = (new Goods)->Goods_Pid(['status' => 0 , 'pid' => ['>', 0], 'store_id' => ['in',$this->is_jurisdiction]],$order);
 
-		if (!empty($Goods)) {
+		// if (!empty($Goods)) {
 			
-			$where['id'] = ['not in', $Goods];
-		}
+		// 	$where['id'] = ['not in', $Goods];
+		// }
 
 		$data = (new CommodityBank)->CommodityBank_Select($where,$order);
 
@@ -1165,51 +1290,44 @@ class GoodsController extends AdminController
 
 		$id = array_unique(input('post.id/a'));
 
+		$store_id = array_unique(input('post.store_id/a'));
+
 		$order = ['id' => 'desc'];
 
 		$data = (new CommodityBank)->CommodityBank_Select(['id' => ['in',$id] , 'status' => 0],$order);
 
 		$arr = [];
+		$i = 0;
+		Db::startTrans();
+    	try{
 
-		foreach ($data as $key => $value) {
+    		foreach ($store_id as $key => $value) {
 			
-			$arr[$key]['goods_name'] = $value['goods_name'];
+				foreach ($data as $k => $v) {
+					$arr[$i] = $v;
 
-			$arr[$key]['goods_images'] = $value['goods_images'];
+					$arr[$i]['store_id'] = $value;
 
-			//$arr[$key]['goods_original_price'] = $value['goods_original_price'];
+					$arr[$i]['pid'] = $v['id'];
 
-			$arr[$key]['goods_present_price'] = $value['goods_present_price'];
+					$arr[$i]['create_time'] = time();
 
-			$arr[$key]['goods_detail'] = $value['goods_detail'];
+					$arr[$i]['update_time'] = time();
 
-			$arr[$key]['state'] = 1;
+					unset($arr[$i]['id']);
+					$i++;
+				}
+			}
 
-//			$arr[$key]['goods_specifications'] = $value['goods_specifications'];
-
-//			$arr[$key]['goods_attribute'] = $value['goods_attribute'];
-
-//			$arr[$key]['goods_stock'] = $value['goods_stock'];
-
-			$arr[$key]['type_id'] = $value['type_id'];
-
-			$arr[$key]['pid'] = $value['id'];
-
-			$arr[$key]['images_detail'] = $value['images_detail'];
-
-			$arr[$key]['store_id'] = $this->is_jurisdiction;
-
-			$arr[$key]['create_time'] = time();
-
-			$arr[$key]['update_time'] = time();
-
-		}
-
-		$add = (new Goods)->Common_InsertAll($arr);
-
-		if($add)
-			return json(['code' => 200 , 'msg' => '拉取成功']);
-			return json(['code' => 400 , 'msg' => '拉取失败']);
+			$add = (new Goods)->Common_InsertAll($arr);
+			//  提交事务
+        	Db::commit();
+        	return json(['code' => 200 , 'msg' => '拉取成功']);
+		} catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return json(['code' => 400 , 'msg' => '拉取失败']);
+        }
 
 	}
 
@@ -1220,38 +1338,46 @@ class GoodsController extends AdminController
 
 		$goods_type = [];
 
-		$order = ['id' => 'desc'];
+			$order = ['id' => 'desc'];
 
-		$list = (new CommodityBank)->Common_Find(['id' => $id]);
+			$list = (new CommodityBank)->Common_Find(['id' => $id]);
 
-		$goods_type = (new GoodsType)->type(['store_id' => $list['store_id'] , 'status' => 0],$order);
+			$goods_type = (new GoodsType)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
 
-		$list['goods_images'] = json_decode($list['goods_images'],true);
+			$goods_brand = (new GoodsBrand)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
 
-		//$list['goods_specifications'] = json_decode($list['goods_specifications'],true);
+			$activity = (new ActivityGoods)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_goods_name activity_name']);
 
-//		$list['goods_attribute'] = json_decode($list['goods_attribute'],true);
+			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 
-		//$list['goods_specifications_num'] = count($list['goods_specifications']);
+			$list['start_time'] = date('Y-m-d H:i:s',$list['start_time']);
 
-//		$list['goods_attribute_num'] = count($list['goods_attribute']);
+			$list['end_time'] = date('Y-m-d H:i:s',$list['end_time']);
 
-		$images_detail = json_decode($list['images_detail'],true);
+			$list['goods_images'] = json_decode($list['goods_images'],true);
 
-		$list['images_detail1'] = [];
+			$images_detail = json_decode($list['images_detail'],true);
 
-		$list['images_detail2'] = [];
+			$list['images_detail1'] = [];
 
-		foreach ($images_detail as $key => $value) {
-			
-			$list['images_detail1'][] = json_decode($value,true);
+			$list['images_detail2'] = [];
 
-			$list['images_detail2'][] = urlencode($value) ;
-		}
+			foreach ($images_detail as $key => $value) {
+				
+				$list['images_detail1'][] = json_decode($value,true);
 
-		$this->assign('list',$list);
+				$list['images_detail2'][] = urlencode($value) ;
+			}
 
-		$this->assign('goods_type',$goods_type);
+			$this->assign('list',$list);
+
+			$this->assign('activity',$activity);
+
+			$this->assign('goods_brand',$goods_brand);
+
+			$this->assign('goods_type',$goods_type);
+
+			return view();
 
 		return view();
 	}
