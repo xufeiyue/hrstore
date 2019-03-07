@@ -84,13 +84,13 @@ class NewdiscoveryController extends AdminController
                         $arr[] = $data;
                     }
 
-                    (new NewDiscovery)->Common_Insert($arr);
+                    (new NewDiscovery)->Common_InsertAll($arr);
 
 
                 }else{
 
                     $data['store_id'] = $store_id;
-                    (new NewDiscovery)->Common_Insert($data);
+                    (new NewDiscovery)->Common_InsertAll($data);
 
                 }
 

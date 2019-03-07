@@ -444,6 +444,7 @@ class IndexController extends CommonController
               if($this_pid['pid'] == 0){
                   //遍历该分类下的所有商品
                   $Goods = (new Goods)->getchildgoods($type_id,$this->store_id);
+                  print_r($Goods);exit;
                   // 取指定分类的二级分类
                   $where_type_last = array('pid'=>$type_id,'status'=>0);
 

@@ -71,7 +71,7 @@ class CouponController extends Controller
     {
         if (Request::instance()->post()) {
             $whether = ['on','off'];
-            if($xianshi == $whether[0]){
+            if('on' == $whether[0]){
                 $data['xianshi'] = 0;
             }else{
                 $data['xianshi'] = 1;
