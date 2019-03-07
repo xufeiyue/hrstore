@@ -10,6 +10,7 @@ return [
 	    '__CSS__'    =>  '/static/admin/css',
 	    '__IMG__'    =>  '/static/admin/img',
 	    '__LIB__'    =>  '/static/admin/lib',
+	    '__BJS__'    =>  '/static/admin/bianjiqi',
 	],
 	  // 控制器类后缀
     'controller_suffix'      => true,

@@ -45,7 +45,8 @@
                   <span class="x-red">*</span>活动详情
               </label>
                <div class="layui-input-inline"  style="width: 550px">
-                  <textarea id="activity_detail" lay-verify="activity_detail" name="activity_detail" style="display: none;">{$list['activity_detail']}</textarea>
+                  <!-- <textarea id="activity_detail" lay-verify="activity_detail" name="activity_detail" style="display: none;">{$list['activity_detail']}</textarea> -->
+                  <script id="editor" name="activity_detail"  type="text/plain" style="height:250px;">{$list['activity_detail']}</script>
                 </div>
           </div>
           <div class="layui-form-item">
@@ -224,5 +225,5 @@
         s.parentNode.insertBefore(hm, s);
       })();</script>
   </body>
-
+{include file="public/bianjiqi"}
 </html>

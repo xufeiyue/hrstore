@@ -164,7 +164,8 @@
                   <span class="x-red"></span>商品详情
               </label>
                <div class="layui-input-inline"  style="width: 550px">
-                  <textarea id="goods_detail" lay-verify="goods_detail" name="goods_detail" style="display: none;"></textarea>
+                  <!-- <textarea id="goods_detail" lay-verify="goods_detail" name="goods_detail" style="display: none;"></textarea> -->
+                  <script id="editor" name="goods_detail"  type="text/plain" style="height:250px;"></script>
                 </div>
           </div>
   
@@ -448,5 +449,5 @@
         s.parentNode.insertBefore(hm, s);
       })();</script>
   </body>
-
+{include file="public/bianjiqi"}
 </html>
