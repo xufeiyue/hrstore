@@ -426,25 +426,58 @@ class IndexController extends CommonController
   //产品分类
   public function category(){
 
-    $type_id = input('type_id/d') ? : 0;
+      $type_id = input('type_id/d') ? : 0;
 
-    $where = ['g.store_id' => ['in',"0,{$this->store_id}"], 'g.status' => 0, 'g.pid' => 0];
+      $where = ['g.store_id' => ['in',"0,{$this->store_id}"], 'g.status' => 0, 'g.pid' => 0];
 
-    $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(t.sort,0)sort'];
+      $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(t.sort,0)sort'];
 
-    $GoodsType = (new GoodsType)->goods_type_all($where, ['sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$this->store_id); //全部分类
+      $GoodsType = (new GoodsType)->goods_type_all($where, ['sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$this->store_id); //全部分类
 
-    $Goods = [];
+      $Goods = [];
 
-    if ($type_id) {
+      if ($type_id) {
 
-      if($GoodsType){
-          // 判断当前分类pid是否为0，如果为0，显示当前分类下的二级分类，如果不为0，取出当前分类的pid，再取出当前二级分类
-          $this_pid = (new GoodsType())->Common_Find(array('id'=>$type_id));
-          if($this_pid['pid'] == 0){
-              //遍历该分类下的所有商品
+          if($GoodsType){
+              // 判断当前分类pid是否为0，如果为0，显示当前分类下的二级分类，如果不为0，取出当前分类的pid，再取出当前二级分类
+              $this_pid = (new GoodsType())->Common_Find(array('id'=>$type_id));
+              if($this_pid['pid'] == 0){
+                  //遍历该分类下的所有商品
+                  $Goods = (new Goods)->getchildgoods($type_id,$this->store_id);
+                  // 取指定分类的二级分类
+                  $where_type_last = array('pid'=>$type_id,'status'=>0);
+
+                  $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url']);
+
+                  if($last_type_list){
+                      $two_type_id = $last_type_list[0]['id'];
+                      $this->assign('two_type_id',$two_type_id);
+                  }
+
+              }else{
+                  // 取指定分类的二级分类
+                  $where_type_last = array('pid'=>$this_pid['pid'],'status'=>0);
+
+                  $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url']);
+
+                  $two_type_id = $type_id;
+
+                  $type_id = $this_pid['pid'];
+                  $this->assign('two_type_id',$two_type_id);
+
+              }
+
+          }
+
+      }else{
+
+          if ($GoodsType) {
+
+              $type_id = $GoodsType['0']['id'];
+
               $Goods = (new Goods)->getchildgoods($type_id,$this->store_id);
-              // 取指定分类的二级分类
+
+              // 取最后一个分类的二级分类
               $where_type_last = array('pid'=>$type_id,'status'=>0);
 
               $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url']);
@@ -453,66 +486,33 @@ class IndexController extends CommonController
                   $two_type_id = $last_type_list[0]['id'];
                   $this->assign('two_type_id',$two_type_id);
               }
-
-          }else{
-              // 取指定分类的二级分类
-              $where_type_last = array('pid'=>$this_pid['pid'],'status'=>0);
-
-              $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url']);
-
-              $two_type_id = $type_id;
-
-              $type_id = $this_pid['pid'];
-              $this->assign('two_type_id',$two_type_id);
-
           }
-
+          $this->assign('type_id',$type_id);
+          $this->assign('tk',1);
       }
 
-    }else{
+      if ($Goods) {
 
-      if ($GoodsType) {
-        
-        $type_id = $GoodsType['0']['id'];
+          foreach ($Goods as $key => $value) {
 
-          $Goods = (new Goods)->getchildgoods($type_id,$this->store_id);
+              if ($value['goods_images']) {
 
-          // 取最后一个分类的二级分类
-          $where_type_last = array('pid'=>$type_id,'status'=>0);
+                  $Goods[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
+                  $str = explode('.',$Goods[$key]['goods_present_price']);
+                  $Goods[$key]['goods_present_price1'] = $str[0];
+                  $Goods[$key]['goods_present_price2'] = $str[1];
 
-          $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url']);
-
-          if($last_type_list){
-              $two_type_id = $last_type_list[0]['id'];
-              $this->assign('two_type_id',$two_type_id);
+              }
           }
       }
       $this->assign('type_id',$type_id);
-      $this->assign('tk',1);
-    }
 
-    if ($Goods) {
-      
-      foreach ($Goods as $key => $value) {
+      $this->assign('Goods',$Goods);
 
-        if ($value['goods_images']) {
-        
-          $Goods[$key]['goods_images'] = json_decode($value['goods_images'],true)[0]; //取第一张图片
-            $str = explode('.',$Goods[$key]['goods_present_price']);
-            $Goods[$key]['goods_present_price1'] = $str[0];
-            $Goods[$key]['goods_present_price2'] = $str[1];
-        
-        }
-      }
-    }
-    $this->assign('type_id',$type_id);
+      $this->assign('GoodsType',$GoodsType);
+      $this->assign('last_type_list',$last_type_list);
 
-    $this->assign('Goods',$Goods);
-
-    $this->assign('GoodsType',$GoodsType);
-    $this->assign('last_type_list',$last_type_list);
-
-    return view();
+      return view();
   }
 
 

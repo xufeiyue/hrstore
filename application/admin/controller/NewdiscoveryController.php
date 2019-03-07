@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 use think\Controller;
+use think\Db;
 use think\Request;
 use app\admin\model\NewDiscovery;
 class NewdiscoveryController extends AdminController
@@ -53,11 +54,11 @@ class NewdiscoveryController extends AdminController
 	public function newdiscovery_add(){
 
 		if ($_POST) {
-			
-			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
-			if (!$data['store_id'])
-				return json(['code' => 400 , 'msg' => '请选择店铺']);
+			//$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
+            $store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
+            if (!$store_id)
+                return json(['code' => 400 , 'msg' => '请选择店铺']);
 
 			$data['src'] = input('post.src/s');
 
@@ -69,11 +70,38 @@ class NewdiscoveryController extends AdminController
 
 			$data['sort'] = input('post.sort/d');
 
-			$add = (new NewDiscovery)->Common_Insert($data);
+			Db::startTrans();
+            try{
 
-			if($add)
-				return json(['code' => 200, 'msg' => '新增成功']);
-				return json(['code' => 400, 'msg' => '新增失败']);
+                if (is_array($store_id)) {
+
+                    $arr = [];
+
+                    foreach ($store_id as $key => $value) {
+
+                        $data['store_id'] = $value;
+
+                        $arr[] = $data;
+                    }
+
+                    (new NewDiscovery)->Common_Insert($arr);
+
+
+                }else{
+
+                    $data['store_id'] = $store_id;
+                    (new NewDiscovery)->Common_Insert($data);
+
+                }
+
+                //  提交事务
+                Db::commit();
+                return json(['code' => 200 , 'msg' => '新增成功']);
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+                return json(['code' => 400 , 'msg' => '新增失败']);
+            }
 
 		}else{
 

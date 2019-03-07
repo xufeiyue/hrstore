@@ -1,21 +1,24 @@
 {include file="public/header"}
     <div class="x-body">
         <form class="layui-form">
-        {if condition="$is_jurisdiction == 0"}
-          <div class="layui-form-item">
-            <label  for="store_id" class="layui-form-label">
-              <span class="x-red">*</span>选择店铺
-            </label>
-            <div class="layui-input-block">
-              <select name="store_id" lay-filter="store_id">
-                <option value="0">请选择</option>
-                {volist name="store" id="vo"}
-                    <option value="{$vo.id}">{$vo.name}</option>
-                {/volist}
-              </select>
+            {if condition="$is_jurisdiction == 0"}
+            <div class="layui-form-item">
+                <label  for="store_id" class="layui-form-label">
+                    <span class="x-red">*</span>选择店铺
+                </label>
+                <div class="layui-input-block">
+                    <!-- <select name="store_id" lay-filter="store_id"> -->
+                    <dl class="checkmod">
+
+                        <input type="checkbox" lay-filter="filter" title="全选">
+                        {volist name="store" id="vo"}
+                        <input type="checkbox" name="store_id[]" value="{$vo['id']}" title="{$vo.name}">
+                        {/volist}
+                    </dl>
+                    <!-- </select> -->
+                </div>
             </div>
-          </div>
-        {/if}
+            {/if}
           
           <div class="layui-form-item">
               <label for="touxiang" class="layui-form-label">
@@ -82,8 +85,13 @@
               layer.msg('上传成功', {icon: 1});
             }
           });
-         
-          //监听提交
+            form.on('checkbox(filter)', function(data){ //全选
+
+                $(this).closest('dl').find('input').prop('checked',this.checked);
+
+                form.render('checkbox');//渲染
+            });
+            //监听提交
           form.on('submit(add)', function(data){
             console.log(data);
             
