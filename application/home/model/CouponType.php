@@ -49,7 +49,7 @@ class CouponType extends Common
     }
 
     public function selAll($w,$whereor=[]){
-        return Db::name($this->table)->where($w)->where($whereor)->select();
+        return Db::name($this->table)->where($w)->select();
     }
 
     public function getTypeInfo($w,$field){

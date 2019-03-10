@@ -58,7 +58,28 @@
               </div>
               <div style="float: left;padding-top: 120px;margin-left: 20px;"><span style="color: red;font-size:14px;">(图片建议尺寸：150 * 150)</span></div>
           </div>
-         
+            <div class="layui-form-item">
+                <label for="start" class="layui-form-label">
+                    <span class="x-red">*</span>开始时间
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="start_time" id="start" placeholder="请输入开始时间">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="end" class="layui-form-label">
+                    <span class="x-red">*</span>结束时间
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="end_time" id="end" placeholder="请输入结束时间">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">显示状态：</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="xianshi" lay-skin="switch" lay-filter="switchTest" lay-text="显示|不显示">
+                </div>
+            </div>
 
           <div class="layui-form-item">
               <label for="L_repass" class="layui-form-label">
@@ -70,10 +91,11 @@
       </form>
     </div>
     <script>
-        layui.use(['form','layer','upload'], function(){
+        layui.use(['form','layer','upload','laydate'], function(){
             $ = layui.jquery;
           var form = layui.form
-          ,layer = layui.layer
+          ,layer = layui.layer,
+              laydate = layui.laydate
           ,upload = layui.upload;
 
           //拖拽上传
@@ -127,7 +149,16 @@
             
             return false;
           });
-          
+            //日期时间选择器
+            laydate.render({
+                elem: '#start'
+                ,type: 'datetime'
+            });
+
+            laydate.render({
+                elem: '#end'
+                ,type: 'datetime'
+            });
           
         });
     </script>

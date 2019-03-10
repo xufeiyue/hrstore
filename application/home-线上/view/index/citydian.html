@@ -1,0 +1,46 @@
+{include file="common/header"}
+<title>{$title}</title>
+		<!--<header data-am-widget="header" class="am-header am-header-default sq-head ">-->
+			<!--<div class="am-header-left am-header-nav">-->
+				<!--<a href="javascript:history.back()" class="">-->
+					<!--<i class="am-icon-chevron-left"></i>-->
+				<!--</a>-->
+			<!--</div>-->
+			<!--<h1 class="am-header-title">-->
+  	            <!--<a href="" class="">{$title}</a>-->
+            <!--</h1>-->
+	    <!--</header>-->
+	    <!--<div style="height: 49px;"></div>-->
+<link rel="stylesheet" type="text/css" href="__CSS__/slidernav.css" media="screen, projection" />
+<script src="__JS__/slidernav.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#slider').sliderNav();
+	});
+</script> 
+<style>
+	*{margin:0;padding:0;list-style-type:none;}
+	a,img{border:0;}
+	body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";background:#eee;}
+	/* demo */
+	.demofghf{width:100%;height: 100%; position: fixed;}
+</style>
+<div class="demofghf">
+
+	<div id="slider">
+		<div class="slider-content">
+			<ul>
+				{foreach name="store_list" item="vo"}
+				<li id="{$vo['initials']}"><a name="{$vo['initials']}" class="title" href="{:url('Index/index',['store_id' => $vo['store_id']])}">{$vo['initials']}</a>
+					<ul>
+						<li><a href="#">{$vo['store_name']}</a></li>
+					</ul>
+				</li>
+				{/foreach}
+			</ul>
+		</div>
+	</div>
+
+</div>
+	</body>
+</html>

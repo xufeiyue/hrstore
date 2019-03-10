@@ -118,6 +118,8 @@ class IndexController extends CommonController
 
     $where = [];
 
+    $time = time();
+
     if ($store_id) {
       
       $where = ['store_id' => $store_id];
@@ -142,19 +144,16 @@ class IndexController extends CommonController
 
     $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '首页']);
 
-    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
+    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType['id'],'end_time'=>array('>',$time),'xianshi'=>0],['id' => 'desc'],['id','image','url']);
 
     // 底部图片
 
       $AdvertisementType_db = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '首页底部']);
 
-      $Advertisement_db = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType_db['id']],['id' => 'desc'],['id','image','url']);
+      $Advertisement_db = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType_db['id'],'end_time'=>array('>',$time),'xianshi'=>0],['id' => 'desc'],['id','image','url']);
 
-    $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0];
-
-    $time = time();
-
-    $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+      $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0,'xianshi'=>0,'end_time'=>array('>',$time)];
+    //$whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
 
     $offset = 0;
 
@@ -164,7 +163,7 @@ class IndexController extends CommonController
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
-    $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field,$whereor); //商品列表
+    $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field); //商品列表
 
     foreach ($goods_list as $key => $value) {
 
@@ -178,7 +177,7 @@ class IndexController extends CommonController
     }
 
     //底部商品列表
-    $goods_top_list = (new Goods)->Common_Select(8,6,$where,$order,$goods_field,$whereor); //商品列表
+    $goods_top_list = (new Goods)->Common_Select(8,6,$where,$order,$goods_field); //商品列表
 
       foreach($goods_top_list as $key1=>$val1){
           if ($val1['goods_images']) {
@@ -190,7 +189,7 @@ class IndexController extends CommonController
           }
       }
 
-    $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0];
+    $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0,'g.xianshi'=>0,'g.end_time'=>array('>',$time)];
     
     $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(t.sort,0)sort'];
     //产品分类
@@ -444,7 +443,7 @@ class IndexController extends CommonController
               if($this_pid['pid'] == 0){
                   //遍历该分类下的所有商品
                   $Goods = (new Goods)->getchildgoods($type_id,$this->store_id);
-                  print_r($Goods);exit;
+
                   // 取指定分类的二级分类
                   $where_type_last = array('pid'=>$type_id,'status'=>0);
 

@@ -76,7 +76,16 @@ class GoodsController extends AdminController
 	public function goods_type_add(){
 
 		if ($_POST) {
-				
+            $whether = ['on','off'];
+            $xianshi = input('post.xianshi/s');
+            if($xianshi == $whether[0]){
+
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
 			$store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
 
 			$data['goods_type_name'] = input('post.goods_type_name/s');
@@ -88,6 +97,10 @@ class GoodsController extends AdminController
 			$data['create_time'] = time();
 
 			$data['update_time'] = time();
+
+            $data['start_time'] = strtotime(input('post.start_time/s'));
+
+            $data['end_time'] = strtotime(input('post.end_time/s'));
 
 			$sort = input('post.sort/d');
 
@@ -161,9 +174,18 @@ class GoodsController extends AdminController
 	public function goods_type_edit(){
 
 		$id = input('id/d');
-
+        $whether = ['on','off'];
 		if ($_POST) {
-				
+            $xianshi = input('post.xianshi/s');
+            //echo '<pre>';print_r($xianshi);exit;
+            if($xianshi == $whether[0]){
+
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
 			$data['goods_type_name'] = input('post.goods_type_name/s');
@@ -177,6 +199,10 @@ class GoodsController extends AdminController
 			$data['update_time'] = time();
 
 			$sort = input('post.sort/d');
+
+            $data['start_time'] = strtotime(input('post.start_time/s'));
+
+            $data['end_time'] = strtotime(input('post.end_time/s'));
 
 			$list = (new GoodsType)->Common_Find(['id' => $id]);
 
@@ -346,7 +372,6 @@ class GoodsController extends AdminController
 		$where['a.status'] = 0;
 
 		$data = (new Goods)->Common_Select($offset,$limit,$where,$order);
-
 		foreach ($data['data'] as $key => $value) {
 			
 			if ($value['pid']) {
