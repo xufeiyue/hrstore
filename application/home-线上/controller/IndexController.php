@@ -166,7 +166,7 @@ class IndexController extends CommonController
       }
 
     $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0];
-    
+      $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
     $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(t.sort,0)sort'];
     //产品分类
     $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$store['store_id']);
