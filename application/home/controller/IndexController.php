@@ -44,7 +44,7 @@ class IndexController extends CommonController
         $store_id = input('store_id/d') ? : 0;
     if($member['store_id'] == 0 && $store_id==0){
 
-        $this->redirect('store_list');
+        $this->redirect('store_list1');
     }else{
 
         if($store_id>0){
@@ -82,9 +82,18 @@ class IndexController extends CommonController
     $w['ctt.card_type_id'] = 30;
     $c = $coupon_model->getRegCoupon($w);
     if(empty($c)){
+      $rec_key = 1;
         $this->assign('rec_key',1);
     }else{
+      $rec_key = 2;
         $this->assign('rec_key',2);
+    }
+
+    if ($rec_key == 2 && $member['kaquan'] == 1) {
+      (new Member())->Common_Update(['kaquan'=>2],['id'=>$this->userId]);
+      $this->assign('kaquan',1);
+    }else{
+      $this->assign('kaquan',2);
     }
     return view();
   }
@@ -337,6 +346,12 @@ class IndexController extends CommonController
 
         $this->assign('title',$this->title);
 
+
+        return view();
+    }
+
+    // 门店列表-不需要经纬度
+    public function store_list1(){
 
         return view();
     }

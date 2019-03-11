@@ -259,6 +259,12 @@
     <span class="shouCi_Close"></span>
 </div>
 {/if}
+
+{if condition="$kaquan eq 1"}
+<div class="shouCi_box TCC_Box1">
+    <img src="http://huaruncard-test.redh5.cn/static/home/images/gengduoyouhuiquan.jpg">
+</div>
+{/if}
 <!--首次一元红包弹出层-->
 <!--完善信息弹出层-->
 <!--<div class="WanShan_box">-->
@@ -418,6 +424,9 @@
     })
     $("#lqcg_close").click(function () {
         $(".lqcg_box").hide()
+    })
+    $(".TCC_Box1").click(function(){
+        window.location.href = '/home/coupon/coupon_list'
     })
 </script>
 {include file="common/footer"}
