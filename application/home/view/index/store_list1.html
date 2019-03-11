@@ -1,0 +1,148 @@
+{include file="common/header"}
+<title>电子DM单</title>
+  
+<div class="yiqiangwan_box">
+    <div class="yiqiangwan_info">
+        <img src="http://huaruncard.redh5.cn/static/home/images/yiqiangwan.png">
+        <p id="close">确定</p>
+    </div>
+</div>
+
+<style>
+    .shouCi_box,.WanShan_box{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+    }
+    .WanShan_box{
+        display: none;
+    }
+    .shouCi_box img,.WanShan_box img{
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top:0;
+        left: 0;
+    }
+    .shouCi_box span{
+        width: 70%;
+        height: 3rem;
+        position: fixed;
+        top: 64%;
+        left: 15%;
+        text-align: center;
+    }
+    .WanShan_box a{
+        width: 70%;
+        height: 3rem;
+        position: fixed;
+        top: 64%;
+        left: 15%;
+        text-align: center;
+        display: block;
+    }
+    .shouCi_box .shouCi_Close,.WanShan_box .WanShan_Close{
+        width: 20%;
+        height: 3rem;
+        position: fixed;
+        top: 77%;
+        left: 40%;
+        text-align: center;
+    }
+    .yiqiangwan_box{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+        display: none;
+    }
+    .yiqiangwan_info{
+        width: 60%;
+        height: 16rem;
+        position: absolute;
+        left: 20%;
+        top:50%;
+        margin-top: -10rem;
+        z-index: 10;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.7);
+        overflow: hidden;
+        background: #fff;
+    }
+    .yiqiangwan_info img{
+        display: block;
+        margin: 0 auto;height: 12rem;
+    }
+    .yiqiangwan_info p{
+        width: 100%;
+        height: 4rem;
+        text-align: center;
+        line-height: 4rem;
+        font-size: 2rem;
+        background: #ff5500;
+        color: #fff;
+        text-indent: 10px;
+    }
+
+    .lqcg_box{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+        display: none;
+    }
+    .lqcg_info{
+        width: 60%;
+        height: 16rem;
+        position: absolute;
+        left: 20%;
+        top:50%;
+        margin-top: -10rem;
+        z-index: 10;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.7);
+        overflow: hidden;
+        background: #fff;
+    }
+    .lqcg_info img{
+        display: block;
+        margin: 0 auto;height: 12rem;
+    }
+    .lqcg_info p{
+        width: 100%;
+        height: 4rem;
+        text-align: center;
+        line-height: 4rem;
+        font-size: 2rem;
+        background: #ff5500;
+        color: #fff;
+        text-indent: 10px;
+    }
+</style>
+<!--首次一元红包弹出层-->
+
+<div class="shouCi_box TCC_Box">
+    <img src="http://huaruncard-test.redh5.cn/static/home/images/qingxuanzeguanzhudedianpu.png">
+</div>
+
+<!--领取成功弹出层-->
+<script>
+    $(function () {
+       $(".shouCi_box").click(function(){
+           window.location.href = '/home/Index/store_list'
+       })
+    });
+</script>
+{include file="common/footer"}
