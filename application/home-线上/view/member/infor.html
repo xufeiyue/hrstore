@@ -1,0 +1,241 @@
+{include file="common/header"}
+<style>
+.safty li .iconfont{ float:left; font-size:1.8rem; display:block; margin:0;}
+</style>
+<style>
+
+	.gengxin_box{
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 9999;
+		background: rgba(0,0,0,0.5);
+		display: none;
+	}
+
+	.gengxin_info{
+		width: 60%;
+		height: 16rem;
+		position: absolute;
+		left: 20%;
+		top:50%;
+		margin-top: -10rem;
+		z-index: 10;
+		border-radius: 15px;
+		box-shadow: 0 0 15px rgba(0,0,0,0.7);
+		overflow: hidden;
+		background: #fff;
+	}
+	.gengxin_info img{
+		display: block;
+		margin: 0 auto;height: 12rem;
+	}
+	.gengxin_info p{
+		width: 100%;
+		height: 4rem;
+		text-align: center;
+		line-height: 4rem;
+		font-size: 2rem;
+		background: #ff5500;
+		color: #fff;
+		text-indent: 10px;
+	}
+
+
+	.lqsb_box{
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 9999;
+		background: rgba(0,0,0,0.5);
+		display: none;
+	}
+
+	.lqsb_info{
+		width: 60%;
+		height: 16rem;
+		position: absolute;
+		left: 20%;
+		top:50%;
+		margin-top: -10rem;
+		z-index: 10;
+		border-radius: 15px;
+		box-shadow: 0 0 15px rgba(0,0,0,0.7);
+		overflow: hidden;
+		background: #fff;
+	}
+	.lqsb_info img{
+		display: block;
+		margin: 0 auto;height: 12rem;
+	}
+	.lqsb_info p{
+		width: 100%;
+		height: 4rem;
+		text-align: center;
+		line-height: 4rem;
+		font-size: 2rem;
+		background: #ff5500;
+		color: #fff;
+		text-indent: 10px;
+	}
+</style>
+<title>{$title}</title>
+		<!--<header data-am-widget="header" class="am-header am-header-default sq-head ">-->
+			<!--<div class="am-header-left am-header-nav">-->
+				<!--<a href="javascript:history.back()" class="">-->
+					<!--<i class="am-icon-chevron-left"></i>-->
+				<!--</a>-->
+			<!--</div>-->
+			<!--<h1 class="am-header-title">-->
+  	            <!--<a href="" class=""></a>-->
+            <!--</h1>-->
+	    <!--</header>-->
+<div class="gengxin_box">
+	<div class="gengxin_info">
+		<img src="http://huaruncard.redh5.cn/static/home/images/gxcg.png">
+		<p id="close1">确定</p>
+	</div>
+</div>
+
+<div class="lqsb_box">
+	<div class="gengxin_info">
+		<img src="http://huaruncard.redh5.cn/static/home/images/lqsb.png">
+		<p id="close2">确定</p>
+	</div>
+</div>
+	<div class="shhshjwh"></div>
+	    <ul class="safty" >
+        </br>
+	    	<li style="background: #fff;">
+	    		<p class="pap">
+	    			<span class="MY_info">
+						 <i>昵称：{$member['nickname']}</i>
+						 <i>绑定手机：{$member['mobilephone']}</i>
+					</span>
+	    			<span class="infor-pic">
+						<!-- <input type="file" style="position: absolute; opacity: 0;width: 72px; height: 72px; display: block;"/> -->
+	    				<img src="{$member['wx_url']}" />
+	    			</span>
+	    		</p>
+	    	</li>
+	    	<li class="Info_box"  style="margin: 10px auto; background: #ffffff;">
+
+					<!--<div class="my_name">-->
+						<!--<span>昵称</span>-->
+						<!--<input type="text" name="nickname" id="nickname" value="{$member['nickname']}">-->
+					<!--</div>-->
+					<div class="my_family">
+                    <i class="iconfont icon-renyuan"></i>
+						<span>家庭：</span>
+						<select id="family" name="family" value="">
+							<option value ="0">请选择</option>
+							<option value ="1" {if condition="$member['family'] eq 1"}selected="selected"{/if}>三口之家</option>
+							<option value ="2" {if condition="$member['family'] eq 2"}selected="selected"{/if}>单身贵族</option>
+							<option value="3" {if condition="$member['family'] eq 3"}selected="selected"{/if}>二人世界</option>
+                            <option value="4" {if condition="$member['family'] eq 4"}selected="selected"{/if}>四口以上</option>
+						</select>
+					</div>
+					<div class="my_age">
+						<i class="iconfont icon-nianling"></i>
+                        <span>年龄：</span>
+						<select id="age" name="age" value="">
+							<option value ="0">请选择</option>
+							<option value ="1" {if condition="$member['age'] eq 1"}selected="selected"{/if}>18-30岁之间</option>
+							<option value ="2" {if condition="$member['age'] eq 2"}selected="selected"{/if}>30-45岁之间</option>
+                            <option value ="3" {if condition="$member['age'] eq 3"}selected="selected"{/if}>45-65岁之间</option>
+							<option value ="4" {if condition="$member['age'] eq 4"}selected="selected"{/if}>65岁以上</option>
+						</select>
+					</div>
+					<div class="my_gender">
+                    <i class="iconfont icon-xingbie"></i>
+						<span>性别：</span>
+						<select id="sex" name="sex" value="">
+				
+							<option value ="1" {if condition="$member['sex'] eq 1"}selected="selected"{/if}>男</option>
+							<option value ="2" {if condition="$member['sex'] eq 2"}selected="selected"{/if}>女</option>
+						</select>
+					</div>
+
+			</li>
+            	 
+			<li class="Info_box" style="margin: 10px auto; background: #ffffff;">
+				<div class="my_tel">
+                <i class="iconfont icon-shouji2"></i>
+					<span>更改手机：</span>
+					<input type="text" name="mobilephone" style="width: 55%;" id="mobilephone" value="">
+				</div>
+				<div class="my_validate">
+                <i class="iconfont icon-yanzhengma3"></i>
+					<span>验证码：</span>
+					<input type="text" name="code" style="width: 30%;" id="code" value="">
+					<!-- <em class="Fa_info">发送验证码</em> -->
+					<input type="button" class="Fa_info" value="发送验证码" />
+				</div>
+			</li>
+			<span class="Sure_btn">提&nbsp;&nbsp;交</span>
+	    </ul>
+        
+	</body>
+</html>
+<script type="text/javascript">
+	var countdown = 60
+	$(".Fa_info").click(function(){
+		var phone = /^1[23456789]\d{9}$/; 
+		var mobilephone = $("#mobilephone").val();
+		if(!phone.test(mobilephone)){
+			alert('请输入正确的手机号码');
+			return false;
+		}
+		settime(this)
+		$.post("{:url('Member/sms_send')}",{mobilephone:mobilephone},function(data){
+
+
+		})
+
+	})
+	function settime(obj) {
+	    if (countdown == 0) { 
+	        obj.removeAttribute("disabled");    
+	        obj.value="重新获取验证码"; 
+	        countdown = 60; 
+	        return;
+	    } else { 
+	        obj.setAttribute("disabled", true); 
+	        obj.value="重新发送(" + countdown + ")"; 
+	        countdown--; 
+	    } 
+		setTimeout(function() { 
+	    	settime(obj) }
+	    ,1000) 
+	}
+
+	$(".Sure_btn").click(function(){
+
+		var nickname = $("#nickname").val();
+		var sex = $("#sex").val();
+		var age = $("#age").val();
+		var family = $("#family").val();
+		var mobilephone = $("#mobilephone").val();
+		var code = $("#code").val();
+
+		$.post("{:url('Member/edit_member')}",{nickname: nickname, sex: sex, age: age, family: family, mobilephone: mobilephone, code: code},function(data){
+
+			if (data.code == 200){
+				$(".gengxin_box").show()
+				//return json(['code' => 200, 'msg' => '更新成功']);
+			}else{
+				//return json(['code' => 400, 'msg' => '更新失败']);
+			}
+
+
+		})
+
+	})
+	$("#close1").click(function(){
+		$(".gengxin_box").hide()
+	})
+</script>

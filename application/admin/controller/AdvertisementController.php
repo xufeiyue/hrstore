@@ -186,7 +186,8 @@ class AdvertisementController extends AdminController
 	public function advertisement_add(){
 
 		if ($_POST) {
-			
+            $whether = ['on','off'];
+            $xianshi = input('post.xianshi/s');
 			$store_id = input('post.store_id/a') ? : $this->is_jurisdiction;
 
 			$data['type_id'] = input('post.type_id/d');
@@ -201,6 +202,17 @@ class AdvertisementController extends AdminController
 
 			$data['update_time'] = time();
 
+            $data['start_time'] = strtotime(input('post.start_time/s'));
+
+            $data['end_time'] = strtotime(input('post.end_time/s'));
+            if($xianshi == $whether[0]){
+
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
 			Db::startTrans();
         	try{
 
@@ -255,9 +267,18 @@ class AdvertisementController extends AdminController
 	public function advertisement_edit(){
 
 		$id = input('id/d');
-
+        $whether = ['on','off'];
 		if ($_POST) {
-			
+            $xianshi = input('post.xianshi/s');
+            //echo '<pre>';print_r($xianshi);exit;
+            if($xianshi == $whether[0]){
+
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
 			$data['store_id'] = input('post.store_id/d') ? : $this->is_jurisdiction;
 
 			if (!$data['store_id'])
@@ -273,6 +294,10 @@ class AdvertisementController extends AdminController
 
 			$data['update_time'] = time();
 
+            $data['start_time'] = strtotime(input('post.start_time/s'));
+
+            $data['end_time'] = strtotime(input('post.end_time/s'));
+
 			$edit = (new Advertisement)->Common_Update($data,['id' => $id]);
 
 			if ($edit)
@@ -286,6 +311,8 @@ class AdvertisementController extends AdminController
 			$order = ['id' => 'desc'];
 
 			$list = (new Advertisement)->Common_Find(['id' => $id]);
+
+			//echo '<pre>';print_r($list);exit;
 
 			$type = (new AdvertisementType)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
 

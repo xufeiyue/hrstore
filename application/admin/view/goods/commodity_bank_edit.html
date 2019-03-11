@@ -313,6 +313,7 @@
                   ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
                   ,'<td>等待上传</td>'
                   ,'<td>'
+                    ,'<button type="button" class="layui-btn layui-btn-xs layui-btn-danger demo-up">上移</button>'
                     ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
                     ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
                   ,'</td>'
@@ -322,7 +323,14 @@
                 tr.find('.demo-reload').on('click', function(){
                   obj.upload(index, file);
                 });
-                
+                  // 上移
+                  tr.find('.demo-up').on('click',function () {
+                      var $tr = $(this).parents("tr");
+                      if ($tr.index() != 0) {
+                          $tr.fadeOut().fadeIn();
+                          $tr.prev().before($tr);
+                      }
+                  })
                 //删除
                 tr.find('.demo-delete').on('click', function(){
                   delete files[index]; //删除对应的文件

@@ -29,27 +29,36 @@ class IndexController extends CommonController
 
 
     $this->title = '首页';
-    $store_id = input('store_id/d') ? : 0;
+
+        // 判断5元红包是否有剩余
+        $num = (New Coupon())->getNum(['card_type_id'=>30,'status'=>2]);
+        if($num>0){
+            $this->assign('is_display',1);
+        }else{
+            $this->assign('is_display',2);
+        }
     /*
-     *  判断用户是否选过店
+       *  判断用户是否选过店
      * */
     $member = (new Member())->Common_Find(['id'=>$this->userId]);
-    if($member['store_id'] == 0 && $store_id == 0){
+        $store_id = input('store_id/d') ? : 0;
+    if($member['store_id'] == 0 && $store_id==0){
 
         $this->redirect('store_list');
     }else{
-        if($member['store_id'] == 0 && $store_id>0){
-            // 将用户与店铺进行绑定
-            (new Member())->Common_Update(['store_id'=>$store_id],['id'=>$this->userId]);
+
+        if($store_id>0){
+            if($member['store_id']== 0){
+                // 将用户与店铺进行绑定
+                (new Member())->Common_Update(['store_id'=>$store_id],['id'=>$this->userId]);
+            }else{
+                session('store_id',$store_id);
+            }
+
+        }else{
+            $store_id = $member['store_id'];
+            session('store_id',$store_id);
         }
-    }
-
-
-
-    if ($store_id) {
-     
-      session('store_id',$store_id);
-
     }
 
     // 增加页面访问量
@@ -80,37 +89,6 @@ class IndexController extends CommonController
     return view();
   }
 
-  public function index1(){
-      $this->title = '首页';
-
-      $store_id = input('store_id/d') ? : 0;
-
-      if ($store_id) {
-
-          session('store_id',$store_id);
-
-      }
-
-      $this->assign('store_id',$store_id);
-
-      $this->assign('title',$this->title);
-
-      // 判断当前用户是否领取过新人红包
-
-      $coupon_model = new CouponType();
-
-      $w['mr.member_id'] = $this->userId;
-      $w['ctt.card_type_id'] = 30;
-      $c = $coupon_model->getRegCoupon($w);
-      if(empty($c)){
-          $this->assign('rec_key',1);
-      }else{
-          $this->assign('rec_key',2);
-      }
-
-      return view();
-  }
-
   //ajax获取首页数据
   public function ajax_index(){
 
@@ -118,49 +96,42 @@ class IndexController extends CommonController
 
     $where = [];
 
+    $time = time();
+
     if ($store_id) {
       
       $where = ['store_id' => $store_id];
     }
 
-    $longitude = input('post.longitude/s') ? : '123.454688';
+//    $longitude = input('post.longitude/s') ? : '123.454688';
+//
+//    $latitude = input('post.latitude/s') ? : '41.778517';
+//
+//    (new Member)->Common_Update(['longitude' => $longitude, 'latitude' => $latitude],['id' => $this->userId]); //更新经纬度
 
-    $latitude = input('post.latitude/s') ? : '41.778517';
-
-    (new Member)->Common_Update(['longitude' => $longitude, 'latitude' => $latitude],['id' => $this->userId]); //更新经纬度
-
-    $store = (new Store)->Common_Find($where,['juli' => 'ASC'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]); // 根据经纬度查询最近的一家门店 距离Km
-
-    if ($store) {
-
-      session('store_id',$store['store_id']);
-
-      session('expiration_time',time());
-    }
-
-    $activity = (new Activity)->Common_Find(['banner' => 0, 'store_id' => $store['store_id']]); //轮播活动
+//  $store = (new Store)->Common_Find($where,['juli' => 'ASC'],['store_id','store_name',"ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(({$latitude} * PI() / 180 - latitude * PI() / 180) / 2),2) + COS({$latitude} * PI() / 180) * COS(latitude * PI() / 180) * POW(SIN(({$longitude} * PI() / 180 - longitude * PI() / 180) / 2),2))),2) AS juli"]); // 根据经纬度查询最近的一家门店 距离Km
+    $store = (New Store())->Common_Find(['store_id'=>$store_id]);
+    $activity = (new Activity)->Common_Find(['banner' => 0, 'store_id' => $store_id]); //轮播活动
 
     $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '首页']);
-
-    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
+      $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store_id, 'status' => 0,
+        'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url'],$whereor);
 
     // 底部图片
 
       $AdvertisementType_db = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '首页底部']);
 
-      $Advertisement_db = (new Advertisement)->Common_All_Select(['store_id' => $store['store_id'], 'status' => 0, 'type_id' => $AdvertisementType_db['id']],['id' => 'desc'],['id','image','url']);
+      $Advertisement_db = (new Advertisement)->Common_All_Select(['store_id' =>$store_id, 'status' => 0, 'type_id' => $AdvertisementType_db['id']],['id' => 'desc'],['id','image','url'],$whereor);
 
-    $where = ['store_id' => $store['store_id'], 'status' => 0, 'state' => 0, 'sell_well' => 0];
-
-    $time = time();
-
-    $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+      $where = ['store_id' => $store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0];
+    //$whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
 
     $offset = 0;
 
     $limit = 8;
 
-    $order = ['goods_bk_paixu' => 'desc'];
+    $order = ['goods_bk_paixu' => 'asc'];
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
 
@@ -190,15 +161,18 @@ class IndexController extends CommonController
           }
       }
 
-    $where = ['g.store_id' => ['in',"0,{$store['store_id']}"], 'g.status' => 0, 'g.pid' => 0];
+    $where = ['g.store_id' => ['in',"0,{$store_id}"], 'g.status' => 0, 'g.pid' => 0];
     
     $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(t.sort,0)sort'];
     //产品分类
-    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$store['store_id']);
+      $whereor1 = "(g.xianshi = 0 and g.end_time >= {$time}) or (g.start_time <= {$time} and g.end_time >= {$time})";
+    $goods_type_list = (new GoodsType)->recommend_type($offset,$limit-1,$where,['sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$store_id,$whereor1);
 
     // 获取
 
-    return json(['code' => 200, 'msg' => '请求成功', 'data' => ['store' => $store, 'goods_top_list' => $goods_top_list, 'activity' => $activity, 'advertisement' => $Advertisement,'advertisement_db'=>$Advertisement_db ,'goods_list' => $goods_list, 'goods_type_list' => $goods_type_list]]);
+    return json(['code' => 200, 'msg' => '请求成功',
+        'data' => ['store' => $store, 'goods_top_list' => $goods_top_list, 'activity' => $activity, 'advertisement' => $Advertisement,
+            'advertisement_db'=>$Advertisement_db ,'goods_list' => $goods_list, 'goods_type_list' => $goods_type_list]]);
 
   }
 
@@ -426,13 +400,17 @@ class IndexController extends CommonController
   //产品分类
   public function category(){
 
+	    $time = time();
+
       $type_id = input('type_id/d') ? : 0;
 
       $where = ['g.store_id' => ['in',"0,{$this->store_id}"], 'g.status' => 0, 'g.pid' => 0];
-
+      $whereor1 = "(g.xianshi = 0 and g.end_time >= {$time}) or (g.start_time <= {$time} and g.end_time >= {$time})";
       $goods_type_field = ['g.id','g.goods_type_name','g.url','COALESCE(t.sort,0)sort'];
 
-      $GoodsType = (new GoodsType)->goods_type_all($where, ['sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$this->store_id); //全部分类
+      $GoodsType = (new GoodsType)->goods_type_all($where, ['sort' => 'ASC','g.id' => 'desc'],$goods_type_field,$this->store_id,$whereor1); //全部分类
+
+      $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
 
       $Goods = [];
 
@@ -443,11 +421,13 @@ class IndexController extends CommonController
               $this_pid = (new GoodsType())->Common_Find(array('id'=>$type_id));
               if($this_pid['pid'] == 0){
                   //遍历该分类下的所有商品
-                  $Goods = (new Goods)->getchildgoods($type_id,$this->store_id);
+
+                  $Goods = (new Goods)->getchildgoods($type_id,$this->store_id,$whereor);
+
                   // 取指定分类的二级分类
                   $where_type_last = array('pid'=>$type_id,'status'=>0);
 
-                  $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url']);
+                  $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url'],$whereor);
 
                   if($last_type_list){
                       $two_type_id = $last_type_list[0]['id'];
@@ -458,7 +438,7 @@ class IndexController extends CommonController
                   // 取指定分类的二级分类
                   $where_type_last = array('pid'=>$this_pid['pid'],'status'=>0);
 
-                  $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url']);
+                  $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url'],$whereor);
 
                   $two_type_id = $type_id;
 
@@ -475,12 +455,12 @@ class IndexController extends CommonController
 
               $type_id = $GoodsType['0']['id'];
 
-              $Goods = (new Goods)->getchildgoods($type_id,$this->store_id);
+              $Goods = (new Goods)->getchildgoods($type_id,$this->store_id,$whereor);
 
               // 取最后一个分类的二级分类
               $where_type_last = array('pid'=>$type_id,'status'=>0);
 
-              $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url']);
+              $last_type_list =  (new GoodsType())->Common_All_Select($where_type_last,['id' => 'desc'],['id','goods_type_name','url'],$whereor);
 
               if($last_type_list){
                   $two_type_id = $last_type_list[0]['id'];
@@ -519,9 +499,11 @@ class IndexController extends CommonController
   //底部新发现
   public function xfx(){
 
-    $this->title = '新发现 新生活';
 
-    $NewDiscovery = (new NewDiscovery)->Common_All_Select(['status' => 0,'store_id' => $this->store_id], ['sort' => 'desc','id' => 'desc'],['id','src','url']);
+    $this->title = '新发现 新生活';
+    $time = time();
+      $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+    $NewDiscovery = (new NewDiscovery)->Common_All_Select(['status' => 0,'store_id' => $this->store_id], ['sort' => 'desc','id' => 'desc'],['id','src','url'],$whereor);
 
     $this->assign('title',$this->title);
 
@@ -534,10 +516,12 @@ class IndexController extends CommonController
   public function rqph(){
 
     $this->title = '人气商品排行榜';
+    $time = time();
 
+    $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
     $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '人气']);
 
-    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $this->store_id, 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
+    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $this->store_id, 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url'],$whereor);
 
     $offset = 0;
 
@@ -548,10 +532,6 @@ class IndexController extends CommonController
     $order = ['goods_rq_paixu'=>'desc','number_of_visits' => 'desc'];
 
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
-
-    $time = time();
-
-    $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
 
     $goods_list = (new Goods)->Common_Select($offset,$limit,$where,$order,$goods_field,$whereor);
 
@@ -585,7 +565,7 @@ class IndexController extends CommonController
     $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0];
 
 //    $order = ['number_of_visits' => 'desc']; //爆款人气排序
-      $order = ['goods_bk_paixu' => 'desc']; //爆款人气排序
+      $order = ['goods_bk_paixu' => 'asc']; //爆款人气排序
     $goods_field = ['id','goods_name','goods_original_price','goods_present_price','goods_images'];
     $time = time();
     $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";

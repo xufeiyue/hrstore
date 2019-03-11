@@ -31,7 +31,7 @@ class CouponController extends CommonController
         // 获取所有平台优惠券
         $coupon_type_model = new CouponType();
         $time = time();
-        $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+        $where_pt['xianshi'] = 0;
         $where_pt['end_time'] = array('>',$time);
         $where_pt['is_use'] = 2;
         $where_pt['status'] = 1;
@@ -75,6 +75,15 @@ class CouponController extends CommonController
         $where_dp['t1.ticket_type'] = 2;
         $field = ['t1.*','g.goods_images'];
         $coupon_type_dp_list = $coupon_type_model->get_coupon_type_dp_list($where_dp,$field,$whereor1);
+        //print_r($coupon_type_dp_list);
+        // 获取我的所有品类优惠券
+        $my_coupon_type_list = $coupon_type_model->getRegCoupon(['mr.member_id'=>$this->userId],"ctt.card_type_id");
+
+        $arr2 = [];
+        foreach($my_coupon_type_list as $key=>$val){
+            $arr2[] = $val['card_type_id'];
+        }
+
         if(!empty($coupon_type_dp_list)){
             foreach($coupon_type_dp_list as $key=>$val){
                 $coupon_type_dp_list[$key]['goods_img'] = json_decode($val['goods_images'],true)[0];
@@ -83,6 +92,11 @@ class CouponController extends CommonController
                     $coupon_type_dp_list[$key]['num_status']= 1; // 有剩余
                 }else{
                     $coupon_type_dp_list[$key]['num_status']= 2; // 已领完
+                }
+                if(in_array($val['card_type_id'],$arr2)){
+                    $coupon_type_dp_list[$key]['my_have_status'] = 1;//有这个优惠券
+                }else{
+                    $coupon_type_dp_list[$key]['my_have_status'] = 2;//没有这个优惠券
                 }
             }
 

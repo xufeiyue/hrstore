@@ -44,7 +44,7 @@
         </div>
 
        <div class="layui-form-item">
-            <label for="start_time" class="layui-form-label">
+            <label for="start" class="layui-form-label">
                 <span class="x-red">*</span>开始时间
             </label>
               <div class="layui-input-inline">
@@ -52,7 +52,7 @@
               </div>
         </div>
         <div class="layui-form-item">
-            <label for="end_time" class="layui-form-label">
+            <label for="end" class="layui-form-label">
                 <span class="x-red">*</span>结束时间
             </label>
               <div class="layui-input-inline">
@@ -61,7 +61,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label for="activity_name" class="layui-form-label">
+            <label for="goods_name" class="layui-form-label">
                 <span class="x-red">*</span>商品名称
             </label>
             <div class="layui-input-inline">
@@ -70,7 +70,7 @@
         </div>
 
           <div class="layui-form-item">
-            <label for="activity_name" class="layui-form-label">
+            <label for="testList" class="layui-form-label">
                 <span class="x-red">*</span>商品图片
             </label>
             <div class="layui-upload" id="upload">
@@ -104,7 +104,7 @@
           <!--</div>-->
 
           <div class="layui-form-item">
-            <label for="activity_name" class="layui-form-label">
+            <label for="goods_present_price" class="layui-form-label">
                 <span class="x-red">*</span>商品优惠价
             </label>
             <div class="layui-input-inline">
@@ -141,14 +141,13 @@
             <!--<div class="layui-btn" id="shuxing_add">增加</div>-->
           <!--</div>-->
   
-          <div class="layui-form-item">
+            <div class="layui-form-item">
               <label class="layui-form-label">
                   <span class="x-red"></span>商品详情
               </label>
-               <div class="layui-input-inline"  style="width: 550px">
-                 <!--  <textarea id="goods_detail" lay-verify="goods_detail" name="goods_detail" style="display: none;"></textarea> -->
+              <div class="layui-input-inline"  style="width: 550px"></div>
+
                  <script id="editor" name="goods_detail"  type="text/plain" style="height:250px;"></script>
-                </div>
           </div>
   
           <div class="layui-form-item">
@@ -274,6 +273,7 @@
                   ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
                   ,'<td>等待上传</td>'
                   ,'<td>'
+                    ,'<button type="button" class="layui-btn layui-btn-xs layui-btn-danger demo-up">上移</button>'
                     ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
                     ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
                   ,'</td>'
@@ -283,15 +283,21 @@
                 tr.find('.demo-reload').on('click', function(){
                   obj.upload(index, file);
                 });
-                
+                  // 上移
+                  tr.find('.demo-up').on('click',function () {
+                      var $tr = $(this).parents("tr");
+                      if ($tr.index() != 0) {
+                          $tr.fadeOut().fadeIn();
+                          $tr.prev().before($tr);
+                      }
+                  })
                 //删除
                 tr.find('.demo-delete').on('click', function(){
                   delete files[index]; //删除对应的文件
                   tr.remove();
                   uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
                 });
-                
-                demoListView.append(tr);
+                  demoListView.append(tr);
               });
             }
             ,done: function(res, index, upload){
@@ -431,4 +437,5 @@
       })();</script>
   </body>
 {include file="public/bianjiqi"}
+
 </html>

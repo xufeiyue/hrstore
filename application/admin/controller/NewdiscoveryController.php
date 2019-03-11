@@ -69,7 +69,19 @@ class NewdiscoveryController extends AdminController
 			$data['update_time'] = time();
 
 			$data['sort'] = input('post.sort/d');
+            $whether = ['on','off'];
+            $xianshi = input('post.xianshi/s');
+            $data['start_time'] = strtotime(input('post.start_time/s'));
 
+            $data['end_time'] = strtotime(input('post.end_time/s'));
+            if($xianshi == $whether[0]){
+
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
 			Db::startTrans();
             try{
 
@@ -84,13 +96,13 @@ class NewdiscoveryController extends AdminController
                         $arr[] = $data;
                     }
 
-                    (new NewDiscovery)->Common_Insert($arr);
+                    (new NewDiscovery)->Common_InsertAll($arr);
 
 
                 }else{
 
                     $data['store_id'] = $store_id;
-                    (new NewDiscovery)->Common_Insert($data);
+                    (new NewDiscovery)->Common_InsertAll($data);
 
                 }
 
@@ -130,7 +142,19 @@ class NewdiscoveryController extends AdminController
 			$data['update_time'] = time();
 
 			$data['sort'] = input('post.sort/d');
+            $whether = ['on','off'];
+            $xianshi = input('post.xianshi/s');
+            $data['start_time'] = strtotime(input('post.start_time/s'));
 
+            $data['end_time'] = strtotime(input('post.end_time/s'));
+            if($xianshi == $whether[0]){
+
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
 			$edit = (new NewDiscovery)->Common_Update($data,['id' => $id]);
 
 			if($edit)

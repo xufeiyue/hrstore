@@ -61,7 +61,7 @@ class CouponController extends Controller
 
         $data = $this->coupon_type->get_type_list($offset, $limit, $where, $order, "*,FROM_UNIXTIME(create_time)create_time,
         FROM_UNIXTIME(start_time,'%Y-%m-%d')start_time,FROM_UNIXTIME(end_time,'%Y-%m-%d')end_time,CONCAT(`face_value`,'元')face_value");
-
+        //print_r($data);exit;
         return json(["code" => 0, "msg" => "请求成功", 'data' => $data['data'], 'count' => $data['count']]);
 
     }
@@ -71,7 +71,7 @@ class CouponController extends Controller
     {
         if (Request::instance()->post()) {
             $whether = ['on','off'];
-            if($xianshi == $whether[0]){
+            if('on' == $whether[0]){
                 $data['xianshi'] = 0;
             }else{
                 $data['xianshi'] = 1;
@@ -122,7 +122,7 @@ class CouponController extends Controller
     public function edit_coupon_type(){
         if (Request::instance()->post()) {
             $whether = ['on','off'];
-            if($xianshi == $whether[0]){
+            if('on' == $whether[0]){
                 $data['xianshi'] = 0;
             }else{
                 $data['xianshi'] = 1;

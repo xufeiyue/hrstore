@@ -161,6 +161,16 @@ class ActivityController extends AdminController
 					$data['store_id'] = $store_id;
 
 					$state = input('post.state/s');
+                    $xianshi = input('post.xianshi/s');
+
+                    if ($xianshi == 'on') {
+
+                        $data['xianshi'] = 0;
+
+                    }else{
+
+                        $data['xianshi'] = 1;
+                    }
 
 					if ($state == 'on') {
 						
@@ -188,6 +198,7 @@ class ActivityController extends AdminController
 					$data['create_time'] = time();
 
 					$data['update_time'] = time();
+
 					
 					$add = (new Activity)->Common_Insert($data);
 				}
@@ -256,7 +267,8 @@ class ActivityController extends AdminController
 			$data['activity_end_time'] = strtotime(input('post.activity_end_time/s'));
 
 			$data['update_time'] = time();
-			
+
+
 			$edit = (new Activity)->Common_Update($data,['id' => $id]);
 
 			if($edit)
@@ -367,7 +379,18 @@ class ActivityController extends AdminController
 			$data['create_time'] = time();
 
 			$data['update_time'] = time();
-			
+
+            $whether = ['on','off'];
+            $xianshi = input('post.xianshi/s');
+            if($xianshi == $whether[0]){
+
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
+
 			$add = (new ActivityLibrary)->Common_Insert($data);
 
 			if($add)
@@ -399,7 +422,17 @@ class ActivityController extends AdminController
 			$data['activity_end_time'] = strtotime(input('post.activity_end_time/s'));
 
 			$data['update_time'] = time();
-			
+            $whether = ['on','off'];
+            $xianshi = input('post.xianshi/s');
+            if($xianshi == $whether[0]){
+
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
+
 			$edit = (new ActivityLibrary)->Common_Update($data,['id' => $id]);
 
 			if($edit)
@@ -642,7 +675,16 @@ class ActivityController extends AdminController
 			$data['update_time'] = time();
 
 			$data['store_id'] = $this->is_jurisdiction;
+            $whether = ['on','off'];
+            $xianshi = input('post.xianshi/s');
+            if($xianshi == $whether[0]){
 
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
 			$add = (new ActivityGoods)->Common_Insert($data);
 
 			if ($add) {
@@ -674,7 +716,16 @@ class ActivityController extends AdminController
 			$data['end_time'] = strtotime(input('post.end_time/s'));
 
 			$data['update_time'] = time();
+            $whether = ['on','off'];
+            $xianshi = input('post.xianshi/s');
+            if($xianshi == $whether[0]){
 
+                $data['xianshi'] = 0;
+
+            }else{
+
+                $data['xianshi'] = 1;
+            }
 			$edit = (new ActivityGoods)->Common_Update($data,['id' => $id]);
 
 			if ($edit)

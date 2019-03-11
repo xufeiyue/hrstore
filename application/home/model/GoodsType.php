@@ -11,13 +11,14 @@ class GoodsType extends Common
         parent::__construct($this->table);
     }
 
-    public function recommend_type($offset=0,$limit=10,$where=[],$order=[],$field=[],$store_id=0){
+    public function recommend_type($offset=0,$limit=10,$where=[],$order=[],$field=[],$store_id=0,$whereor=[]){
 
     	$data = Db::name($this->table)
     		->alias('g')
     		->join('store_type_recommend s',"s.type_id = g.id and s.store_id = {$store_id}",'left')
     		->join('store_type_sort t',"t.type_id = g.id and t.store_id = {$store_id}",'left')
 			->where($where)
+            ->where($whereor)
 			->limit($offset,$limit)
 			->order($order)
 			->field($field)
@@ -27,13 +28,14 @@ class GoodsType extends Common
     }
 
     //全部分类+排序
-    public function goods_type_all($where=[],$order=[],$field=[],$store_id=0){
+    public function goods_type_all($where=[],$order=[],$field=[],$store_id=0,$whereor){
 
     	$data = Db::name($this->table)
     		->alias('g')
     		->join('store_type_recommend s',"s.type_id = g.id and s.store_id = {$store_id}",'left')
     		->join('store_type_sort t',"t.type_id = g.id and t.store_id = {$store_id}",'left')
 			->where($where)
+            ->where($whereor)
 			->order($order)
 			->field($field)
 			->select();

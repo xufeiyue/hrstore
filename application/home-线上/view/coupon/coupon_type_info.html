@@ -1,0 +1,106 @@
+{include file="common/header"}
+<title>卡券详情</title>
+<!--<header data-am-widget="header" class="am-header am-header-default sq-head ">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.back()" class="">
+            <i class="am-icon-chevron-left"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        <a href="" class="">卡券详情</a>
+    </h1>
+</header>
+<div style="height: 49px;"></div>-->
+<div style="width: 100%;">
+    <img style="width: 100%; height: auto;" src="{$info[0]['card_ticket_type_img']}"/>
+</div>
+<div class="ZLY_XingQing">
+    <div style=" padding: 20px 0;width:100%;">
+        {if condition="$check_status eq 1"}
+        <img class="TiaoMa" style="width: 70%;display: none; border: 0; margin: 0 auto;" src="{:url('Coupon/barcode',['barcode' => $card_ticket_info['barcode']])}"/>
+        <span class="Quan_btn" style="display: block; margin: 20px auto;width: 60%;padding: 10px 0;color:#fff;text-align: center;background:#ff4f5f; ">立即使用</span>
+        {elseif condition="$check_status eq '2'"/}
+        <img class="TiaoMa" style="width: 70%;display: block; border: 0; margin: 0 auto;" src="{:url('Coupon/barcode',['barcode' => $card_ticket_info['barcode']])}"/>
+        {else /}
+        暂时不能使用
+        {/if}
+
+
+    </div>
+    <style>
+        .asdflasj p{
+            padding: 5px;
+            font-size: 1.5rem;
+        }
+    </style>
+    <div class="asdflasj" style="background: #ffffff; padding: 10px; border-radius: 5px; font-size: 1.3rem;">
+        <p>
+            卡券名称：{$info[0]['ticket_name']}
+        </p>
+        <p>
+            活动时间：{$info[0]['start_time']|date='Y-m-d',###}至{$info[0]['end_time']|date='Y-m-d',###}
+        </p>
+        <p>
+            适用范围：{$info[0]['scope_of_application']}
+        </p>
+        <p>
+            使用说明：{$info[0]['instructions']}
+
+        </p>
+    </div>
+</div>
+<!--底部导航-->
+<input type="hidden" name="card_ticket_id" id="card_ticket_id" value="{$card_ticket_id}" />
+<div style="height: 55px;"></div>
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-4 Icon-Name">
+        <li>
+            <a href="{:url('Index/index')}">
+                <span class="iconfont icon-bank-card-type"></span>
+                <span class="am-navbar-label">聚优惠</span>
+            </a>
+        </li>
+        <li>
+            <a href="{:url('Index/xfx')}">
+                <span class="iconfont icon-xin-1"></span>
+                <span class="am-navbar-label">新发现</span>
+            </a>
+        </li>
+        <li>
+            <a href="{:url('Index/rqph')}">
+                <span class="iconfont icon-paihangbang"></span>
+                <span class="am-navbar-label">人气榜</span>
+            </a>
+        </li>
+        <li>
+            <a href="{:url('Coupon/coupon_list')}" class="curr">
+                <span class="iconfont icon-qiaquan1"></span>
+                <span class="am-navbar-label">卡券</span>
+            </a>
+        </li>
+        <li>
+            <a href="{:url('Member/index')}" class="">
+                <span class="iconfont icon-Personalcenter"></span>
+                <span class="am-navbar-label">我的</span>
+            </a>
+        </li>
+
+</div>
+<script>
+    $(function () {
+        var card_ticket_id = $("#card_ticket_id").val();
+        $(".Quan_btn").click(function() {
+            $.post("{:url('Coupon/use_coupon')}",{card_ticket_id: card_ticket_id},function(res){
+                if(res.code == 200){
+                    $(".TiaoMa").css("display","block");
+                    $(".Quan_btn").css("display","none");
+                }else{
+                    alert(res.msg)
+                }
+            })
+
+        });
+
+    });
+</script>
+{include file="common/footer"}

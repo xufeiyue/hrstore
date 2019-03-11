@@ -1,0 +1,264 @@
+{include file="common/header"}
+<title>我的卡券</title>
+	<body style="background: #f5f5f5;">
+		<!--<header data-am-widget="header" class="am-header am-header-default sq-head ">
+			<div class="am-header-left am-header-nav">
+				<a href="javascript:history.back()" class="">
+					<i class="am-icon-chevron-left"></i>
+				</a>
+			</div>
+			<h1 class="am-header-title">
+  	            <a href="" class=""></a>
+            </h1>
+	    </header>
+	    <div style="height: 42px;"></div>-->
+	    <div class="whitebar">
+			<div data-am-widget="tabs" class="am-tabs am-tabs-d2">
+				<ul class="am-tabs-nav am-cf" style="position: fixed; top: 0px;">
+					<li class="am-active"><a>可使用</a></li>
+					<li class=""><a>已使用</a></li>
+					<li><a>已过期</a></li>
+				</ul>
+				<div style="height: 49px;"></div>
+			</div>
+		</div>
+		<div class="quan-box quan-box1">
+			<ul class="pingtai">
+				{volist name="list1" id="vo"}
+				<li class="pingtai-list">
+					<div class="jinE pingtai-jinE">
+						<h1><i>￥</i>{$vo.face_value}</h1>
+						<p>平台卡券</p>
+					</div>
+					<div class="pingtai-info">
+						<p>{$vo.ticket_name}</p>
+						<div class="pingtai-function">
+							<span>有效期：{$vo.end_time_desc}</span>
+							<a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">立即查看</a>
+						</div>
+					</div>
+				</li>
+				{/volist}
+			</ul>
+			<ul class="danpin">
+				{volist name="list2" id="vo"}
+				<li class="danpin-list">
+					<div class="jinE danpin-jinE">
+						<h1><i>￥</i>{$vo.face_value}</h1>
+						<p>单品卡券</p>
+					</div>
+					<div class="danpin-info">
+						<div class="danpin-product">
+							<img src="{$vo.goods_img}">
+						</div>
+						<div class="danpin-function">
+							<p>{$vo.ticket_name}</p>
+							<span>有效期：{$vo.end_time_desc}</span>
+						</div>
+						<a class="danpin-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">立即查看</a>
+					</div>
+				</li>
+				{/volist}
+			</ul>
+            
+            <!--满减券-->
+            <ul class="manjian">
+				{volist name="list7" id="vo"}
+                <li class="manjian-list">
+                    <div class="jinE manjian-jinE">
+                        <h1><i>￥</i>{$vo.small_value}</h1>
+                        <p>满减卡券</p>
+                    </div>
+                    <div class="pingtai-info manjian-info">
+                        <p>{$vo.ticket_name}</p>
+                        <div class="pingtai-function">
+                            <span>有效期：{$vo.end_time_desc}</span>
+                            <a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">立即查看</a>
+                        </div>
+                    </div>
+                </li>
+               {/volist}
+            </ul>
+    		<!--满减券-->
+		</div>
+		<div class="quan-box quan-box2">
+			<ul class="pingtai">
+				{volist name="list3" id="vo"}
+				<li class="pingtai-list" style="position: relative;">
+					<div class="jinE pingtai-jinE">
+						<h1><i>￥</i>{$vo.face_value}</h1>
+						<p>平台卡券</p>
+					</div>
+					<div class="pingtai-info">
+						<p>{$vo.ticket_name}</p>
+						<div class="pingtai-function">
+							<span>有效期：{$vo.end_time_desc}</span>
+							<a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">查看</a>
+						</div>
+					</div>
+				</li>
+				{/volist}
+			</ul>
+			<ul class="danpin">
+				{volist name="list4" id="vo"}
+				<li class="danpin-list" style="position: relative;">
+					<div class="jinE danpin-jinE">
+						<h1><i>￥</i>{$vo.face_value}</h1>
+						<p>单品卡券</p>
+					</div>
+					<div class="danpin-info">
+						<div class="danpin-product">
+							<img src="{$vo.goods_img}">
+						</div>
+						<div class="danpin-function">
+							<p>{$vo.ticket_name}</p>
+							<span>有效期：{$vo.end_time_desc}</span>
+						</div>
+						<a class="danpin-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">查看</a>
+					</div>
+				</li>
+				{/volist}
+			</ul>
+            <!--满减券-->
+            <ul class="manjian">
+				{volist name="list8" id="vo"}
+                <li class="manjian-list">
+                    <div class="jinE manjian-jinE">
+                        <h1><i>￥</i>{$vo.small_value}</h1>
+                        <p>满减卡券</p>
+                    </div>
+                    <div class="pingtai-info manjian-info">
+                        <p>{$vo.ticket_name}</p>
+                        <div class="pingtai-function">
+                            <span>有效期：{$vo.end_time_desc}</span>
+                            <a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">查看</a>
+                        </div>
+                    </div>
+                </li>
+               {/volist}
+            </ul>
+    		<!--满减券-->
+		</div>
+		<div class="quan-box quan-box3">
+			<ul class="pingtai">
+				{volist name="list5" id="vo"}
+				<li class="pingtai-list" style="position: relative;">
+					<div class="jinE pingtai-jinE">
+						<h1><i>￥</i>{$vo.face_value}</h1>
+						<p>平台卡券</p>
+					</div>
+					<div class="pingtai-info">
+						<p>{$vo.ticket_name}</p>
+						<div class="pingtai-function">
+							<span>有效期：{$vo.end_time_desc}</span>
+							<a class="pingtai-btn">立即使用</a>
+						</div>
+					</div>
+					<div class="gy-pic"><img src="__IMAGES__/guoqi.png"/></div>
+				</li>
+				{/volist}
+			</ul>
+			<ul class="danpin">
+				{volist name="list6" id="vo"}
+				<li class="danpin-list" style="position: relative;">
+					<div class="jinE danpin-jinE">
+						<h1><i>￥</i>{$vo.face_value}</h1>
+						<p>单品卡券</p>
+					</div>
+					<div class="danpin-info">
+						<div class="danpin-product">
+							<img src="{$vo.goods_img}">
+						</div>
+						<div class="danpin-function">
+							<p>{$vo.ticket_name}</p>
+							<span>有效期：{$vo.end_time_desc}</span>
+						</div>
+						<a class="danpin-btn">立即使用</a>
+					</div>
+					<div class="gy-pic"><img src="__IMAGES__/guoqi.png"/></div>
+				</li>
+				{/volist}
+			</ul>
+            <!--满减券-->
+            <ul class="manjian">
+				{volist name="list9" id="vo"}
+                <li class="manjian-list">
+                    <div class="jinE manjian-jinE">
+                        <h1><i>￥</i>{$vo.small_value}</h1>
+                        <p>满减卡券</p>
+                    </div>
+                    <div class="pingtai-info manjian-info">
+                        <p>{$vo.ticket_name}</p>
+                        <div class="pingtai-function">
+                            <span>有效期：{$vo.end_time_desc}</span>
+                            <a class="pingtai-btn">立即使用</a>
+                        </div>
+                    </div>
+                    <div class="gy-pic"><img src="__IMAGES__/guoqi.png"/></div>
+                </li>
+               {/volist}
+            </ul>
+    		<!--满减券-->
+		</div>
+		<!--底部导航-->
+		<div style="height: 55px;"></div>
+		<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
+			<ul class="am-navbar-nav am-cf am-avg-sm-4 Icon-Name">
+				<li>
+					<a href="{:url('Index/index')}" class="curr">
+						<span class="iconfont icon-bank-card-type"></span>
+						<span class="am-navbar-label">聚优惠</span>
+					</a>
+				</li>
+				<li>
+					<a href="{:url('Index/xfx')}">
+						<span class="iconfont icon-xin-1
+"></span>
+						<span class="am-navbar-label">新发现</span>
+					</a>
+				</li>
+				<li>
+					<a href="{:url('Index/rqph')}">
+						<span class="iconfont icon-paihangbang"></span>
+						<span class="am-navbar-label">人气榜</span>
+					</a>
+				</li>
+				<li>
+					<a href="{:url('Coupon/coupon_list')}" class="">
+						<span class="iconfont icon-qiaquan1"></span>
+						<span class="am-navbar-label">卡券</span>
+					</a>
+				</li>
+				<li>
+					<a href="{:url('Member/index')}">
+						<span class="iconfont icon-Personalcenter"></span>
+						<span class="am-navbar-label">我的</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		
+		<script>
+			$(function () {
+				var tabsnav=$(".am-tabs-nav li");
+				var quanbox=$(".quan-box");
+
+				$(tabsnav[0]).click(function() {
+					var num=$(this).index();
+					$(quanbox).css("display","none");
+					$(quanbox[num]).css("display","block");
+				});
+				$(tabsnav[1]).click(function() {
+					var num=$(this).index();
+					$(quanbox).css("display","none");
+					$(quanbox[num]).css("display","block");
+				});
+				$(tabsnav[2]).click(function() {
+					var num=$(this).index();
+					$(quanbox).css("display","none");
+					$(quanbox[num]).css("display","block");
+				});
+
+			});
+		</script>
+{include file="common/footer"}
