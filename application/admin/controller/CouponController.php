@@ -87,6 +87,8 @@ class CouponController extends Controller
             $data['ticket_type'] = input('post.ticket_type');
             $data['is_use'] = 2;
             $data['create_time'] = time();
+            $data['pici'] = input('post.pici');
+            $data['des'] = input('post.des');
             // 判断是否为品类券
             if($data['ticket_type'] == 3){
                 // 向th_card_ticket表插入一条记录
@@ -137,6 +139,7 @@ class CouponController extends Controller
             $data['end_time_desc'] = input('post.end_time');
             $data['face_value'] = input('post.face_value');
             $data['ticket_type'] = input('post.ticket_type');
+            $data['des'] = input('post.des');
             $data['create_time'] = time();
             $add = $this->coupon_type->Common_Update($data,array('card_type_id'=>$card_type_id));
             if ($add) {

@@ -36,9 +36,10 @@ class CouponController extends CommonController
         $where_pt['is_use'] = 2;
         $where_pt['status'] = 1;
         $where_pt['ticket_type'] = 1;
-        $where_pt['card_type_id'] = array('not in','31'); // 不显示新人注册券和完善资料券
+        $where_pt['card_type_id'] = array('not in',"{$this->this_card_type_id},31"); // 不显示新人注册券和完善资料券
         $field = [];
         $order=[];
+        $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
         $coupon_type_pt_list = $coupon_type_model->selAll($where_pt,$order,$field,$whereor);
         // 获取我的所有品类优惠券
         $my_coupon_type_list1 = $coupon_type_model->getRegCoupon(['mr.member_id'=>$this->userId],"ctt.card_type_id");
@@ -135,12 +136,14 @@ class CouponController extends CommonController
         $w['a_l.card_type_id'] = $card_type_id;
         $field = ['a_l.*'];
         $info = $coupon_type_model->getInfo($w,$field);
+
         $this->assign('info',$info);
         $this->assign('card_ticket_id',$card_ticket_id);
         // 获取此条码是否被使用
         $card_ticket_model = new Coupon();
         $card_ticket_info = $card_ticket_model->Common_Find(array('card_ticket_id'=>$card_ticket_id));
-        $check_status = $card_ticket_model->get_member_card_ticket_relation_info(array('card_ticket_id'=>$card_ticket_id));
+
+        $check_status = $card_ticket_model->get_member_card_ticket_relation_info(array('card_ticket_id'=>$card_ticket_id,'member_id'=>$this->userId));
         $this->assign('check_status',$check_status['status']);
         $this->assign('card_ticket_info',$card_ticket_info);
         return view();
@@ -265,7 +268,7 @@ class CouponController extends CommonController
     // 首次登陆领取红包
     public function get_receive_coupon(){
 
-        $card_type_id = 30;
+        $card_type_id = $this->this_card_type_id;
         $data['member_id'] = $this->userId;
         // 根据card_type_id分配 card_ticket_id
         $card_ticket_model = new Coupon();

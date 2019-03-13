@@ -50,6 +50,7 @@ class Coupon extends Common
 left join th_card_ticket as ct on ct.card_ticket_id = r.card_ticket_id 
 left join th_card_ticket_type as ctt on ctt.card_type_id = ct.card_type_id 
 where r.member_id = $member_id and r.`status` = '1' and ctt.end_time > $time and ctt.ticket_type='1'";
+        //echo $sql;exit;
         return Db::query($sql);
     }
 
@@ -127,6 +128,7 @@ where r.member_id = $member_id and ctt.end_time < $time and ctt.ticket_type='2'"
 left join th_card_ticket as ct on ct.card_ticket_id = r.card_ticket_id 
 left join th_card_ticket_type as ctt on ctt.card_type_id = ct.card_type_id 
 where r.member_id = $member_id and r.`status` = '1' and ctt.end_time > $time and ctt.ticket_type='3'";
+        //echo $sql;exit;
         return Db::query($sql);
     }
 
@@ -163,7 +165,7 @@ where r.member_id = $member_id and ctt.end_time < $time and ctt.ticket_type='3'"
     }
     // 查询重复领取的card_ticket_id
     public function get_cf_list(){
-        $sql = "select mr.card_ticket_id,count(*) as c from th_member_card_ticket_relation as mr left join th_card_ticket as ct on ct.card_ticket_id = mr.card_ticket_id where ct.card_type_id = 30 GROUP BY mr.card_ticket_id HAVING c>1";
+        $sql = "select mr.card_ticket_id,count(*) as c from th_member_card_ticket_relation as mr left join th_card_ticket as ct on ct.card_ticket_id = mr.card_ticket_id where ct.card_type_id = 78 GROUP BY mr.card_ticket_id HAVING c>1";
         return Db::query($sql);
     }
 
@@ -188,7 +190,7 @@ where r.member_id = $member_id and ctt.end_time < $time and ctt.ticket_type='3'"
         $count = count($list);
         //echo $count;
         // 查询未使用的优惠券
-        $sql1 = "select card_ticket_id from th_card_ticket where card_type_id = 30 and status = '2' limit 0,$count";
+        $sql1 = "select card_ticket_id from th_card_ticket where card_type_id = 78 and status = '2' limit 0,$count";
         $list1 = Db::query($sql1);
         //echo '<pre>';print_r($list);exit;
         foreach($list as $key=>$val){

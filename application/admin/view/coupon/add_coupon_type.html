@@ -93,12 +93,27 @@
                 <textarea name="scope_of_application" placeholder="请输入内容" class="layui-textarea" id="scope_of_application"></textarea>
             </div>
         </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea name="des" placeholder="请输入内容" class="layui-textarea" id="des"></textarea>
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">显示状态：</label>
             <div class="layui-input-block">
               <input type="checkbox" name="xianshi" lay-skin="switch" lay-filter="switchTest" lay-text="显示|不显示">
             </div>
           </div>
+        <div class="pici">
+            <label for="ticket_name" class="layui-form-label">
+                <span class="x-red">*</span>批次
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="pici" name="pici" required="" lay-verify="pici"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
         <div class="layui-form-item">
             <button  class="layui-btn" lay-filter="add" lay-submit="">
                 增加
@@ -130,12 +145,12 @@
         //日期时间选择器
         laydate.render({
             elem: '#start_time'
-            ,type: 'date'
+            ,type: 'datetime'
         });
 
         laydate.render({
             elem: '#end_time'
-            ,type: 'date'
+            ,type: 'datetime'
         });
 
         upload.render({

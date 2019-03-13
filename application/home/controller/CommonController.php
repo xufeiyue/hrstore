@@ -9,6 +9,8 @@ class CommonController extends Controller
 {
 	public $store_id;
 	public $userId;
+	public $this_card_type_id;
+	public $or_card_type_id;
 
 	//网页授权
 	public function _initialize(){
@@ -24,6 +26,10 @@ class CommonController extends Controller
 		$this->store_id = 1;
 
 		$this->userId = 1;
+
+		$this->this_card_type_id = 67;
+
+		$this->or_card_type_id = "30,67";
 
 		if (session('wechat_user')) {
 			

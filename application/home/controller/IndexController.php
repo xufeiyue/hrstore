@@ -31,7 +31,7 @@ class IndexController extends CommonController
     $this->title = '首页';
 
         // 判断5元红包是否有剩余
-        $num = (New Coupon())->getNum(['card_type_id'=>30,'status'=>2]);
+        $num = (New Coupon())->getNum(['card_type_id'=>$this->this_card_type_id,'status'=>2]);
         if($num>0){
             $this->assign('is_display',1);
         }else{
@@ -60,7 +60,6 @@ class IndexController extends CommonController
             session('store_id',$store_id);
         }
     }
-
     // 增加页面访问量
     if($this->store_id > 0){
         (new Store())->Common_SetInc('visits_num',['store_id'=>$this->store_id]);
@@ -79,7 +78,7 @@ class IndexController extends CommonController
     $coupon_model = new CouponType();
 
     $w['mr.member_id'] = $this->userId;
-    $w['ctt.card_type_id'] = 30;
+    $w['ctt.card_type_id'] = array('in',$this->or_card_type_id);
     $c = $coupon_model->getRegCoupon($w);
     if(empty($c)){
       $rec_key = 1;
@@ -752,5 +751,8 @@ class IndexController extends CommonController
 
   }
 
+  public function sid(){
+	    echo $this->userId;
+  }
 
 }

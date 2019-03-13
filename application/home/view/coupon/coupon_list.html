@@ -87,9 +87,8 @@
                 <p>平台卡券</p>
             </div>
             <div class="pingtai-info">
-                <p>{$vo.ticket_name}<br>
-                    全区限领5万张，领完即止。
-                </p>
+                <p>{$vo.ticket_name}</p>
+                    <em>{$vo.des}</em>
                 <div class="pingtai-function">
                     <span>有效期：{$vo.end_time_desc}</span>
                     <!--<a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id']])}">立即领取</a>-->
@@ -104,7 +103,7 @@
                 <p>平台卡券</p>
             </div>
             <div class="pingtai-info">
-                <p>{$vo.ticket_name}<br />全区限领5万张，领完即止。</p>
+                <p>{$vo.ticket_name}</p><em>{$vo.des}</em>
                 <div class="pingtai-function">
                     <span>有效期：{$vo.end_time_desc}</span>
                     <!-- <a class="pingtai-btn">立即使用</a> -->
@@ -185,6 +184,7 @@
             </div>
             <div class="pingtai-info manjian-info">
                 <p>{$vo3.ticket_name}</p>
+                <em>{$vo3.des}</em>
                 <div class="pingtai-function">
                     <span>有效期：{$vo3.end_time_desc}</span>
                     <a class="pingtai-btn lingqu_hide_{$vo3.card_type_id}" href="javascript:get_coupon({$vo3.card_type_id})">立即领取</a>
@@ -200,6 +200,7 @@
             </div>
             <div class="pingtai-info manjian-info">
                 <p>{$vo3.ticket_name}</p>
+                <em>{$vo3.des}</em>
                 <div class="pingtai-function">
                     <span>有效期：{$vo3.end_time_desc}</span>
                 </div>

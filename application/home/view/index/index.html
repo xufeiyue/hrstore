@@ -248,6 +248,17 @@
         color: #fff;
         text-indent: 10px;
     }
+    .shouCi_box1 img,.WanShan_box img{display:block;margin:0 auto;width:70%;height:auto;position:fixed;top:25%;left:15%;}
+    .shouCi_box1{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+    }
+    .shouCi_box1 img{width:110%;left:-5%;top:0%;}
 </style>
 <!--首次一元红包弹出层-->
 {if condition="$rec_key eq 1"}
@@ -261,8 +272,8 @@
 {/if}
 
 {if condition="$kaquan eq 1"}
-<div class="shouCi_box TCC_Box1">
-    <img src="http://huaruncard-test.redh5.cn/static/home/images/gengduoyouhuiquan.jpg">
+<div class="shouCi_box1 TCC_Box1" style="display: block">
+    <img src="http://huaruncard.redh5.cn/static/home/images/gengduoyouhuiquan.png">
 </div>
 {/if}
 <!--首次一元红包弹出层-->
@@ -426,6 +437,7 @@
         $(".lqcg_box").hide()
     })
     $(".TCC_Box1").click(function(){
+        $(".TCC_Box1").css('display','none');
         window.location.href = '/home/coupon/coupon_list'
     })
 </script>
