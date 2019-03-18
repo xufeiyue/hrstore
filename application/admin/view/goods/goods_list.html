@@ -19,7 +19,7 @@
           {if condition="$is_jurisdiction == 0"}
           <div class="layui-inline">
             <select id="store_id" name="store_id">
-              <option value="0">请选择</option>
+              <option value="0">请选择门店</option>
               <option value="-1">平台</option>
               {volist name="store" id="vo"}
                 <option value="{$vo['id']}">{$vo['name']}</option>

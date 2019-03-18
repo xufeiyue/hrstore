@@ -1120,4 +1120,5 @@ class StatisticalController extends AdminController
 		return json(["code" =>  0, "msg" => "请求成功", 'data' => $data['data'] , 'count' => $data['count']]);
 	}
 
+
 }
