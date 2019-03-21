@@ -4,3 +4,8 @@ composer.lock
 application/.htaccess
 application/config.php
 application/database.php
+xiugai.sql
+MP_verify_uqBlXUAGno7ueL85.txt
+hwwebscan_verify.html
+.gitignore
+public/.*
