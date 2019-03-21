@@ -15,103 +15,43 @@
     <div class="layui-btn-group demoTable">
         <button class="layui-btn" onclick="a();">按券统计</button>
     </div>
+    <table class="layui-table" id="demo" lay-filter="useruv">
+    </table>
 </div>
 <div class="layui-row" id="aqtj" style="display: block;">
-    <div class="x-body">
-        <div class="layui-row">
-            <div class="demoTable layui-form layui-col-md12 x-so">
-                <div class="layui-inline">
-                    <select id="card_type" name="card_type">
-                        <option value="0">请选择</option>
-                        <option value="1">平台</option>
-                        <option value="2">单品</option>
-                        <option value="3">品类</option>
-                    </select>
-                </div>
-                <div class="layui-inline">
-                    <input class="layui-input" placeholder="开始日" name="start_time" id="start">
-                    <input class="layui-input" placeholder="截止日" name="end_time" id="end">
-                </div>
-                <!--<div class="layui-inline">-->
-                    <!--<select id="ff_type" name="ff_type">-->
-                        <!--<option value="0">请选择</option>-->
-                        <!--<option value="1">发放数量</option>-->
-                        <!--<option value="2">领取数量</option>-->
-                    <!--</select>-->
-                <!--</div>-->
-                <div class="layui-inline">
-                <select id="store_id" name="store_id">
-                    <option value="0">请选择门店</option>
-                    <option value="-1">平台</option>
-                    {volist name="store" id="vo"}
-                    <option value="{$vo['id']}">{$vo['name']}</option>
-                    {/volist}
-                </select>
-                </div>
-                <button class="layui-btn" data-type="reload">搜索</button>
-            </div>
-        </div>
-        <table class="layui-table" id="demo1" lay-filter="useruv" lay-data="{id:'idTest'}">
-        </table>
-    </div>
+
+
+<div class="layui-inline">
+<select id="store_id" name="store_id">
+    <option value="0">请选择优惠券类型</option>
+    <option value="1">平台券</option>
+    <option value="2">品类券</option>
+</select>
 </div>
+<div class="demoTable layui-form layui-col-md12 x-so">
+<div class="layui-inline">
+    <input class="layui-input" name="goods_name" placeholder="请输入商品名称" id="demoReload" autocomplete="off">
+</div>
+
+<button class="layui-btn" data-type="reload">搜索</button>
+</div>
+</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" name="state" value="{{d.id}}" lay-skin="switch" lay-text="上架|下架" lay-filter="stateDemo" {{ d.state == 0 ? 'checked' : '' }}>
+
+</script>
+<script type="text/html" id="switchTpl1">
+    <input type="checkbox" name="xianshi" value="{{d.id}}" lay-skin="switch" lay-text="显示|不显示" lay-filter="stateDemo1" {{ d.xianshi == 0 ? 'checked' : '' }}>
+
+</script>
 <script>
-    layui.use(['table','laydate'],function () {
-        var laydate = layui.laydate;
-        var table = layui.table;
-        var form = layui.form;
+    function a() {
 
-        laydate.render({
-            elem:'#start'
-        });
-
-        laydate.render({
-            elem:'#end'
-        });
-
-        var tableIns = table.render({
-            elem: '#demo1'
-            ,method: 'post'
-            // ,toolbar: 'default'
-            ,url: '/Admin/Statistics/statistics_list' //数据接口
-            ,page: true //开启分页
-            ,cellMinWidth : 95
-            ,height : "600"
-            ,limit: 20
-            ,id: 'idTest'
-            ,cols: [[ //表头
-                {checkbox: true, fixed: true,style:'height:100px;'},
-                {field: 'store_name', title: '店铺名称',align: 'center'}
-                ,{field: 'nums', title: '领取数量',align: 'center'}
-            ]]
-        });
-
-        var $ = layui.$, active = {
-            reload: function(){
-                var card_type = $('#card_type');
-                var start_time = $('#start');
-                var end_time = $('#end');
-                var store_id = $('#store_id');
-                //执行重载
-                tableIns.reload({
-                    page: {
-                        curr: 1 //重新从第 1 页开始
-                    }
-                    ,where: {
-                        card_type: card_type.val(),
-                        start_time: start_time.val(),
-                        end_time: end_time.val(),
-                        store_id:store_id.val()
-                    }
-                })
-            }
-        };
-
-        $('.demoTable .layui-btn').on('click', function(){
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
-        });
-    })
+    }
 </script>
 </body>
 

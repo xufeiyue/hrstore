@@ -302,7 +302,7 @@
             }
             ,done: function(res, index, upload){
               if(res.code == 0){ //上传成功
-                $("#upload").append('<input type="hidden" name="file[]" value="'+res.data+'">');
+                $("#upload").append('<input type="hidden" name="file[]" value="'+res.data+'">');111
                 $("#upload").append('<input type="hidden" name="file_detail[]" value="'+res.info+'">');
                 var tr = demoListView.find('tr#upload-'+ index)
                 ,tds = tr.children();

@@ -37,12 +37,4 @@ class Coupon extends Common
             return 0;
         }
     }
-
-    public function getAllCoupon(){
-        $sql = "SELECT count(*), card_ticket_type_res.card_type_id, card_ticket_type_res.ticket_name FROM th_member_card_ticket_relation
- AS r LEFT JOIN th_card_ticket AS ct ON ct.card_ticket_id = r.card_ticket_id LEFT JOIN 
- (( SELECT card_type_id, ticket_name, ticket_type FROM th_card_ticket_type WHERE `status` = 1 ) card_ticket_type_res) 
- ON card_ticket_type_res.card_type_id = ct.card_type_id group by card_ticket_type_res.card_type_id";
-        return Db::query($sql);
-    }
 }
