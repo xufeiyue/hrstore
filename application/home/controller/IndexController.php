@@ -30,13 +30,15 @@ class IndexController extends CommonController
 
     $this->title = '首页';
 
-        // 判断5元红包是否有剩余
-        $num = (New Coupon())->getNum(['card_type_id'=>$this->this_card_type_id,'status'=>2]);
-        if($num>0){
-            $this->assign('is_display',1);
-        }else{
-            $this->assign('is_display',2);
-        }
+    // 判断当前档期的5元红包是否有剩余
+    $num = (New Coupon())->getThisDqKuCun($this->this_card_type_id);
+    if($num>0){
+        $this->assign('is_display',1);
+    }else{
+        $this->assign('is_display',2);
+    }
+
+
     /*
        *  判断用户是否选过店
      * */
@@ -64,8 +66,6 @@ class IndexController extends CommonController
     if($this->store_id > 0){
         (new Store())->Common_SetInc('visits_num',['store_id'=>$this->store_id]);
     }
-
-
 
 
 
@@ -121,16 +121,16 @@ class IndexController extends CommonController
     $store = (New Store())->Common_Find(['store_id'=>$store_id]);
     $activity = (new Activity)->Common_Find(['banner' => 0, 'store_id' => $store_id]); //轮播活动
 
-    $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '首页']);
+    $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '首页轮播图']);
       $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
     $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store_id, 'status' => 0,
-        'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url'],$whereor);
+        'type_id' => $AdvertisementType['id']],['sort'=>'asc'],['id','image','url'],$whereor);
 
     // 底部图片
 
-      $AdvertisementType_db = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '首页底部']);
+      $AdvertisementType_db = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '厂商周广告位']);
 
-      $Advertisement_db = (new Advertisement)->Common_All_Select(['store_id' =>$store_id, 'status' => 0, 'type_id' => $AdvertisementType_db['id']],['id' => 'desc'],['id','image','url'],$whereor);
+      $Advertisement_db = (new Advertisement)->Common_All_Select(['store_id' =>$store_id, 'status' => 0, 'type_id' => $AdvertisementType_db['id']],['id' => 'asc'],['id','image','url'],$whereor);
 
       $where = ['store_id' => $store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0];
     //$whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
@@ -512,12 +512,10 @@ class IndexController extends CommonController
 
   //底部新发现
   public function xfx(){
-
-
     $this->title = '新发现 新生活';
     $time = time();
       $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
-    $NewDiscovery = (new NewDiscovery)->Common_All_Select(['status' => 0,'store_id' => $this->store_id], ['sort' => 'desc','id' => 'desc'],['id','src','url'],$whereor);
+    $NewDiscovery = (new NewDiscovery)->Common_All_Select(['status' => 0,'store_id' => $this->store_id], ['sort' => 'asc','id' => 'desc'],['id','src','url'],$whereor);
 
     $this->assign('title',$this->title);
 
@@ -530,12 +528,12 @@ class IndexController extends CommonController
   public function rqph(){
 
     $this->title = '人气商品排行榜';
-    $time = time();
-
-    $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
-    $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '人气']);
-
-    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $this->store_id, 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url'],$whereor);
+      $time = time();
+      $store_id = $this->store_id;
+      $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '人气']);
+      $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+      $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store_id, 'status' => 0,
+          'type_id' => $AdvertisementType['id']],['id' => 'asc'],['id','image','url'],$whereor);
 
     $offset = 0;
 
@@ -571,10 +569,13 @@ class IndexController extends CommonController
   public function tuijian(){
 
     $this->title = '推荐爆款';
+        $time = time();
+        $store_id = $this->store_id;
+      $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '爆款']);
+      $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+      $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store_id, 'status' => 0,
+          'type_id' => $AdvertisementType['id']],['id' => 'asc'],['id','image','url'],$whereor);
 
-    $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '爆款']);
-
-    $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $this->store_id, 'status' => 0, 'type_id' => $AdvertisementType['id']],['id' => 'desc'],['id','image','url']);
 
     $where = ['store_id' => $this->store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0];
 

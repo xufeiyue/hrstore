@@ -1,5 +1,6 @@
 <?php
 namespace app\admin\controller;
+use app\admin\model\User;
 use think\Controller;
 use think\Db;
 use think\Request;
@@ -33,8 +34,10 @@ class NewdiscoveryController extends AdminController
 		$where = [];
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
-			
-			$where['a.store_id'] = $this->is_jurisdiction;
+
+            $admininfo = (new User())->find(session('user_id'));
+            //var_dump($admininfo);exit;
+            $where['a.store_id'] = ['in',$admininfo['store_id']];
 		}
 
 		$offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;

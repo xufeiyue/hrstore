@@ -545,8 +545,9 @@ class GoodsController extends AdminController
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 
 			$goods_brand = (new GoodsBrand)->type(['store_id' => $this->is_jurisdiction , 'status' => 0],$order);
-
-			$activity = (new ActivityGoods)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_goods_name activity_name']);
+            $time = time();
+            $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+			$activity = (new ActivityGoods)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_goods_name activity_name'],$whereor);
 
 			$this->assign('activity',$activity);
 
@@ -686,8 +687,9 @@ class GoodsController extends AdminController
 			$goods_type = (new GoodsType)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
 
 			$goods_brand = (new GoodsBrand)->type(['store_id' => ['in',"0,{$list['store_id']}"] , 'status' => 0],$order);
-
-			$activity = (new ActivityGoods)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_goods_name activity_name']);
+            $time = time();
+            $whereor = "((xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time}))";
+			$activity = (new ActivityGoods)->Common_All_Select(['store_id' => $this->is_jurisdiction , 'status' => 0],['id' => 'desc'],['id','activity_goods_name activity_name'],$whereor);
 
 			$goods_type = Model('Common/Tree')->toFormatTree($goods_type,'goods_type_name');
 

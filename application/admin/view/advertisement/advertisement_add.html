@@ -2,7 +2,7 @@
     <div class="x-body">
         <form class="layui-form">
 
-            {if condition="$is_jurisdiction == 0"}
+
             <div class="layui-form-item">
                 <label  for="store_id" class="layui-form-label">
                     <span class="x-red">*</span>选择店铺
@@ -19,7 +19,7 @@
                 <!-- </select> -->
               </div>
             </div>
-            {/if}
+
             <div class="layui-form-item">
               <label  for="type_id" class="layui-form-label">
                 <span class="x-red">*</span>选择类型
@@ -79,11 +79,20 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label for="sort" class="layui-form-label">
+                    <span class="x-red">*</span>排序
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="sort" name="sort" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">显示状态：</label>
                 <div class="layui-input-block">
                     <input type="checkbox" name="xianshi" lay-skin="switch" lay-filter="switchTest" lay-text="显示|不显示">
                 </div>
             </div>
+
           <div class="layui-form-item">
               <label for="L_repass" class="layui-form-label">
               </label>

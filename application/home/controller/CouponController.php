@@ -121,6 +121,8 @@ class CouponController extends CommonController
             }else{
                 $coupon_type_pl_list[$key2]['my_have_status'] = 2;//没有这个优惠券
             }
+            $str = explode(' ',$val2['end_time_desc']);
+            $coupon_type_pl_list[$key2]['end_time_desc'] = $str[0];
         }
         //print_r($my_coupon_type_list);exit;
         $this->assign('coupon_type_pt_list',$coupon_type_pt_list);
@@ -147,6 +149,24 @@ class CouponController extends CommonController
         $this->assign('check_status',$check_status['status']);
         $this->assign('card_ticket_info',$card_ticket_info);
         return view();
+    }
+
+    public function coupon_type_pt_info(){
+        $card_type_id = input('card_type_id/d');
+        $card_ticket_id = input('card_ticket_id/d');
+        $card_ticket_model = new Coupon();
+        $info = $card_ticket_model->getTicketInfo($card_ticket_id);
+
+        $this->assign('info',$info);
+        $this->assign('card_ticket_id',$card_ticket_id);
+        // 获取此条码是否被使用
+
+        $card_ticket_info = $card_ticket_model->Common_Find(array('card_ticket_id'=>$card_ticket_id));
+
+        $check_status = $card_ticket_model->get_member_card_ticket_relation_info(array('card_ticket_id'=>$card_ticket_id,'member_id'=>$this->userId));
+        $this->assign('check_status',$check_status['status']);
+        $this->assign('card_ticket_info',$card_ticket_info);
+        return view('coupon_type_info');
     }
     // 条形码接口
     public function barcode(){
@@ -207,6 +227,7 @@ class CouponController extends CommonController
         $data['card_ticket_id'] = $card_ticket_info['card_ticket_id'];
         $data['status'] = 1;
         $data['create_time'] = time();
+        $data['store_id'] = $this->store_id;
         $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket_info['card_ticket_id']),array('status'=>1),1);
 
         if($res){
@@ -236,12 +257,14 @@ class CouponController extends CommonController
             $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
             $data['status'] = 1;
             $data['create_time'] = time();
+            $data['store_id'] = $this->store_id;
             $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1),1);
         }else{
             $card_ticket = $card_ticket_model->Common_Find(array('card_type_id'=>$card_type_id));
             $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
             $data['status'] = 1;
             $data['create_time'] = time();
+            $data['store_id'] = $this->store_id;
             $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1),2);
         }
         if($res){
@@ -270,13 +293,15 @@ class CouponController extends CommonController
 
         $card_type_id = $this->this_card_type_id;
         $data['member_id'] = $this->userId;
-        // 根据card_type_id分配 card_ticket_id
+        // 根据card_type_id以及当前时间分配该批次的 card_ticket_id
         $card_ticket_model = new Coupon();
-        $card_ticket = $card_ticket_model->Common_Find(array('card_type_id'=>$card_type_id,'status'=>2));
+        $pici = $card_ticket_model->thisPici();
+        $card_ticket = $card_ticket_model->Common_Find(array('card_type_id'=>$card_type_id,'status'=>2,'pici'=>$pici));
         if(!empty($card_ticket)){
             $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
             $data['status'] = 1;
             $data['create_time'] = time();
+            $data['store_id'] = $this->store_id;
             $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1),1);
             if($res){
                 return json(['code' => 200 , 'msg' => '领取成功']);

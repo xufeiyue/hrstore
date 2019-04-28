@@ -1,5 +1,7 @@
 <?php
 namespace app\home\controller;
+use app\home\model\Advertisement;
+use app\home\model\AdvertisementType;
 use think\Controller;
 use app\home\model\Activity;
 use app\home\model\ActivityLog;
@@ -40,7 +42,7 @@ class ActivityController extends CommonController
 
 			(new ActivityLog)->Common_Insert($data);
 		}
-		
+
 
 		$Activity = (new Activity)->Common_Find(['id' => $id],[],['id','activity_name','activity_url','activity_detail']);
 
@@ -55,12 +57,18 @@ class ActivityController extends CommonController
 	public function activity_default(){
 
 		$id = input('id/d');
-
 		$time = time();
+		$store_id = $this->store_id;
+        $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '首页轮播图']);
+        $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+        $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store_id, 'status' => 0,
+            'type_id' => $AdvertisementType['id']],['id' => 'asc'],['id','image','url'],$whereor);
+        $this->assign('Advertisement',$Advertisement);
 
-		$whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
+		$whereor = "((xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time}))";
 
-		$goods_list = (new Goods)->Common_All_Select(['activity_id' => $id, 'store_id' => $this->store_id],['id' => 'desc'],['id','goods_name','goods_original_price','goods_present_price','goods_images'],$whereor);
+		$goods_list = (new Goods)->Common_All_Select(['activity_id' => $id, 'store_id' => $this->store_id,'state'=>0,'status'=>0],['hd_goods_px' => 'asc'],['id','goods_name','goods_original_price','goods_present_price','goods_images'],$whereor);
+        $Activity = (new Activity)->get_activity_goods(['id' => $id]);
 
 		foreach ($goods_list as $key => $value) {
 
@@ -74,7 +82,7 @@ class ActivityController extends CommonController
 	    }
 
 		$this->assign('goods_list',$goods_list);
-
+        $this->assign('Activity',$Activity);
 		return view();
 	}
 }

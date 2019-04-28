@@ -126,7 +126,7 @@
               <label class="layui-form-label">
                   <span class="x-red"></span>商品详情
               </label>
-               <div class="layui-input-inline"  style="width: 550px">
+               <div class="layui-input-inline"  style="width: 1024px">
                   <!-- <textarea id="goods_detail" lay-verify="goods_detail" name="goods_detail" style="display: none;"></textarea> -->
                   <script id="editor" name="goods_detail"  type="text/plain" style="height:250px;"></script>
                 </div>
@@ -251,7 +251,7 @@
                   ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
                   ,'<td>等待上传</td>'
                   ,'<td>'
-                    ,'<button type="button" class="layui-btn layui-btn-xs  up" value="'+index+'">上移</button>'
+
                     ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
                     ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
                   ,'</td>'
@@ -261,20 +261,7 @@
                 tr.find('.demo-reload').on('click', function(){
                   obj.upload(index, file);
                 });
-                // 上移
-                tr.find('.up').on('click',function () {
-                  var s = tr.find('.up').val();
-                  if($('.'+s).index()!=0){
-                      $('.'+s).fadeOut().fadeIn();
-                      $('.'+s).prev().before($('.'+s));
-                  }
-                    var $tr = $(this).parents("tr");
-                  if($tr.index()!=0){
-                      $tr.fadeOut().fadeIn();
-                      $tr.prev().before($tr)
-                  }
 
-              })
                 //删除
                 tr.find('.demo-delete').on('click', function(){
                   delete files[index]; //删除对应的文件
@@ -293,7 +280,22 @@
                 ,tds = tr.children();
                 tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
                 //tds.eq(4).html(''); //清空操作
-                  //tds.eq(4).html('')
+                  tds.eq(4).html('')
+                  tds.eq(4).html('<button type="button" class="layui-btn layui-btn-xs  up" value='+index+'>上移</button>')
+                  // 上移
+                  tr.find('.up').on('click',function () {
+                      var s = tr.find('.up').val();
+                      if($('.'+s).index()!=0){
+                          $('.'+s).fadeOut().fadeIn();
+                          $('.'+s).prev().before($('.'+s));
+                      }
+                      var $tr = $(this).parents("tr");
+                      if($tr.index()!=0){
+                          $tr.fadeOut().fadeIn();
+                          $tr.prev().before($tr)
+                      }
+
+                  })
                 return delete this.files[index]; //删除文件队列已经上传成功的文件
               }
               this.error(index, upload);

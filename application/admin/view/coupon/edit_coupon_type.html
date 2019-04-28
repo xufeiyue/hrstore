@@ -39,15 +39,42 @@
             </label>
             <div class="layui-input-inline">
                 {if condition="$info['ticket_type'] eq 1"}
-                     <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1" checked/>
-                     <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2"/>
+                     <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1" lay-filter="tick_q1" checked/>
+                     <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2" lay-filter="tick_q2"/>
+                     <input type="radio" name="ticket_type" value="3" title="品类券" id="q3" lay-filter="tick_q3"/>
+                {elseif condition="$info['ticket_type'] eq 3"}
+                    <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1" lay-filter="tick_q1"/>
+                    <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2" lay-filter="tick_q2">
+                    <input type="radio" name="ticket_type" value="3" title="品类券" id="q3" lay-filter="tick_q3" checked/>
                 {else /}
-                    <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1" />
-                    <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2" checked/>
+                    <input type="radio" name="ticket_type" value="1" title="平台卡券" id="q1" lay-filter="tick_q1" />
+                    <input type="radio" name="ticket_type" value="2" title="单品卡券" id="q2" lay-filter="tick_q2" checked >
+                    <input type="radio" name="ticket_type" value="3" title="品类券" id="q3" lay-filter="tick_q3" />
                 {/if}
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item" id="coupon_code_s" {if condition="$info['ticket_type'] eq 3"}style="display: block;"{else /}style="display: none;"{/if}>
+            <label for="coupon_code" class="layui-form-label">
+                <span class="x-red">*</span>品类券编码
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="coupon_code" name="coupon_code" required="" lay-verify="coupon_code"
+                       autocomplete="off" class="layui-input" {if condition="$info['ticket_type'] eq 3"}value="{$info['barcode']}"{/if}>
+            </div>
+        </div>
+        <div class="layui-form-item" id="mj_value_c" {if condition="$info['ticket_type'] eq 3"}style="display: block;"{else /}style="display: none;"{/if}>
+            <label for="coupon_code" class="layui-form-label">
+                <span class="x-red">*</span>满减金额设置
+            </label>
+            <div class="layui-input-inline">
+                满：<input type="text" id="max_value" name="max_value" required="" lay-verify="max_value"
+                         autocomplete="off" class="layui-input" value="{$info['max_value']}">
+                减：<input type="text" id="small_value" name="small_value" required="" lay-verify="small_value"
+                         autocomplete="off" class="layui-input" value="{$info['small_value']}">
+            </div>
+        </div>
+
+        <div class="layui-form-item" id="card_ticket_type_img_c" {if condition="$info['ticket_type'] eq 3"}style="display: none;"{else /}style="display: block;"{/if}>
             <label for="card_ticket_type_img" class="layui-form-label">
                 <span class="x-red">*</span>卡券图片
             </label>
@@ -61,6 +88,7 @@
                 {/if}
             </div>
         </div>
+
         <div class="layui-form-item">
             <label for="face_value" class="layui-form-label">
                 <span class="x-red">*</span>面值
@@ -205,7 +233,27 @@
 
             return false;
         });
+        form.on('radio(tick_q1)',function () {
+            $("#coupon_code_s").css('display','none');
+            $("#goods_c_id").css('display','none');
+            $("#mj_value_c").css('display','none');
+            $("#card_ticket_type_img_c").css('display','block');
+        })
 
+        form.on('radio(tick_q2)',function () {
+            $("#coupon_code_s").css('display','none');
+            $("#goods_c_id").css('display','none');
+            $("#mj_value_c").css('display','none');
+            $("#card_ticket_type_img_c").css('display','block');
+        })
+
+        form.on('radio(tick_q3)',function () {
+            $("#goods_c_id").css('display','block');
+            $("#coupon_code_s").css('display','block');
+            $("#mj_value_c").css('display','block');
+            $("#card_ticket_type_img_c").css('display','none');
+
+        })
 
     });
 

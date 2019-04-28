@@ -10,48 +10,90 @@
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
 </div>
-<div class="x-body">
-
-    <div class="layui-btn-group demoTable">
-        <button class="layui-btn" onclick="a();">按券统计</button>
-    </div>
-    <table class="layui-table" id="demo" lay-filter="useruv">
-    </table>
-</div>
 <div class="layui-row" id="aqtj" style="display: block;">
+    <div class="x-body">
+        <div class="layui-row">
+            <div class="demoTable layui-form layui-col-md12 x-so">
+                <div class="layui-inline">
+                    <input class="layui-input" placeholder="开始日" name="start_time" id="start">
+                    <input class="layui-input" placeholder="截止日" name="end_time" id="end">
+                </div>
+                <button class="layui-btn" data-type="reload">搜索</button>
+            </div>
+        </div>
 
-
-<div class="layui-inline">
-<select id="store_id" name="store_id">
-    <option value="0">请选择优惠券类型</option>
-    <option value="1">平台券</option>
-    <option value="2">品类券</option>
-</select>
+        <table class="layui-table" id="demo" lay-filter="useruv" lay-data="{id:'idTest'}">
+        </table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+            </div>
+        </script>
+    </div>
 </div>
-<div class="demoTable layui-form layui-col-md12 x-so">
-<div class="layui-inline">
-    <input class="layui-input" name="goods_name" placeholder="请输入商品名称" id="demoReload" autocomplete="off">
-</div>
-
-<button class="layui-btn" data-type="reload">搜索</button>
-</div>
-</div>
-<script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-</script>
-<script type="text/html" id="switchTpl">
-    <input type="checkbox" name="state" value="{{d.id}}" lay-skin="switch" lay-text="上架|下架" lay-filter="stateDemo" {{ d.state == 0 ? 'checked' : '' }}>
-
-</script>
-<script type="text/html" id="switchTpl1">
-    <input type="checkbox" name="xianshi" value="{{d.id}}" lay-skin="switch" lay-text="显示|不显示" lay-filter="stateDemo1" {{ d.xianshi == 0 ? 'checked' : '' }}>
-
-</script>
 <script>
-    function a() {
 
-    }
+     layui.use(['table','laydate'], function(){
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var form = layui.form;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+
+
+
+        //第一个实例
+        var tableIns = table.render({
+            elem: '#demo'
+            ,method: 'post'
+            ,toolbar: '#toolbarDemo'
+            ,url: '/Admin/Statistics/statistics_list' //数据接口
+            ,page: true //开启分页
+            ,cellMinWidth : 95
+            ,height : "600"
+            ,limit: 20
+            ,id: 'idTest'
+            ,cols: [[ //表头
+                {checkbox: true, fixed: true,style:'height:100px;'}
+                ,{field: 'store_name',  title: '店名', sort: true ,align: 'center'}
+                ,{field: 'visits_num', title: '访问量',align: 'center'}
+                ,{field: 'num', title: '5元券',align: 'center'}
+                ,{field: 'num1', title: '人数',align: 'center'}
+            ]]
+        });
+
+        var $ = layui.$, active = {
+
+            reload: function(){
+                var start_time = $('#start');
+                var end_time = $('#end');
+                //执行重载
+                tableIns.reload({
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        start_time: start_time.val(),
+                        end_time: end_time.val()
+                    }
+                })
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
 </script>
 </body>
 

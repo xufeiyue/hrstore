@@ -399,6 +399,7 @@ class MemberController extends CommonController
                 $data['card_ticket_id'] = $card_ticket['card_ticket_id'];
                 $data['status'] = 1;
                 $data['create_time'] = time();
+                $data['store_id'] = $this->store_id;
                 $res = $card_ticket_model->get_coupon($data,array('card_ticket_id'=>$card_ticket['card_ticket_id']),array('status'=>1),1);
                 if($res){
                     return 1; // 领取成功
@@ -411,7 +412,5 @@ class MemberController extends CommonController
         }else{
             return 4; // 已领取
         }
-
-
     }
 }

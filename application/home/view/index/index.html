@@ -261,6 +261,7 @@
     .shouCi_box1 img{width:110%;left:-5%;top:0%;}
 </style>
 <!--首次一元红包弹出层-->
+{if condition="$is_display eq 1"}
 {if condition="$rec_key eq 1"}
 <div class="shouCi_box TCC_Box">
     <img src="http://huaruncard.redh5.cn/static/home/images/lijilingbao.png">
@@ -270,7 +271,7 @@
     <span class="shouCi_Close"></span>
 </div>
 {/if}
-
+{/if}
 {if condition="$kaquan eq 1"}
 <div class="shouCi_box1 TCC_Box1" style="display: block">
     <img src="http://huaruncard.redh5.cn/static/home/images/gengduoyouhuiquan.png">
@@ -410,9 +411,13 @@
             var images_list_db_html = '';
             for (i in db_images){
                 images_list_db_html += '<div class="Active_area_list Active_area_One">';
-                images_list_db_html += '<a href="'+db_images[i].url+'">';
-                images_list_db_html += '<img src="'+db_images[i].image+'"/>';
-                images_list_db_html += '</a></div>';
+                if(db_images[i].url != ''){
+                    images_list_db_html += '<a href="'+db_images[i].url+'">';
+                    images_list_db_html += '<img src="'+db_images[i].image+'"/>';
+                    images_list_db_html += '</a></div>';
+                }else{
+                    images_list_db_html += '<img src="'+db_images[i].image+'"/></div>';
+                }
             }
             $("#Active_area_db").html('')
             $("#Active_area_db").append(images_list_db_html)

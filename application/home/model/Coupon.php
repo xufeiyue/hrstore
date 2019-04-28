@@ -46,10 +46,11 @@ class Coupon extends Common
 
     public function get_my_coupon_pt($member_id){
         $time = time();
-        $sql = "SELECT * from th_member_card_ticket_relation as r 
+        $sql = "SELECT ctt.face_value,ctt.ticket_name,ctt.des,ct.card_type_id,ct.card_ticket_id,p.end_time from th_member_card_ticket_relation as r 
 left join th_card_ticket as ct on ct.card_ticket_id = r.card_ticket_id 
-left join th_card_ticket_type as ctt on ctt.card_type_id = ct.card_type_id 
-where r.member_id = $member_id and r.`status` = '1' and ctt.end_time > $time and ctt.ticket_type='1'";
+left join th_card_ticket_type as ctt on ctt.card_type_id = ct.card_type_id
+left join th_card_pici as p on p.pici = ct.pici
+where r.member_id = $member_id and r.`status` = '1' and p.end_time > $time and ctt.ticket_type='1'";
         //echo $sql;exit;
         return Db::query($sql);
     }
@@ -66,10 +67,11 @@ where r.member_id = $member_id and r.`status` = '1' and ctt.end_time > $time and
 
     public function get_my_coupon_is_use_pt($member_id){
         $time = time();
-        $sql = "SELECT * from th_member_card_ticket_relation as r 
+        $sql = "SELECT ctt.face_value,ctt.ticket_name,ctt.des,ct.card_type_id,ct.card_ticket_id,p.end_time from th_member_card_ticket_relation as r 
 left join th_card_ticket as ct on ct.card_ticket_id = r.card_ticket_id 
-left join th_card_ticket_type as ctt on ctt.card_type_id = ct.card_type_id 
-where r.member_id = $member_id and r.`status` = '2' and ctt.end_time > $time and ctt.ticket_type='1'";
+left join th_card_ticket_type as ctt on ctt.card_type_id = ct.card_type_id
+left join th_card_pici as p on p.pici = ct.pici
+where r.member_id = $member_id and r.`status` = '2' and p.end_time > $time and ctt.ticket_type='1'";
         return Db::query($sql);
     }
 
@@ -87,10 +89,11 @@ where r.member_id = $member_id and r.`status` = '2' and ctt.end_time > $time and
 
     public function get_my_coupon_guoqi_pt($member_id){
         $time = time();
-        $sql = "SELECT * from th_member_card_ticket_relation as r 
+        $sql = "SELECT ctt.face_value,ctt.ticket_name,ctt.des,ct.card_type_id,ct.card_ticket_id,p.end_time from th_member_card_ticket_relation as r 
 left join th_card_ticket as ct on ct.card_ticket_id = r.card_ticket_id 
 left join th_card_ticket_type as ctt on ctt.card_type_id = ct.card_type_id 
-where r.member_id = $member_id and ctt.end_time < $time and ctt.ticket_type='1'";
+left join th_card_pici as p on p.pici = ct.pici
+where r.member_id = $member_id and p.end_time < $time and ctt.ticket_type='1'";
         return Db::query($sql);
     }
 
@@ -202,4 +205,33 @@ where r.member_id = $member_id and ctt.end_time < $time and ctt.ticket_type='3'"
             Db::name('card_ticket')->where($w1)->update($data1);
         }
     }
+    // 获取档期档期卡券剩余数量
+    public function getThisDqKuCun($card_type_id){
+        $time = time();
+        // 获取当前时间属于哪个批次
+        $res = Db::name('card_pici')->where("start_time<$time and end_time > $time")->find();
+        // 查询该批次号券的剩余数量
+        $w1['pici'] = $res['pici'];
+        $w1['status'] = 2;
+        $w1['card_type_id'] = $card_type_id;
+        $c = Db::name($this->table)->where($w1)->count();
+        return $c;
+    }
+    // 根据当前时间获取批次号
+    public function thisPici(){
+        $time = time();
+        // 获取当前时间属于哪个批次
+        $res = Db::name('card_pici')->where("start_time<$time and end_time > $time")->find();
+        return $res['pici'];
+    }
+
+    // 获取优惠券详情
+
+    public function getTicketInfo($card_ticket_id){
+        $sql = "select ctt.ticket_name,p.start_time,p.end_time,ctt.scope_of_application,p.p_instructions as instructions,ctt.card_ticket_type_img,ct.barcode from th_card_ticket_type as ctt left join th_card_ticket as ct on ct.card_type_id = ctt.card_type_id 
+left join th_card_pici as p on p.pici = ct.pici where ct.card_ticket_id = $card_ticket_id";
+        return Db::query($sql);
+    }
+
+
 }

@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 use app\admin\model\ad_style;
 use app\admin\model\Store;
+use app\admin\model\User;
 use think\Controller;
 use think\Request;
 use think\Db;
@@ -37,6 +38,8 @@ class AdvertisementController extends AdminController
 			$where['a.store_id'] = $this->is_jurisdiction;
 
 		}
+
+
 
 		$where['a.status'] = 0;
 
@@ -165,8 +168,9 @@ class AdvertisementController extends AdminController
 		}
 
 		if ($this->is_jurisdiction) { //判断是管理员还是商家
-			
-			$where['a.store_id'] = ['in',$this->is_jurisdiction];
+			$admininfo = (new User())->find(session('user_id'));
+			//var_dump($admininfo);exit;
+			$where['a.store_id'] = ['in',$admininfo['store_id']];
 		}
 
 		$where['a.status'] = 0;
@@ -205,6 +209,8 @@ class AdvertisementController extends AdminController
             $data['start_time'] = strtotime(input('post.start_time/s'));
 
             $data['end_time'] = strtotime(input('post.end_time/s'));
+
+            $data['sort'] = input('post.sort/d');
             if($xianshi == $whether[0]){
 
                 $data['xianshi'] = 0;
@@ -297,7 +303,7 @@ class AdvertisementController extends AdminController
             $data['start_time'] = strtotime(input('post.start_time/s'));
 
             $data['end_time'] = strtotime(input('post.end_time/s'));
-
+            $data['sort'] = input('post.sort/d');
 			$edit = (new Advertisement)->Common_Update($data,['id' => $id]);
 
 			if ($edit)

@@ -35,10 +35,11 @@ class Common
 	}
 
 	//全部数据
-	public function Common_All_Select($where=[],$order=[],$field=[]){
+	public function Common_All_Select($where=[],$order=[],$field=[],$whereor=[]){
 
 		$data = Db::name($this->table)
 			->where($where)
+            ->where($whereor)
 			->order($order)
 			->field($field)
 			->select();

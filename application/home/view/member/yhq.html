@@ -34,8 +34,8 @@
 						<p>{$vo.ticket_name}</p>
 						<em>{$vo.des}</em>
 						<div class="pingtai-function">
-							<span>有效期：{$vo.end_time_desc}</span>
-							<a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">立即查看</a>
+							<span>有效期：{$vo.end_time|date="Y-m-d",###}</span>
+							<a class="pingtai-btn" href="{:url('Coupon/coupon_type_pt_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">立即查看</a>
 						</div>
 					</div>
 				</li>
@@ -95,8 +95,8 @@
 						<p>{$vo.ticket_name}</p>
 						<em>{$vo.des}</em>
 						<div class="pingtai-function">
-							<span>有效期：{$vo.end_time_desc}</span>
-							<a class="pingtai-btn" href="{:url('Coupon/coupon_type_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">查看</a>
+							<span>有效期：{$vo.end_time|date="Y-m-d",###}</span>
+							<a class="pingtai-btn" href="{:url('Coupon/coupon_type_pt_info',['card_type_id' => $vo['card_type_id'],'card_ticket_id'=>$vo['card_ticket_id']])}">查看</a>
 						</div>
 					</div>
 				</li>
@@ -156,7 +156,7 @@
 						<p>{$vo.ticket_name}</p>
 						<em>{$vo.des}</em>
 						<div class="pingtai-function">
-							<span>有效期：{$vo.end_time_desc}</span>
+							<span>有效期：{$vo.end_time|date="Y-m-d",###}</span>
 							<a class="pingtai-btn">立即使用</a>
 						</div>
 					</div>

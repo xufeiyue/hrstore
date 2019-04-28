@@ -87,7 +87,6 @@ class CouponController extends Controller
             $data['ticket_type'] = input('post.ticket_type');
             $data['is_use'] = 2;
             $data['create_time'] = time();
-            $data['pici'] = input('post.pici');
             $data['des'] = input('post.des');
             // 判断是否为品类券
             if($data['ticket_type'] == 3){
@@ -110,9 +109,6 @@ class CouponController extends Controller
                     return json(['code' => 2, 'msg' => '添加失败']);
                 }
             }
-
-
-
         } else {
             return view();
         }
@@ -150,6 +146,11 @@ class CouponController extends Controller
         } else {
             $card_type_id = input('get.card_type_id');
             $info = $this->coupon_type->Common_Find(array('card_type_id'=>$card_type_id));
+            if($info['ticket_type'] == '3'){
+                $coupon_info = (new Coupon())->Common_Find(['card_type_id'=>$info['card_type_id']]);
+                $info['barcode'] = $coupon_info['barcode'];
+            }
+
             $this->assign('info',$info);
             return view();
         }
@@ -175,7 +176,7 @@ class CouponController extends Controller
             $data['goods_id'] = input('post.goods_id');
             $data['create_time'] = time();
             $file_url = input('post.file_url');
-
+            $data['pici'] = input('post.pici');
             // 判断选中卡券类型是不是全场券
             $ticket_type = $this->coupon_type->Common_Find(array('card_type_id'=>$data['card_type_id']));
             if($ticket_type['ticket_type'] == 1){
@@ -191,18 +192,28 @@ class CouponController extends Controller
                 return json(['code' => 2, 'msg' => '添加失败']);
             }
 
+            $picidata['pici'] = input('post.pici');
+            $picidata['start_time'] = strtotime(input('post.start_time'));
+            $picidata['end_time'] = strtotime(input('post.end_time'));
+            $picidata['p_instructions'] = input('post.p_instructions');
+
             $file_url=str_replace("\\","/",$file_url);
             $excel_datas = $this->read_excel($file_url); //获取表中数据
-            if($this->coupon->addCards($data,$excel_datas)){
+
+            //echo '<pre>';print_r($excel_datas);exit;
+            if($this->coupon->addCards($data,$excel_datas,$picidata)){
                 return json(['code' => 1, 'msg' => '添加成功']);
             }else{
-                return json(['code' => 2, 'msg' => '添加失败']);
+                return json(['code' => 4, 'msg' => '添加失败']);
             }
 
 
         } else {
             // 获取卡券类型列表
             $where['status'] = 1;
+
+            $where['card_type_id'] = 67;
+
             $coupon_type_list = $this->coupon_type->Common_All_Select($where);
             $this->assign('coupon_type_list', $coupon_type_list);
             return view();
@@ -235,7 +246,9 @@ class CouponController extends Controller
         for ($col = 'A'; $col <= $col_num; $col++) {
             //从第二行开始，去除表头（若无表头则从第一行开始）
             for ($row = 2; $row <= $row_num; $row++) {
-                $data[$row - 2][] = $sheet->getCell($col . $row)->getValue();
+                if($sheet->getCell($col . $row)->getValue()){
+                    $data[$row - 2][] = $sheet->getCell($col . $row)->getValue();
+                }
             }
         }
         return $data;
@@ -245,10 +258,14 @@ class CouponController extends Controller
     public function download()
     {
         //$famlePath = $_GET['resum'];
-        $file_dir = ROOT_PATH . 'public' . DS . 'uploads' . '/' . "卡券模板.xlsx";    // 下载文件存放目录
+        $base_path = str_replace('..\\','',ROOT_PATH);
+        //$file_dir = 'D:/www/hrstore/public/uploads/demo.xlsx';
+        $file_dir = $base_path.'uploads/demo.xlsx';
+        $new_file_dir = str_replace('\\','/',$file_dir);
 
+        //echo $file_dir;exit;
         // 检查文件是否存在
-        if (!file_exists($file_dir)) {
+        if (!file_exists($new_file_dir)) {
             $this->error('文件未找到');
         } else {
             // 打开文件
@@ -257,7 +274,7 @@ class CouponController extends Controller
             Header("Content-type: application/octet-stream");
             Header("Accept-Ranges: bytes");
             Header("Accept-Length:" . filesize($file_dir));
-            Header("Content-Disposition: attachment;filename=卡券模板.xlsx");
+            Header("Content-Disposition: attachment;filename=demo.xlsx");
             ob_clean();     // 重点！！！
             flush();        // 重点！！！！可以清除文件中多余的路径名以及解决乱码的问题：
             //输出文件内容
