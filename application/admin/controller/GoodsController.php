@@ -468,9 +468,9 @@ class GoodsController extends AdminController
 
 			$data['goods_name'] = input('post.goods_name/s');	
 
-			$data['sort'] = input('post.sort/d');	
-
-			$images = input('post.file/a');
+			$data['sort'] = input('post.sort/d');
+            $data['hd_goods_px'] = input('post.hd_goods_px/d');
+            $images = input('post.file/a');
 
 			$data['goods_images'] = json_encode($images);
 
@@ -631,6 +631,8 @@ class GoodsController extends AdminController
 			$data['brand_id'] = input('post.brand_id/d');
 
 			$data['sort'] = input('post.sort/d');
+
+            $data['hd_goods_px'] = input('post.hd_goods_px/d');
 
 			$data['start_time'] = strtotime(input('post.start_time/s'));
 

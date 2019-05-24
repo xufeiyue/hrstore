@@ -60,6 +60,14 @@
             </select>
           </div>
         </div>
+		<div class="layui-form-item">
+                <label for="sort" class="layui-form-label">
+                    <span class="x-red"></span>活动商品排序
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="hd_goods_px" value="" name="hd_goods_px" autocomplete="off" class="layui-input">
+                </div>
+        </div>
 
        <div class="layui-form-item">
             <label for="start_time" class="layui-form-label">
@@ -190,7 +198,7 @@
                     <input type="text" id="sort" value="" name="sort" autocomplete="off" class="layui-input">
                 </div>
             </div>
-
+            
 
           <div class="layui-form-item">
               <label for="L_repass" class="layui-form-label">
@@ -231,7 +239,7 @@
           }); //建立编辑器
 
           layedit.sync(index)
-
+            var str = '';
            //多文件列表示例
           var demoListView = $('#demoList')
           ,uploadListIns = upload.render({
@@ -245,13 +253,12 @@
               var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
               //读取本地文件
               obj.preview(function(index, file, result){
-                var tr = $(['<tr id="upload-'+ index +'">'
+                  var tr = $(['<tr id="upload-'+ index +'">',
                   ,'<td><img src="'+result+'"></td>'
                   ,'<td>'+ file.name +'</td>'
                   ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
                   ,'<td>等待上传</td>'
                   ,'<td>'
-
                     ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
                     ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
                   ,'</td>'
@@ -276,26 +283,16 @@
               if(res.code == 0){ //上传成功
                 $("#done_images_file").append('<input type="hidden" name="file[]" value="'+res.data+'" class="'+index+'">');
                 $("#upload").append('<input type="hidden" name="file_detail[]" value="'+res.info+'">');
-                var tr = demoListView.find('tr#upload-'+ index)
-                ,tds = tr.children();
-                tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
-                //tds.eq(4).html(''); //清空操作
-                  tds.eq(4).html('')
-                  tds.eq(4).html('<button type="button" class="layui-btn layui-btn-xs  up" value='+index+'>上移</button>')
-                  // 上移
-                  tr.find('.up').on('click',function () {
-                      var s = tr.find('.up').val();
-                      if($('.'+s).index()!=0){
-                          $('.'+s).fadeOut().fadeIn();
-                          $('.'+s).prev().before($('.'+s));
-                      }
-                      var $tr = $(this).parents("tr");
-                      if($tr.index()!=0){
-                          $tr.fadeOut().fadeIn();
-                          $tr.prev().before($tr)
-                      }
-
-                  })
+                // var tr = demoListView.find('tr#upload-'+ index)
+                // ,tds = tr.children();
+                // tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
+                // //tds.eq(4).html(''); //清空操作
+                //   tds.eq(4).html('')
+                //   tds.eq(4).html('<button type="button" class="layui-btn layui-btn-xs  up" value='+index+'>上移</button>')
+                $("#demoList").html('');
+                str+='<tr id=upload-'+index+'><td><img src="'+res.data+'"/></td><td>'+res.img_name+'</td><td>'+res.size+'</td>' +
+                    '<td><span style="color: #5FB878;">上传成功</span></td><td><button type="button" class="layui-btn layui-btn-xs  up" value='+index+'>上移</button></td></tr>';
+                $("#demoList").append(str)
                 return delete this.files[index]; //删除文件队列已经上传成功的文件
               }
               this.error(index, upload);
@@ -373,6 +370,19 @@
               form.render('select');
             })
           })
+            // 上移
+            $(document).on('click','.up',function () {
+                var s = $(this).val();
+                if($('.'+s).index()!=0){
+                    $('.'+s).fadeOut().fadeIn();
+                    $('.'+s).prev().before($('.'+s));
+                }
+                var $tr = $(this).parents("tr");
+                if($tr.index()!=0){
+                    $tr.fadeOut().fadeIn();
+                    $tr.prev().before($tr)
+                }
+            })
 
           form.on('checkbox(filter)', function(data){ //全选
 
