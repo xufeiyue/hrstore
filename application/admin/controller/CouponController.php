@@ -9,6 +9,7 @@ namespace app\admin\controller;
 use app\admin\model\Coupon;
 use app\admin\model\CouponType;
 use think\Controller;
+use think\Db;
 use think\Env;
 use think\Request;
 use app\admin\model\Member;
@@ -297,5 +298,23 @@ class CouponController extends Controller
         if($edit)
             return json(['code' => 200 , 'msg' => '操作成功']);
             return json(['code' => 400 , 'msg' => '操作失败']);
+    }
+    public function coupon_list_show(){
+        return view();
+    }
+    public function coupon_list(){
+        $where = [];
+        $offset = (input('post.page/d') - 1) * input('post.limit/d') ? : 0;
+
+        $limit = input('post.limit/d') ? : 10;
+
+        $order = ['card_ticket_id' => 'desc'];
+
+        $data = Db::name('card_ticket')->where($where)
+            ->limit($offset,$limit)
+            ->order($order)->field("card_ticket_id,barcode,FROM_UNIXTIME(create_time,'%Y-%m-%d') as create_time,pici")->select();
+        $c = Db::name('card_ticket')->where($where)
+            ->count();
+        return json(["code" =>  0, "msg" => "请求成功", 'data' => $data , 'count' =>$c]);
     }
 }
