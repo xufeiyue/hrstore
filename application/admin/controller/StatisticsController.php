@@ -41,21 +41,29 @@ class StatisticsController extends AdminController{
 //        }
         $start_time = strtotime(input('post.start_time'));
         $end_time = strtotime(input('post.end_time'));
-        $w1 = '';$w2='';
+        $end_time+=3600*24-1;
+        $w1 = '';$w2=''; $w3 = '';$w4 = '';
+        $start_days = date('Y-m-d',$start_time);
+        $end_days = date('Y-m-d',$end_time);
         if($start_time!='' && $end_time !=''){
             $w1 = " AND ( r.create_time > $start_time AND r.create_time < $end_time )";
 
             $w2 = "WHERE create_time > $start_time AND create_time < $end_time";
+            $time = time();
+
+            $w3 = "where `status` = 0 and `state` = 0 and `sell_well` = 0 and ((xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time}))";
+
+            $w4 = "where visits_date >=  '$start_days' and visits_date <= '$end_days'";
         }
-        $list = (new Coupon())->getAllCoupon1($w1,$w2);
+        $list = (new Coupon())->getAllCoupon1($w1,$w2,$w3,$w4);
 
         return json(["code" =>  0, "msg" => "请求成功", 'data' => $list , 'count' => count($list)]);
     }
 
-    public function statistics_list1(){
-        $where = [];
-        $where1 = ['status'=>1];
-        $list = (new Coupon())->getAllCoupon1($where,$where1);
-        return json(["code" =>  0, "msg" => "请求成功", 'data' => $list , 'count' => 2]);
-    }
+//    public function statistics_list1(){
+//        $where = [];
+//        $where1 = ['status'=>1];
+//        $list = (new Coupon())->getAllCoupon1($where,$where1);
+//        return json(["code" =>  0, "msg" => "请求成功", 'data' => $list , 'count' => 2]);
+//    }
 }

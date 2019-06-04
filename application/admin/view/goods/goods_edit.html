@@ -58,7 +58,14 @@
               </select>
             </div>
           </div>
-
+		  <div class="layui-form-item">
+			<label for="sort" class="layui-form-label">
+				<span class="x-red"></span>活动商品排序
+			</label>
+			<div class="layui-input-inline">
+				<input type="text" id="hd_goods_px" value="{$list['hd_goods_px']}" name="hd_goods_px" autocomplete="off" class="layui-input">
+			</div>
+		  </div>	
           <div class="layui-form-item">
               <label for="start_time" class="layui-form-label">
                   <span class="x-red">*</span>开始时间
@@ -262,14 +269,7 @@
                 </div>
             </div>
 
-<div class="layui-form-item">
-    <label for="sort" class="layui-form-label">
-        <span class="x-red"></span>活动商品排序
-    </label>
-    <div class="layui-input-inline">
-        <input type="text" id="hd_goods_px" value="{$list['hd_goods_px']}" name="hd_goods_px" autocomplete="off" class="layui-input">
-    </div>
-</div>
+
           <!--<div class="layui-form-item">-->
             <!--<label class="layui-form-label">关联：</label>-->
             <!--<div class="layui-input-block">-->

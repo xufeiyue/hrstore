@@ -60,13 +60,14 @@ class Coupon extends Common
             ->select();
     }
 
-    public function getAllCoupon1($w1='',$w2=''){
+    public function getAllCoupon1($w1='',$w2='',$w3 = '',$w4 = ''){
         $sql = "SELECT
 	s.store_name,
 	( IFNULL( n.num, 0 ) ) AS num,
 	s.store_id,
-	s.visits_num,
-	( IFNULL( m.num1, 0 ) ) AS num1 
+	( IFNULL( v.visits_num, 0 ) ) AS visits_num,
+	( IFNULL( m.num1, 0 ) ) AS num1,
+	( IFNULL( g.goods_nums, 0 ) ) AS goods_nums 
 FROM
 	th_store s
 	LEFT JOIN (
@@ -82,7 +83,9 @@ FROM
 	GROUP BY
 		r.store_id 
 	) n ON n.store_id = s.store_id
-	LEFT JOIN ( SELECT count( * ) AS num1, `store_id` FROM `th_member` $w2 GROUP BY store_id ) m ON m.store_id = s.store_id 
+	LEFT JOIN ( SELECT count( * ) AS num1, `store_id` FROM `th_member` $w2 GROUP BY store_id ) m ON m.store_id = s.store_id
+	LEFT JOIN ( SELECT COUNT(*) AS `goods_nums`,`store_id` FROM `th_goods` $w3 GROUP BY store_id ) g ON g.store_id = s.store_id
+	LEFT JOIN ( SELECT visits_numbers AS `visits_num`,`store_id` FROM `th_store_visits_number` $w4 GROUP BY store_id ) v ON v.store_id = s.store_id
 WHERE
 	s.STATUS = 1 
 GROUP BY

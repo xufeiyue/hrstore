@@ -17,6 +17,7 @@ use app\home\model\Questionnaire;
 use app\home\model\Problem;
 use app\home\model\Member;
 use app\home\model\MemberAndQuestionnaire;
+use think\Db;
 use think\Loader;
 
 class IndexController extends CommonController
@@ -67,8 +68,13 @@ class IndexController extends CommonController
         (new Store())->Common_SetInc('visits_num',['store_id'=>$this->store_id]);
     }
 
+    $today = date('Y-m-d',time());
 
+    // 增加店铺当天访问量
 
+        $sql = "INSERT INTO th_store_visits_number (store_id,visits_date,visits_numbers) VALUES ($this->store_id,'{$today}',1) ON DUPLICATE KEY UPDATE visits_numbers=visits_numbers+1;";
+
+        Db::execute($sql);
     $this->assign('store_id',$store_id);
 
     $this->assign('title',$this->title);
@@ -130,7 +136,7 @@ class IndexController extends CommonController
 
       $AdvertisementType_db = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '厂商周广告位']);
 
-      $Advertisement_db = (new Advertisement)->Common_All_Select(['store_id' =>$store_id, 'status' => 0, 'type_id' => $AdvertisementType_db['id']],['id' => 'asc'],['id','image','url'],$whereor);
+      $Advertisement_db = (new Advertisement)->Common_All_Select(['store_id' =>$store_id, 'status' => 0, 'type_id' => $AdvertisementType_db['id']],['sort' => 'asc'],['id','image','url'],$whereor);
 
       $where = ['store_id' => $store_id, 'status' => 0, 'state' => 0, 'sell_well' => 0];
     //$whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
@@ -533,7 +539,7 @@ class IndexController extends CommonController
       $AdvertisementType = (new AdvertisementType)->Common_Find(['status' => 0, 'type_name' => '人气']);
       $whereor = "(xianshi = 0 and end_time >= {$time}) or (start_time <= {$time} and end_time >= {$time})";
       $Advertisement = (new Advertisement)->Common_All_Select(['store_id' => $store_id, 'status' => 0,
-          'type_id' => $AdvertisementType['id']],['id' => 'asc'],['id','image','url'],$whereor);
+          'type_id' => $AdvertisementType['id']],['sort' => 'asc'],['id','image','url'],$whereor);
 
     $offset = 0;
 

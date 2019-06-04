@@ -718,7 +718,6 @@ class ActivityController extends AdminController
 			$data['end_time'] = strtotime(input('post.end_time/s'));
 
 			$data['update_time'] = time();
-            $data['activity_goods_img'] = input('post.activity_goods_img');
             $whether = ['on','off'];
             $xianshi = input('post.xianshi/s');
             if($xianshi == $whether[0]){

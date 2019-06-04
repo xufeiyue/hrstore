@@ -1,0 +1,489 @@
+{include file="public/header"}
+    <div class="x-body">
+        <form class="layui-form">
+        <input type="hidden" id="id" value="{$list['id']}" name="id" lay-verify="id">
+        {if condition="$is_jurisdiction == 0"}
+          <div class="layui-form-item">
+            <label  for="store_id" class="layui-form-label">
+              <span class="x-red">*</span>选择店铺
+            </label>
+            <div class="layui-input-block">
+              <select name="store_id" lay-filter="store_id">
+                <option value="0">请选择</option>
+                {volist name="store" id="vo"}
+                    <option value="{$vo.id}" {if condition="$list['store_id'] eq $vo['id']"}selected="selected"{/if}>{$vo.name}</option>
+                {/volist}
+              </select>
+            </div>
+          </div>
+        {/if}
+          <div class="layui-form-item">
+            <label  for="type_id" class="layui-form-label">
+              <span class="x-red">*</span>选择商品类型
+            </label>
+            <div class="layui-input-block">
+              <select name="type_id" id="type_id" lay-filter="type_id">
+                <option value="0">请选择</option>
+                {volist name="goods_type" id="vo"}
+                    <option value="{$vo.id}" {if condition="$list['type_id'] eq $vo['id']"}selected="selected"{/if}>{$vo.title_show}</option>
+                {/volist}
+              </select>
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label  for="type_id" class="layui-form-label">
+              <span class="x-red"></span>选择商品品牌
+            </label>
+            <div class="layui-input-block">
+              <select name="brand_id" id="brand_id">
+                <option value="0">请选择</option>
+                {volist name="goods_brand" id="vo"}
+                    <option value="{$vo.id}" {if condition="$list['brand_id'] eq $vo['id']"}selected="selected"{/if}>{$vo.goods_brand_name}</option>
+                {/volist}
+              </select>
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label  for="activity_id" class="layui-form-label">
+              <span class="x-red">*</span>选择活动
+            </label>
+            <div class="layui-input-block">
+              <select name="activity_id" lay-filter="activity_id" id="activity_id">
+                <option value="0">请选择</option>
+                {volist name="activity" id="vo"}
+                    <option value="{$vo.id}"{if condition="$list['activity_id'] eq $vo['id']"}selected="selected"{/if}>{$vo.activity_name}</option>
+                {/volist}
+              </select>
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="start_time" class="layui-form-label">
+                  <span class="x-red">*</span>开始时间
+              </label>
+                <div class="layui-input-inline">
+                  <input type="text" lay-verify="required" value="{$list['start_time']}" autocomplete="off" class="layui-input" name="start_time" id="start" placeholder="请输入开始时间">
+                </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="end_time" class="layui-form-label">
+                  <span class="x-red">*</span>结束时间
+              </label>
+                <div class="layui-input-inline">
+                  <input type="text" lay-verify="required" value="{$list['end_time']}" autocomplete="off" class="layui-input" name="end_time" id="end" placeholder="请输入结束时间">
+                </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="activity_name" class="layui-form-label">
+                  <span class="x-red">*</span>商品名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="goods_name" value="{$list['goods_name']}" name="goods_name" lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+
+          {foreach name="list['goods_images']" item="vo" key="k" }
+            <input type="hidden" name="images[]" value="{$vo}" id="file_{$k}">
+          {/foreach}
+
+          {foreach name="list['images_detail2']" item="vo" key="k" }
+            <input type="hidden" name="file_detail[]" value="{$vo}" id="file_detail_{$k}">
+          {/foreach}
+
+           <div class="layui-form-item">
+            <label for="activity_name" class="layui-form-label">
+                <span class="x-red">*</span>商品图片
+            </label>
+            <div class="layui-upload" id="upload">
+              <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                <span style="display: inline-block;font-size: 14px;color: red">(图片建议尺寸：750 * 750)</span>
+              <div class="layui-upload-list">
+                <table class="layui-table">
+                  <thead>
+                    <tr>
+                      <th>图片</th>
+                      <th>文件名</th>
+                      <th>大小</th>
+                      <th>状态</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="demoList">
+                    {foreach name="list['images_detail1']" item="vo" key="k" }
+                    <tr id="del_list_{$k}">
+                      <td><img src="{$list['goods_images'][$k]}"></td>
+                      <td>{$vo['name']}</td>
+                      <td>{$vo['size']}</td>
+                      <td><span style="color: #5FB878;">上传成功</span></td>
+                      <td><a class="layui-btn layui-btn-danger layui-btn-xs" id="del" data-id="{$k}">删除</a></td>
+                    </tr>
+                    {/foreach}
+                  </tbody>
+                </table>
+              </div>
+              <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+            </div> 
+          </div>
+          
+          <!--<div class="layui-form-item">-->
+            <!--<label for="activity_name" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>商品原价-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="goods_original_price" value="{$list['goods_original_price']}" name="goods_original_price" lay-verify="required" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+          <!--</div>-->
+
+          <div class="layui-form-item">
+            <label for="activity_name" class="layui-form-label">
+                <span class="x-red">*</span>商品优惠价
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="goods_present_price" value="{$list['goods_present_price']}" name="goods_present_price" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+
+          <!--<div class="layui-form-item">-->
+            <!--<label for="activity_name" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>商品库存-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="goods_stock" value="{$list['goods_stock']}" name="goods_stock" lay-verify="required" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+          <!--</div>-->
+
+          {foreach name="list['goods_specifications']" item="vo" key="k" }
+          <div class="layui-form-item {if condition="$k eq 0"}guige{/if}" {if condition="$k neq 0"}id="guige_del_{$k}" {/if}>
+            <label for="activity_name" class="layui-form-label">
+                {if condition="$k eq 0"}
+                  <span class="x-red">*</span>商品规格
+                {/if}
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="goods_specifications" name="goods_specifications[]" value="{$vo}" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            {if condition="$k eq 0"}
+              <div class="layui-btn" id="guige_add">增加</div>
+            {else if/}
+              <div class="layui-btn guige_del" data-id="{$k}" style="background-color: #FF5722;">删除</div>
+            {/if}
+          </div>
+          {/foreach}
+
+          {foreach name="list['goods_attribute']" item="vo" key="k" }
+          <div class="layui-form-item {if condition="$k eq 0"}shuxing{/if}" {if condition="$k neq 0"} id="shuxing_del_{$k}" {/if}>
+            <label for="activity_name" class="layui-form-label">
+                {if condition="$k eq 0"}
+                  <span class="x-red">*</span>商品属性
+                {/if}
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="goods_attribute" name="goods_attribute[]" value="{$vo}" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            {if condition="$k eq 0"}
+              <div class="layui-btn" id="shuxing_add">增加</div>
+            {else if/}
+              <div class="layui-btn shuxing_del" data-id="{$k}" style="background-color: #FF5722;">删除</div>
+            {/if}
+          </div>
+          {/foreach}
+
+
+  
+          <div class="layui-form-item">
+              <label class="layui-form-label">
+                  <span class="x-red"></span>商品详情
+              </label>
+               <div class="layui-input-inline"  style="width: 550px">
+                  <!-- <textarea id="goods_detail" lay-verify="goods_detail" name="goods_detail" style="display: none;">{$list['goods_detail']}</textarea> -->
+                  <script id="editor" name="goods_detail"  type="text/plain" style="height:250px;">{$list['goods_detail']}</script>
+                </div>
+          </div>
+
+           <div class="layui-form-item">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" {if condition="$list['state'] eq 0"} checked="" {/if} name="state" lay-skin="switch" lay-filter="switchTest" lay-text="上架|下架">
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">显示状态：</label>
+            <div class="layui-input-block">
+              <input type="checkbox" {if condition="$list['xianshi'] eq 0"} checked="" {/if} name="xianshi" lay-skin="switch" lay-filter="switchTest" lay-text="显示|不显示">
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">推荐爆款：</label>
+            <div class="layui-input-block">
+              <input type="checkbox"  {if condition="$list['sell_well'] eq 0"} checked="" {/if} name="sell_well" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+        <div class="layui-form-item">
+            <label for="goods_bk_paixu" class="layui-form-label">
+                <span class="x-red"></span>爆款排序
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="goods_bk_paixu" value="{$list['goods_bk_paixu']}" name="goods_bk_paixu"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">个人中心：</label>
+            <div class="layui-input-block">
+              <input type="checkbox"  {if condition="$list['characteristic'] eq 0"} checked="" {/if} name="characteristic" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">人气：</label>
+            <div class="layui-input-block">
+              <input type="checkbox"  {if condition="$list['popularity'] eq 0"} checked="" {/if} name="popularity" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            </div>
+          </div>
+<div class="layui-form-item">
+    <label for="goods_rq_paixu" class="layui-form-label">
+        <span class="x-red"></span>人气排序
+    </label>
+    <div class="layui-input-inline">
+        <input type="text" id="goods_rq_paixu" value="{$list['goods_rq_paixu']}" name="goods_rq_paixu"  autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<div class="layui-form-item">
+                <label for="sort" class="layui-form-label">
+                    <span class="x-red"></span>排序
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="sort" value="{$list['sort']}" name="sort" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+          <!--<div class="layui-form-item">-->
+            <!--<label class="layui-form-label">关联：</label>-->
+            <!--<div class="layui-input-block">-->
+              <!--<input type="checkbox"  {if condition="$list['relation'] eq 0"} checked="" {/if} name="relation" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">-->
+            <!--</div>-->
+          <!--</div>-->
+
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="edit" lay-submit="">
+                  更新
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+        layui.use(['form','layer','upload','layedit','laydate'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,upload = layui.upload
+          ,layedit = layui.layedit
+          ,laydate = layui.laydate
+          ,layer = layui.layer;
+          layedit.set({
+            uploadImage: {
+              url: '/Admin/Upload/editor_upload', 
+              type: 'post'
+            }
+          });
+          //日期时间选择器
+          laydate.render({
+            elem: '#start'
+            ,type: 'datetime'
+          });
+
+          laydate.render({
+            elem: '#end'
+            ,type: 'datetime'
+          });
+          //注意：layedit.set 一定要放在 build 前面，否则配置全局接口将无效。
+          var index = layedit.build('goods_detail',{
+            height: 180,
+          }); //建立编辑器
+
+          layedit.sync(index)
+
+           //多文件列表示例
+          var demoListView = $('#demoList')
+          ,uploadListIns = upload.render({
+            elem: '#testList'
+            ,url: '/admin/Upload/upload'
+            ,accept: 'images'
+            ,multiple: true
+            ,auto: false
+            ,bindAction: '#testListAction'
+            ,choose: function(obj){   
+              var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+              //读取本地文件
+              obj.preview(function(index, file, result){
+                console.log(file);
+                var tr = $(['<tr id="upload-'+ index +'">'
+                  ,'<td><img src="'+ result +'"></td>'
+                  ,'<td>'+ file.name +'</td>'
+                  ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+                  ,'<td>等待上传</td>'
+                  ,'<td>'
+                    ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                    ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                  ,'</td>'
+                ,'</tr>'].join(''));
+                
+                //单个重传
+                tr.find('.demo-reload').on('click', function(){
+                  obj.upload(index, file);
+                });
+                
+                //删除
+                tr.find('.demo-delete').on('click', function(){
+                  delete files[index]; //删除对应的文件
+                  tr.remove();
+                  uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                });
+                
+                demoListView.append(tr);
+              });
+            }
+            ,done: function(res, index, upload){
+              if(res.code == 0){ //上传成功
+                console.log(res);
+                $("#upload").append('<input type="hidden" name="images[]" value="'+res.data+'">');
+                $("#upload").append('<input type="hidden" name="file_detail[]" value="'+res.info+'">');
+                var tr = demoListView.find('tr#upload-'+ index)
+                ,tds = tr.children();
+                tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
+                tds.eq(4).html(''); //清空操作
+                return delete this.files[index]; //删除文件队列已经上传成功的文件
+              }
+              this.error(index, upload);
+            }
+            ,error: function(index, upload){
+              var tr = demoListView.find('tr#upload-'+ index)
+              ,tds = tr.children();
+              tds.eq(3).html('<span style="color: #FF5722;">上传失败</span>');
+              tds.eq(4).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+          });
+
+          var i = $("#guige_num").val();
+          $(document).on('click','#guige_add',function(){
+            var html = '';
+              html +='<div class="layui-form-item" id="guige_del_'+i+'">';
+              html +=  '<label for="activity_name" class="layui-form-label">';
+              html +=      '<span class="x-red"></span>';
+              html +=  '</label>';
+              html +=  '<div class="layui-input-inline">';
+              html +=      '<input type="text" id="goods_specifications" name="goods_specifications[]" lay-verify="required" autocomplete="off" class="layui-input">';
+              html +=  '</div>';
+              html +=  '<div class="layui-btn guige_del" data-id="'+i+'" style="background-color: #FF5722;">删除</div>'
+              html +='</div>';
+              i++;
+              $(".guige").after(html);
+          })
+          $(document).on('click','.guige_del',function(){
+            var id = $(this).data('id')
+            $("#guige_del_"+id).remove();
+          })
+
+          var j = $("#shuxing_num").val();
+          $(document).on('click','#shuxing_add',function(){
+            var html = '';
+              html +='<div class="layui-form-item" id="shuxing_del_'+i+'">';
+              html +=  '<label for="activity_name" class="layui-form-label">';
+              html +=      '<span class="x-red"></span>';
+              html +=  '</label>';
+              html +=  '<div class="layui-input-inline">';
+              html +=      '<input type="text" id="goods_attribute" name="goods_attribute[]" lay-verify="required" autocomplete="off" class="layui-input">';
+              html +=  '</div>';
+              html +=  '<div class="layui-btn shuxing_del" data-id="'+i+'" style="background-color: #FF5722;">删除</div>'
+              html +='</div>';
+              i++;
+              $(".shuxing").after(html);
+          })
+          $(document).on('click','.shuxing_del',function(){
+            var id = $(this).data('id')
+            $("#shuxing_del_"+id).remove();
+          })
+         
+          form.on('select(store_id)',function(data){
+            $.post('/Admin/Goods/store_goods_type',{store_id: data.value},function(res){
+              var html = '';
+              html += '<option value="0">请选择</option>';
+              if (res.code == 200) {
+                for (var i = 0; i < res.data.length; i++) {
+                  html += '<option value="'+res.data[i].id+'">'+res.data[i].title_show+'</option>'
+                }
+              }
+              $("#type_id").html('');
+              $("#type_id").append(html);
+              form.render('select');
+            })
+            $.post('/Admin/Goods/store_activity_list',{store_id: data.value},function(res){
+              var html = '';
+              html += '<option value="0">请选择</option>';
+              if (res.code == 200) {
+                for (var i = 0; i < res.data.length; i++) {
+                  html += '<option value="'+res.data[i].id+'">'+res.data[i].activity_name+'</option>'
+                }
+              }
+              $("#activity_id").html('');
+              $("#activity_id").append(html);
+              form.render('select');
+            })
+          })
+
+          $(document).on('click','#del',function(){
+            var id = $(this).data('id');
+            $("#file_"+id).remove();
+            $("#file_detail_"+id).remove();
+            $("#del_list_"+id).remove();
+          })
+
+          //自定义验证规则
+          form.verify({
+            goods_detail: function(value) { 
+             return layedit.sync(index);
+            }
+          });
+         
+          //监听提交
+          form.on('submit(edit)', function(data){
+            
+            //发异步，把数据提交给php
+            $.post('/Admin/Goods/goods_edit', data.field, function(res){
+
+                if(res.code == 200){
+                    layer.alert(res.msg, {icon: 1},function () {
+                      // 获得frame索引
+                      var index = parent.layer.getFrameIndex(window.name);
+
+                      //关闭当前frame
+                      parent.layer.close(index);
+                     
+                      window.parent.location.reload();
+
+                  });
+                }else{
+                  layer.msg(res.msg,{time: 1000});
+                }
+            })
+            
+            return false;
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+{include file="public/bianjiqi"}
+</html>
